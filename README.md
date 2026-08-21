@@ -1,137 +1,156 @@
 # revealz
 
-Godot 4 카드 게임 **revealz**의 공개 소개 레포입니다.  
-게임플레이보다, 온라인 서비스를 돌리기 위한 **운영(ops) 스택** — Node.js 로비, Docker Compose, 모니터링/관리 UI, CI/CD — 을 중심으로 정리합니다.
+Godot 4 카드 게임 + 소규모 VM 운영 스택 소개 레포.
 
-> 소스 전체·배포 시크릿은 이 레포에 포함하지 않습니다. 아래 GIF는 자리만 잡아 두었고, 녹화본 경로가 정해지면 교체합니다.
-
----
-
-## Play
-
-<!-- TODO: replace with recorded GIF -->
-![Gameplay overview](docs/media/play-overview.gif)
-
-짧은 플레이 클립 (매치 / 턴 / 리빌 등).
+- 공개 범위: 소개용 README · 미디어
+- 소스 전체 · 배포 시크릿 · 실서버 주소는 포함하지 않음
+- 소개 비중: **운영(로비 · 모니터 · 관리 · CI/CD)** 을 메인으로, 플레이·기능은 데모로 보조
 
 ---
 
-## Features (game)
+## 프로젝트 소개
 
-| | |
-|---|---|
-| 팩 오픈 | ![Pack open](docs/media/feature-pack-open.gif) |
-| 덱 / 상점 | ![Deck & shop](docs/media/feature-deck-shop.gif) |
-| 온라인 매치 | ![Online match](docs/media/feature-online-match.gif) |
+- 턴제 카드 수집 · 팩 오픈 · 덱 편성 · 온라인 대전
+- 온라인은 전용 게임 서버를 매치마다 띄우는 구조
+- 계정·골드·보유 카드는 Postgres 메타 DB로 동기화
+- 점검 · 백업 · 유저 조치 · 패치노트는 토큰 보호 관리 화면에서 처리
+
+---
+
+## 플레이
+
+<!-- 미디어: docs/media/*.gif — 파일 추가 후 경로 확정 -->
+<!-- <img src="docs/media/TODO-play.gif" alt="플레이" width="560"/> -->
+
+- 매치 진행 · 턴 · 리빌 등 핵심 루프 짧은 클립
+
+---
+
+## 주요 기능 (게임)
+
+<!-- 미디어: docs/media/*.gif -->
+<!-- <img src="docs/media/TODO-feature.gif" alt="주요 기능" width="560"/> -->
 
 - 카드 수집 · 팩 연출 · 덱 편집
-- 로비 기반 방 생성 / 참가 · 랜덤 매칭
-- 패치노트 · 점검 게이트 등 클라이언트–서버 연동
-
-*(표의 GIF는 placeholder — 파일만 `docs/media/`에 넣으면 표시됩니다.)*
+- 상점 구매 · 보유 카드 메타 동기화
+- 방 코드 참가 · 랜덤 매칭
+- 패치노트 열람 · 점검 중 온라인/상점 차단
 
 ---
 
-## Ops (main)
+## 멀티플레이 · 매치메이킹
 
-온라인 세션과 메타(계정·골드·보유 카드)를 VM에서 운영하는 쪽을 메인으로 소개합니다.
-
-### Stack
+### 한 줄 구조
 
 ```text
-┌─────────────┐     ┌──────────────────────┐     ┌─────────────────┐
-│  Godot 클라  │────▶│  Node.js lobby :8080 │────▶│ Dedicated worker│
-│             │◀────│  rooms / matchmaking │◀────│  (UDP spawn)    │
-└─────────────┘     │  MetaSrv HTTP        │     └─────────────────┘
-                    └──────────┬───────────┘
-                               │
-                    ┌──────────▼───────────┐
-                    │  Postgres 16 (meta)  │
-                    │  loopback only       │
-                    └──────────────────────┘
-                               ▲
-                    ┌──────────┴───────────┐
-                    │  health poller       │
-                    │  → health.jsonl      │
-                    └──────────────────────┘
+클라 ──HTTP──▶ 로비(Node) ──spawn/UDP포트──▶ 전용 게임 프로세스
+                  │
+                  └──Postgres(메타: 계정·덱·구매)
 ```
 
-- **Docker Compose**: `postgres` + `lobby` + `poller`
-- Lobby / poller는 **host network** (UDP 포트 풀), Postgres는 **127.0.0.1만** 바인딩
-- 매치 Dedicated는 컨테이너가 아니라 lobby가 **Linux headless 바이너리를 spawn**
-- Warm pool · 방 TTL · 매칭 타임아웃 · UDP 포트 범위는 env로 조정
+- 로비: 매칭 · 방 배정 · 메타 API (HTTP)
+- 실제 대전 패킷: 로비가 띄운 **전용 게임 프로세스**와 **UDP**로 직접 통신
+- 매치마다 컨테이너를 새로 만들지 않음 → 로비가 바이너리를 프로세스로 실행
 
-### Lobby (Node.js)
+### 입장 방식 두 가지
 
-- 방 생성 / 참가, 랜덤 매칭 큐
-- UDP 포트 할당 → 워커 listening 확인 후 클라에 `host` / `port` 전달
-- `GET /v1/health` — rooms, queue, warm, free ports, meta DB, worker 바이너리 메타, maintenance
-- Meta API — 계정 스냅샷, 구매, 덱 검증, revision 기반 동시 수정 방지(LWW)
+1. **방 코드**
+   - 생성 → 코드·호스트·포트 발급 (워커가 listen 한 뒤)
+   - 참가 → 같은 코드로 합류
+2. **랜덤 매칭**
+   - 큐에 등록(티켓 발급) → 상태 폴링
+   - 대기 중 취소 가능
+   - 혼자 오래 기다리면 티켓 만료
 
-### Monitor — `/ops`
+### 랜덤 매칭 흐름
 
-<!-- TODO: replace with recorded GIF -->
-![Ops monitor](docs/media/ops-monitor.gif)
+1. 플레이어 A, B가 각각 매칭 큐에 등록
+2. 큐에 2명이 모이면 로비가 게임 룸(포트) 확보
+3. **미리 켜 둔 워커(warm)** 가 있으면 그걸 먼저 사용, 없으면 새로 실행
+4. 워커 stdout에 listening 확인이 뜬 뒤에만 양쪽에 `matched` + 접속 정보 전달
+5. 이후 클라는 로비가 아닌 **게임 프로세스 UDP**로 플레이
 
-- `OPS_TOKEN` 게이트 (없거나 틀리면 404)
-- rooms / queue / warm / freePorts 시계열 (`health.jsonl`)
-- 호스트 CPU · 메모리 (poller + host PID)
+### 운영 관점 포인트
 
-### Admin — `/ops/db`
+- warm 풀: 빈 워커를 미리 listen 시켜 매칭 지연 감소
+- 빈 방 TTL · 매칭 대기 제한 · UDP 포트 범위는 설정값으로 조정
+- 덱 검증: 매치 진입 시 메타 DB 기준으로 보유·구성 확인 (실패 시 거절)
 
-<!-- TODO: replace with recorded GIF -->
-![Ops admin](docs/media/ops-db.gif)
+---
+
+## 운영 (메인)
+
+온라인 세션과 메타 데이터를 VM에서 돌리기 위한 쪽.
+
+### 구성
+
+| 구성 요소 | 역할 |
+|-----------|------|
+| Postgres 16 | 계정 · 골드 · 보유 카드 · 덱 · 패치노트 |
+| Node 로비 | HTTP 로비 · 매칭 · 메타 API · ops UI |
+| health poller | 주기적으로 health 기록 → 모니터 그래프 |
+| 전용 게임 바이너리 | 매치당 1프로세스 (git에 없음, VM에 별도 배치) |
+
+- Docker Compose로 Postgres + 로비 + poller를 묶음
+- 로비·poller는 호스트 네트워크 (UDP 포트 풀)
+- Postgres는 루프백(127.0.0.1)만 열어 외부 직접 접속 차단
+
+### 모니터 화면 (`/ops`)
+
+<!-- 미디어: docs/media/*.png -->
+<!-- <img src="docs/media/TODO-ops-monitor.png" alt="모니터" width="700"/> -->
+
+- 접속 토큰 필요 (없거나 틀리면 404)
+- 방 수 · 매칭 큐 · warm · 남은 포트 추이
+- 호스트 CPU · 메모리 (poller가 호스트 PID 기준으로 기록)
+
+### 관리 화면 (`/ops/db`)
+
+<!-- 미디어: docs/media/*.png -->
+<!-- <img src="docs/media/TODO-ops-db.png" alt="관리" width="700"/> -->
 
 | 영역 | 내용 |
 |------|------|
-| 점검 | maintenance on/off + 메시지 → 클라 온라인/상점 차단 |
-| 백업 | `pg_dump` (client 버전을 Postgres 16에 맞춤) |
-| 복구 | `pg_restore` (관리 UI에서 선택 복원) |
-| 계정 | 목록 · 검색 · 정렬 · 페이지네이션 |
-| 유저 수정 | 골드 / 표시명 |
-| Grant | 단건 카드 · 전종×레어도 |
-| 삭제 | hard delete + 동일 키 재이관 차단(tombstone) |
-| 패치노트 | CRUD · 즉시/예약 발행 · 클라 공개 API |
+| 점검 | on/off + 메시지 → 클라 온라인/상점 차단 |
+| 백업 | DB 덤프 생성 |
+| 복구 | 백업 목록에서 선택 복원 |
+| 계정 | 목록 · 검색 · 정렬 · 페이지 |
+| 유저 | 골드 · 표시명 수정 |
+| 지급 | 카드 단건 / 전종×레어도 |
+| 삭제 | 계정 완전 삭제 + 같은 키 재가입(재이관) 차단 |
+| 패치노트 | 작성 · 즉시/예약 발행 · 삭제 |
 
-CLI (`tools/ops.py`)로 health / grant / maintenance / backup / delete-account 등 동일 작업을 스크립트로도 실행합니다.
+- 동일 작업을 CLI 스크립트로도 실행 가능
 
-### Client ↔ server gates
+### 클라 ↔ 서버 운영 연동
 
-- 부팅 · 메인 복귀 · 온라인/상점 진입 시 health(+meta) 재확인
-- 점검 중 조작 차단
-- meta revision 충돌 시 서버 스냅샷 적용 (ops grant가 클라 PUT에 덮이지 않도록)
-- 삭제된 계정은 `410`으로 재이관 차단
+- 부팅 · 메인 복귀 · 온라인/상점 진입 시 서버 상태 재확인
+- 점검 중이면 해당 진입 차단
+- 관리자가 지급한 카드가 클라 저장으로 덮이지 않도록 버전(revision) 충돌 처리
+- 삭제된 계정은 재이관 거부
 
-### CI / CD (GitHub Actions)
+### CI / CD
 
-| 워크플로 | 하는 일 | 하지 않는 일 |
-|----------|---------|--------------|
-| **Lobby CI** | `npm ci` → `node --check` → `/v1/health` smoke | Godot 빌드, Dedicated spawn |
-| **Pull VM** | SSH로 VM `git pull --ff-only` | `docker compose build` / 재시작 |
+| 단계 | 하는 일 | 하지 않는 일 |
+|------|---------|--------------|
+| 로비 CI | 문법 검사 · health 스모크 | 게임 빌드 · 워커 실행 |
+| VM pull | `main` 푸시 시 서버에서 git pull | 이미지 재빌드 · 로비 재시작 |
 
-이미지 재빌드·로비 재시작은 **수동**으로 둡니다. 운영 실 실수를 줄이기 위한 경계입니다.
-
----
-
-## Docs media (GIF placeholders)
-
-녹화 후 아래 경로에 파일을 넣으면 README에 바로 보입니다.
-
-```text
-docs/media/
-  play-overview.gif          # 플레이 전체 한 컷
-  feature-pack-open.gif      # 팩 오픈
-  feature-deck-shop.gif      # 덱 / 상점
-  feature-online-match.gif   # 온라인 매치
-  ops-monitor.gif            # /ops 모니터
-  ops-db.gif                 # /ops/db 관리
-```
-
-경로·파일명을 바꾸면 README의 이미지 링크만 맞춰 주면 됩니다.
+- 이미지 재빌드·재시작은 **수동**
+- 운영 중 실 자동 재시작으로 인한 사고를 줄이려는 경계
 
 ---
 
-## Status
+## 기술 요약
 
-개인/학습용 온라인 카드 게임 + 소규모 VM ops 실험입니다.  
-이 공개 레포는 **소개용**이며, 프로덕션 SLA나 완전 자동 배포를 약속하지 않습니다.
+- **클라**: Godot 4
+- **로비**: Node.js (HTTP)
+- **메타 DB**: PostgreSQL 16
+- **인프라**: Docker Compose · GitHub Actions (검사 + VM pull)
+- **관리**: 토큰 보호 웹 UI + CLI
+
+---
+
+## 상태
+
+개발 중인 상태로, 언제든지 변경될 수 있습니다.
