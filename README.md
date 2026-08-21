@@ -15,7 +15,16 @@ Godot 4 카드 게임 + 소규모 VM **운영 스택** 소개 레포.
 - 계정 · 골드 · 보유 카드는 Postgres 메타 DB로 동기화
 - 점검 · 백업 · 유저 조치 · 패치노트는 토큰 보호 관리 화면에서 처리
 
-이 레포는 게임 자체보다, 위 서비스를 **어떻게 올리고 · 지켜보고 · 점검하고 · 배포하는지**를 정리한 포트폴리오용 소개입니다.
+---
+
+## 기술 요약
+
+- **클라**: Godot 4
+- **로비 · ops UI**: Node.js / JavaScript
+- **운영 스크립트**: Python (health poller · ops CLI)
+- **메타 DB**: PostgreSQL 16
+- **인프라**: Docker Compose · GitHub Actions
+- **전용 서버**: Godot export 바이너리 (로비가 spawn)
 
 ---
 
@@ -160,17 +169,6 @@ Godot 4 카드 게임 + 소규모 VM **운영 스택** 소개 레포.
 <img src="docs/media/match.gif" alt="온라인 매치" width="560"/>
 
 - 매칭 후 대전 진입
-
----
-
-## 기술 요약
-
-- **클라**: Godot 4
-- **로비 · ops UI**: Node.js / JavaScript
-- **운영 스크립트**: Python (health poller · ops CLI)
-- **메타 DB**: PostgreSQL 16
-- **인프라**: Docker Compose · GitHub Actions
-- **전용 서버**: Godot export 바이너리 (로비가 spawn)
 
 ---
 
