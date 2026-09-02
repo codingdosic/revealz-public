@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://cbi2xos0mjgsn"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://do6ril6dkp5c7" path="res://assets_lite/Blue/청-제약의 마술사 제노.png" id="2_ra12d"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_ra12d"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cguxmih61xr5d" path="res://resources/effects/primitives/step_set_card.gd" id="7"]
+
+[sub_resource type="Resource" id="Resource_ra12d"]
+script = ExtResource("5")
+relative_side = 1
+line_scope = 1
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_hand_min"]
+script = ExtResource("5")
+zone = 0
+min_count = 4
+
+[sub_resource type="Resource" id="step_pick_opp"]
+script = ExtResource("6")
+include_types = null
+store_key = "set_target"
+
+[sub_resource type="Resource" id="step_set"]
+script = ExtResource("7")
+targets_key = "set_target"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("Resource_ra12d"), SubResource("step_hand_min"), SubResource("step_pick_opp"), SubResource("step_set")])
+
+[resource]
+script = ExtResource("2")
+card_name = "제약의 마술사 제노"
+illustration = ExtResource("2_ra12d")
+illustration_back = ExtResource("3_ra12d")
+id = 76
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드가 4장 이상이라면, 이 라인에서 상대 유닛 1장을 선택해 세트한다. (이 스킬로 세트한 카드는 턴 종료시까지 오픈할 수 없다.)"
+stat_l = 2
+stat_c = 1
+stat_r = 3
+stat_spd = 2
+oncePerTurn = true
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

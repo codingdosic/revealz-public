@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3 uid="uid://djikcyolmy3ra"]
+
+[ext_resource type="Script" uid="uid://chcmdwmikjqv2" path="res://scenes/screen/deck_select_cell.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_icon"]
+
+[node name="DeckSelectCell" type="Button"]
+custom_minimum_size = Vector2(160, 200)
+focus_mode = 0
+script = ExtResource("1_script")
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Control" type="Control" parent="Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="Icon" type="TextureRect" parent="Content/VBox/Control"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = 43.999996
+offset_top = 15.000002
+offset_right = 164.0
+offset_bottom = 135.0
+rotation = 0.12217305
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MainCard" type="TextureRect" parent="Content/VBox/Control"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 0
+offset_left = -11.0
+offset_top = 23.999998
+offset_right = 109.0
+offset_bottom = 144.0
+rotation = -0.034906585
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SubLabel" type="Label" parent="Content/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="NameLabel" type="Label" parent="Content/VBox"]
+layout_mode = 2
+text = "Deck"
+horizontal_alignment = 1
+autowrap_mode = 3

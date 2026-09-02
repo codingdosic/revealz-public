@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqmatchload01"]
+
+[ext_resource type="Script" uid="uid://deivauwlmm6u3" path="res://scenes/screen/match_loading_screen.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bmatchversus01" path="res://scenes/ui/match_versus_overlay.tscn" id="2_versus"]
+[ext_resource type="PackedScene" uid="uid://cd3xpi2eyrvuq" path="res://scenes/ui/loading_gate.tscn" id="3_gate"]
+
+[node name="MatchLoadingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="MatchVersusOverlay" parent="." instance=ExtResource("2_versus")]
+
+[node name="LoadingGate" parent="." instance=ExtResource("3_gate")]

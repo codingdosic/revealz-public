@@ -1,0 +1,112 @@
+[gd_resource type="Resource" script_class="ShopCatalog" load_steps=37 format=3 uid="uid://b0io2yebcx71"]
+
+[ext_resource type="Script" uid="uid://bglumf1eqxd0l" path="res://scripts/shop/shop_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" uid="uid://cc7ivvroepty6" path="res://scripts/shop/shop_tab.gd" id="2_tab"]
+[ext_resource type="Script" uid="uid://c12samu2tc1rr" path="res://scripts/shop/shop_subcategory.gd" id="3_sub"]
+[ext_resource type="Script" uid="uid://c38wd0ugoo4jy" path="res://scripts/shop/shop_pack_product.gd" id="4_pack"]
+[ext_resource type="Script" uid="uid://dwf6ub364g7y0" path="res://scripts/shop/shop_product.gd" id="4_vdeys"]
+[ext_resource type="Texture2D" uid="uid://3t8yoxolhjga" path="res://assets_lite/ShopAsset/basicPackBanner.png" id="5_btkad"]
+[ext_resource type="Texture2D" uid="uid://d3vbh1lhkv47d" path="res://assets_lite/Black/흑-반역의 군주 벨리알.png" id="6_lhab2"]
+[ext_resource type="Texture2D" uid="uid://do6ril6dkp5c7" path="res://assets_lite/Blue/청-제약의 마술사 제노.png" id="7_fi0gl"]
+[ext_resource type="Texture2D" uid="uid://dr15wiouv7eki" path="res://assets_lite/Green/녹-자연의 분노 바쿠.png" id="8_88wqm"]
+[ext_resource type="Texture2D" uid="uid://dwipvsiwlptra" path="res://assets_lite/Red/적-종언의 불꽃 드라그나.png" id="9_etl48"]
+[ext_resource type="Texture2D" uid="uid://keb3xjx4vk4l" path="res://assets_lite/White/백-자유의 성기사 세르무스.png" id="10_bvpca"]
+[ext_resource type="Resource" uid="uid://dhuk1dq5yh38n" path="res://resources/shop/packdata/black_limited_pack.tres" id="12_lhab2"]
+[ext_resource type="Resource" uid="uid://djtk7xouui2pv" path="res://resources/shop/packdata/green_limited_pack.tres" id="13_lhab2"]
+[ext_resource type="Resource" uid="uid://dwtffoo155lks" path="res://resources/shop/packdata/white_limited_pack.tres" id="14_fi0gl"]
+[ext_resource type="Resource" uid="uid://6qrsvqf74um" path="res://resources/shop/packdata/blue_limited_pack.tres" id="15_88wqm"]
+[ext_resource type="Resource" uid="uid://561tbsrhqcpx" path="res://resources/shop/packdata/red_limited_pack.tres" id="16_etl48"]
+[ext_resource type="Resource" uid="uid://c017v3nbc1vyy" path="res://resources/shop/accessories/card_back/blue_back.tres" id="17_acc_blue"]
+[ext_resource type="Resource" uid="uid://c017v3ngikvmy" path="res://resources/shop/accessories/card_back/green_back.tres" id="18_acc_green"]
+[ext_resource type="Resource" uid="uid://c017v3nq4kiyy" path="res://resources/shop/accessories/card_back/red_back.tres" id="19_acc_red"]
+[ext_resource type="Resource" uid="uid://shopaccpurp1" path="res://resources/shop/accessories/card_back/purple_back.tres" id="20_acc_purple"]
+[ext_resource type="Resource" uid="uid://c017v3nh2u5qy" path="res://resources/shop/accessories/icons/icon_red.tres" id="21_acc_icon_red"]
+[ext_resource type="Resource" uid="uid://dgcocpdabof81" path="res://resources/shop/accessories/card_back/cosmic_back.tres" id="21_kv387"]
+[ext_resource type="Resource" uid="uid://ckiaglugn1mo" path="res://resources/shop/accessories/card_back/neon_back.tres" id="22_77m4m"]
+[ext_resource type="Resource" uid="uid://dimbq0mfws8dl" path="res://resources/shop/accessories/field/field_board2.tres" id="23_acc_field2"]
+[ext_resource type="Resource" uid="uid://b37ei2hd6fmef" path="res://resources/shop/accessories/icons/icon_blue.tres" id="24_cfogs"]
+
+[sub_resource type="Resource" id="Resource_btkad"]
+script = ExtResource("4_pack")
+pool_card_ids = null
+pool_weights = null
+weight_n = 674
+weight_r = 225
+weight_sr = 75
+weight_ur = 26
+product_id = "basic_pack"
+display_name = "Basic Pack"
+price_gold = 100
+description = "전체 기본 카드 중 5장을 랜덤하게 얻을 수 있다."
+detail_main = ExtResource("5_btkad")
+detail_sample_1 = ExtResource("6_lhab2")
+detail_sample_2 = ExtResource("7_fi0gl")
+detail_sample_3 = ExtResource("8_88wqm")
+detail_sample_4 = ExtResource("9_etl48")
+detail_sample_5 = ExtResource("10_bvpca")
+
+[sub_resource type="Resource" id="Resource_k55cc"]
+script = ExtResource("3_sub")
+id = "newCardPacks"
+display_name = "카드팩"
+products = Array[ExtResource("4_vdeys")]([SubResource("Resource_btkad")])
+metadata/_custom_type_script = "uid://c12samu2tc1rr"
+
+[sub_resource type="Resource" id="Resource_vdeys"]
+script = ExtResource("3_sub")
+id = "newAccessories"
+display_name = "액세서리"
+products = Array[ExtResource("4_vdeys")]([ExtResource("21_kv387"), ExtResource("22_77m4m")])
+metadata/_custom_type_script = "uid://c12samu2tc1rr"
+
+[sub_resource type="Resource" id="tab_featured"]
+script = ExtResource("2_tab")
+id = "featured"
+display_name = "신상품"
+subcategories = Array[ExtResource("3_sub")]([SubResource("Resource_k55cc"), SubResource("Resource_vdeys")])
+
+[sub_resource type="Resource" id="sub_packs_normal"]
+script = ExtResource("3_sub")
+id = "normal"
+display_name = "일반"
+products = Array[ExtResource("4_vdeys")]([SubResource("Resource_btkad")])
+
+[sub_resource type="Resource" id="sub_packs_limited"]
+script = ExtResource("3_sub")
+id = "limited"
+display_name = "한정"
+products = Array[ExtResource("4_vdeys")]([ExtResource("12_lhab2"), ExtResource("13_lhab2"), ExtResource("14_fi0gl"), ExtResource("15_88wqm"), ExtResource("16_etl48")])
+
+[sub_resource type="Resource" id="tab_packs"]
+script = ExtResource("2_tab")
+id = "packs"
+display_name = "카드팩"
+subcategories = Array[ExtResource("3_sub")]([SubResource("sub_packs_normal"), SubResource("sub_packs_limited")])
+
+[sub_resource type="Resource" id="sub_cosmetics_card_back"]
+script = ExtResource("3_sub")
+id = "card_back"
+display_name = "카드 뒷면"
+products = Array[ExtResource("4_vdeys")]([ExtResource("17_acc_blue"), ExtResource("18_acc_green"), ExtResource("19_acc_red"), ExtResource("20_acc_purple"), ExtResource("21_kv387"), ExtResource("22_77m4m")])
+
+[sub_resource type="Resource" id="sub_cosmetics_icon"]
+script = ExtResource("3_sub")
+id = "icon"
+display_name = "아이콘"
+products = Array[ExtResource("4_vdeys")]([ExtResource("21_acc_icon_red"), ExtResource("24_cfogs")])
+
+[sub_resource type="Resource" id="sub_cosmetics_field"]
+script = ExtResource("3_sub")
+id = "field"
+display_name = "필드"
+products = Array[ExtResource("4_vdeys")]([ExtResource("23_acc_field2")])
+
+[sub_resource type="Resource" id="tab_cosmetics"]
+script = ExtResource("2_tab")
+id = "cosmetics"
+display_name = "액세서리"
+subcategories = Array[ExtResource("3_sub")]([SubResource("sub_cosmetics_card_back"), SubResource("sub_cosmetics_icon"), SubResource("sub_cosmetics_field")])
+
+[resource]
+script = ExtResource("1_catalog")
+tabs = Array[ExtResource("2_tab")]([SubResource("tab_featured"), SubResource("tab_packs"), SubResource("tab_cosmetics")])

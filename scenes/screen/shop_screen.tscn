@@ -1,0 +1,274 @@
+[gd_scene load_steps=5 format=3 uid="uid://cg6eco0fkasp"]
+
+[ext_resource type="Script" uid="uid://dkr2iwty1p252" path="res://scenes/screen/shop_screen.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://b0io2yebcx71" path="res://resources/shop/default_catalog.tres" id="2_catalog"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_uplk5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/card_info_detail.tscn" id="4_detail"]
+
+[node name="ShopScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+catalog = ExtResource("2_catalog")
+
+[node name="BrowseRoot" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="BrowseRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="BrowseRoot/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TabSection" type="PanelContainer" parent="BrowseRoot/Margin/VBox"]
+layout_mode = 2
+
+[node name="TabBar" type="HBoxContainer" parent="BrowseRoot/Margin/VBox/TabSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="BrowseRoot/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="SubSection" type="PanelContainer" parent="BrowseRoot/Margin/VBox/Body"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SubScroll" type="ScrollContainer" parent="BrowseRoot/Margin/VBox/Body/SubSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SubList" type="VBoxContainer" parent="BrowseRoot/Margin/VBox/Body/SubSection/SubScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="GridSection" type="PanelContainer" parent="BrowseRoot/Margin/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridArea" type="Control" parent="BrowseRoot/Margin/VBox/Body/GridSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridScroll" type="ScrollContainer" parent="BrowseRoot/Margin/VBox/Body/GridSection/GridArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProductGrid" type="GridContainer" parent="BrowseRoot/Margin/VBox/Body/GridSection/GridArea/GridScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
+[node name="EmptyLabel" type="Label" parent="BrowseRoot/Margin/VBox/Body/GridSection/GridArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "(상품 없음)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DetailRoot" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="DetailRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailRoot/Margin"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GallerySection" type="PanelContainer" parent="DetailRoot/Margin/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailRoot/Margin/HBoxContainer/GallerySection"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer"]
+layout_mode = 2
+text = "Product name"
+horizontal_alignment = 1
+
+[node name="MainImage" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ImageContainer" type="HBoxContainer" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SampleImage1" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer/ImageContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SampleImage2" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer/ImageContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SampleImage3" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer/ImageContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SampleImage4" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer/ImageContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SampleImage5" type="TextureRect" parent="DetailRoot/Margin/HBoxContainer/GallerySection/VBoxContainer/ImageContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_uplk5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="DetailRoot/Margin/HBoxContainer"]
+layout_mode = 2
+
+[node name="InfoSection" type="PanelContainer" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2/InfoSection"]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2/InfoSection/VBoxContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+text = "상품 설명란입니다."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BuyButtonSection" type="PanelContainer" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2/BuyButtonSection"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2/BuyButtonSection/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "1 pack - 100"
+
+[node name="MultiBuyButton" type="Button" parent="DetailRoot/Margin/HBoxContainer/VBoxContainer2/BuyButtonSection/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "10 pack - 1000"
+
+[node name="CardInfoRoot" parent="." instance=ExtResource("4_detail")]
+layout_mode = 1
+z_index = 40
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[node name="GoldSection" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.97
+anchor_top = 0.02
+anchor_right = 0.983
+anchor_bottom = 0.02
+offset_left = -51.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="GoldLabel" type="Label" parent="GoldSection"]
+layout_mode = 2
+text = "gold: 0"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="DetailRoot/Margin/HBoxContainer/VBoxContainer2/BuyButtonSection/VBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]
+[connection signal="pressed" from="DetailRoot/Margin/HBoxContainer/VBoxContainer2/BuyButtonSection/VBoxContainer/MultiBuyButton" to="." method="_on_multi_buy_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

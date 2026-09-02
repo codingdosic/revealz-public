@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShopAccessoryProduct" load_steps=3 format=3 uid="uid://c017v3nbc1vyy"]
+
+[ext_resource type="Script" uid="uid://bdorsnpo5khl8" path="res://scripts/shop/shop_accessory_product.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://w4eourqg84yd" path="res://assets_lite/accessories/card_back/blue_back.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+accessory_type = "card_back"
+accessory_id = "blue_back"
+product_id = "shop_blue_back"
+display_name = "블루"
+price_gold = 200
+description = "블루 카드 뒷면"
+icon = ExtResource("2_icon")
+detail_main = ExtResource("2_icon")

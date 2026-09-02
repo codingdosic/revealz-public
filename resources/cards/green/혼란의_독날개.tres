@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://b3r1fypumlxo6"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_n4pi5"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_6qjb3"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_ofcb3"]
+[ext_resource type="Texture2D" uid="uid://dxvk4l6skix72" path="res://assets_lite/Green/녹-혼란의 독날개.png" id="2_ua8ii"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_ua8ii"]
+
+[resource]
+script = ExtResource("2_ofcb3")
+card_name = "혼란의 독날개"
+illustration = ExtResource("2_ua8ii")
+illustration_back = ExtResource("3_ua8ii")
+id = 61
+card_type = "Unit"
+color = 4
+type = "Beast"
+trigger_type = 64
+stat_l = 8
+stat_c = 4
+stat_r = 5
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

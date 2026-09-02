@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=16 format=3 uid="uid://bvho8adirohs5"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_vokd8"]
+[ext_resource type="Texture2D" uid="uid://b56tf2qesgi7r" path="res://assets_lite/Red/적-천공룡 지오빌란.png" id="2_8ylor"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_76ibh"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_8ylor"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="8"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="9_8ylor"]
+
+[sub_resource type="Resource" id="Resource_0y6c4"]
+script = ExtResource("9_8ylor")
+line_scope = 1
+min_count = 2
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_pick_field"]
+script = ExtResource("6")
+relative_side = 0
+exclude_source = true
+include_types = null
+
+[sub_resource type="Resource" id="step_bind"]
+script = ExtResource("7")
+kind = 6
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+
+[sub_resource type="Resource" id="step_buff_self"]
+script = ExtResource("8")
+use_self = true
+delta = 6
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+steps = Array[ExtResource("5")]([SubResource("Resource_0y6c4"), SubResource("step_pick_field"), SubResource("step_bind"), SubResource("step_buff_self")])
+
+[resource]
+script = ExtResource("2_76ibh")
+card_name = "천공룡 지오빌란"
+illustration = ExtResource("2_8ylor")
+illustration_back = ExtResource("3_8ylor")
+id = 29
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 1
+effect_text = "$Trigger 이 라인에서 자신의 유닛 1장을 선택해 바인드한다. 그 후, 이 유닛의 LP +6"
+stat_c = 4
+stat_r = 4
+stat_spd = 2
+oncePerTurn = true
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

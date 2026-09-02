@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://wvq8vgtp03vx"]
+
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://dbffdh22mx7b7" path="res://assets_lite/accessories/field/default_board_img.png" id="1_t4v25"]
+
+[resource]
+script = ExtResource("1_def")
+accessory_id = "default_field"
+display_name = "기본 필드"
+description = "기본 필드 보드"
+accessory_type = "field"
+preview = ExtResource("1_t4v25")
+preview_path = "res://assets_lite/ShopAsset/card_back.png"
+scene_path = "res://assets_lite/accessories/field/board.glb"

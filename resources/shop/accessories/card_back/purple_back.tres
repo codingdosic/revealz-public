@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShopAccessoryProduct" load_steps=3 format=3 uid="uid://shopaccpurp1"]
+
+[ext_resource type="Script" uid="uid://bdorsnpo5khl8" path="res://scripts/shop/shop_accessory_product.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://7s5ftj02na1f" path="res://assets_lite/accessories/card_back/purple_back.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+accessory_type = "card_back"
+accessory_id = "purple_back"
+product_id = "shop_purple_back"
+display_name = "퍼플"
+price_gold = 200
+description = "퍼플 카드 뒷면"
+icon = ExtResource("2_icon")
+detail_main = ExtResource("2_icon")

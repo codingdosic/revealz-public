@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://dctwfn1dir027"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_1iv4r"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_y5s6a"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="4"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="5"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1iv4r"]
+load_path = "res://.godot/imported/흑-은밀한 발걸음 캐스퍼.png-f510f1bff310d7eded5beecbc3dadaa0.ctex"
+
+[sub_resource type="Resource" id="step_slot"]
+script = ExtResource("4")
+line_scope = 0
+
+[sub_resource type="Resource" id="step_relocate"]
+script = ExtResource("5")
+kind = 5
+fx_trail = 1
+
+[sub_resource type="Resource" id="pipeline_trash"]
+script = ExtResource("2")
+trigger = "TRASH"
+steps = Array[ExtResource("3")]([SubResource("step_slot"), SubResource("step_relocate")])
+
+[resource]
+script = ExtResource("1")
+card_name = "은밀한 발걸음 캐스퍼"
+illustration = SubResource("CompressedTexture2D_1iv4r")
+illustration_back = ExtResource("2_y5s6a")
+id = 12
+card_type = "Unit"
+color = 1
+type = "Knight"
+trigger_type = 2
+effect_text = "$Trigger 이 유닛을 원하는 라인에 배치한다."
+stat_l = 2
+stat_c = 2
+stat_r = 4
+stat_spd = 2
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_trash")])

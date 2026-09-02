@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqb28x6lvp853"]
+
+[ext_resource type="Script" path="res://scenes/ui/placement_permission_display.gd" id="1_script"]
+
+[node name="PlacementPermissionDisplay" type="Node2D"]
+visible = false
+script = ExtResource("1_script")

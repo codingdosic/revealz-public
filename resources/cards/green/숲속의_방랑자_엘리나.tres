@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://duwhspc21r54j"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_dltmb"]
+[ext_resource type="Texture2D" uid="uid://tvsh0cpiduag" path="res://assets_lite/Green/녹-숲속의 방랑자 리나.png" id="2_b1bmr"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_er7ua"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_gnrsv"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_b1bmr"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="5"]
+[ext_resource type="Script" uid="uid://c4l613ksp5ud2" path="res://resources/effects/primitives/step_optional_stack_from_hand.gd" id="6"]
+
+[sub_resource type="Resource" id="step_draw"]
+script = ExtResource("5")
+fx_trail_color = Color(0, 0.77254903, 0.16470589, 1)
+
+[sub_resource type="Resource" id="step_optional"]
+script = ExtResource("6")
+fx_trail = 1
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2_er7ua")
+steps = Array[ExtResource("4")]([SubResource("step_draw"), SubResource("step_optional")])
+
+[resource]
+script = ExtResource("2_gnrsv")
+card_name = "숲속의 방랑자 엘리나"
+illustration = ExtResource("2_b1bmr")
+illustration_back = ExtResource("3_b1bmr")
+id = 53
+card_type = "Unit"
+color = 4
+type = "Fairy"
+trigger_type = 1
+effect_text = "$Trigger 자신의 덱에서 1장을 드로우한다. 그 후, 핸드에서 카드 1장을 이 유닛에게 스택으로 넣는다면 추가로 덱에서 1장을 드로우할 수 있다."
+stat_l = 3
+stat_c = 4
+stat_r = 3
+stat_spd = 3
+oncePerTurn = true
+pipelines = Array[ExtResource("2_er7ua")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

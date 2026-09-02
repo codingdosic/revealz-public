@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://d35du6qllswsq"]
+
+[ext_resource type="Script" path="res://scenes/ui/zone_browse_sidebar.gd" id="1_zbs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_zbs"]
+bg_color = Color(0.08, 0.08, 0.12, 0.92)
+
+[node name="ZoneBrowseSidebar" type="PanelContainer"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_zbs")
+script = ExtResource("1_zbs")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "존"
+autowrap_mode = 3
+
+[node name="CloseButton" type="Button" parent="Margin/VBox/TitleRow"]
+layout_mode = 2
+text = "닫기"
+
+[node name="EmptyLabel" type="Label" parent="Margin/VBox"]
+visible = false
+layout_mode = 2
+text = "(비어 있음)"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Margin/VBox/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 3

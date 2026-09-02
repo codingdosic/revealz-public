@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://toevayg112na"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_25sxu"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_tfuxb"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="4"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="5"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_25sxu"]
+load_path = "res://.godot/imported/흑-영혼 길잡이 세나토스.png-9b047586e818a1532d1744d35085c776.ctex"
+
+[sub_resource type="Resource" id="step_mill"]
+script = ExtResource("4")
+kind = 1
+count = 3
+
+[sub_resource type="Resource" id="step_buff"]
+script = ExtResource("5")
+use_self = true
+delta = 4
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2")
+steps = Array[ExtResource("3")]([SubResource("step_mill"), SubResource("step_buff")])
+
+[resource]
+script = ExtResource("1")
+card_name = "영혼 길잡이 세나토스"
+illustration = SubResource("CompressedTexture2D_25sxu")
+illustration_back = ExtResource("2_tfuxb")
+id = 10
+card_type = "Unit"
+color = 1
+type = "Zombie"
+trigger_type = 1
+effect_text = "$Trigger 자신의 덱 위에서 3장을 트래쉬한다. 그 후, 이 유닛의 LP +4"
+stat_spd = 1
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_open")])

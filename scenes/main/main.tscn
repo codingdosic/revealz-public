@@ -1,0 +1,112 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdwbb1fu0rgbf"]
+
+[ext_resource type="Script" uid="uid://ds57en006ejej" path="res://scenes/main/main.gd" id="1_hyk8p"]
+[ext_resource type="PackedScene" path="res://scenes/ui/player_badge.tscn" id="2_badge"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hyk8p")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MenuSection" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MenuSection"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SingleplayButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Singleplay"
+
+[node name="MultiplayButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+layout_mode = 2
+text = "Multiplay"
+
+[node name="DeckButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+layout_mode = 2
+text = "Deck"
+
+[node name="ShopButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+layout_mode = 2
+text = "Shop"
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/MenuSection/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 20.0
+offset_right = -10.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="PatchNoteButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "note"
+
+[node name="GoldSection" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="GoldLabel" type="Label" parent="HBoxContainer/GoldSection"]
+layout_mode = 2
+text = "gold: 0"
+horizontal_alignment = 1
+
+[node name="PlayerBadge" parent="." instance=ExtResource("2_badge")]
+z_index = 100
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 193.0
+offset_bottom = 52.0
+
+[node name="VersionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -28.0
+offset_right = -12.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = ""
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/SingleplayButton" to="." method="_on_singleplay_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/MultiplayButton" to="." method="_on_multiplay_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/DeckButton" to="." method="_on_deck_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/PatchNoteButton" to="." method="_on_patch_note_button_pressed"]
+[connection signal="profile_requested" from="PlayerBadge" to="." method="_on_player_badge_pressed"]

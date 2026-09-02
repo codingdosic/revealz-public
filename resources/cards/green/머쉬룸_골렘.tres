@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://b5hsi6fksycop"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_smtwp"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_bewhx"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_jfbv6"]
+[ext_resource type="Texture2D" uid="uid://igkj63ql6bvy" path="res://assets_lite/Green/녹-머쉬룸 골렘.png" id="2_wx7ef"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_wx7ef"]
+
+[resource]
+script = ExtResource("2_jfbv6")
+card_name = "머쉬룸 골렘"
+illustration = ExtResource("2_wx7ef")
+illustration_back = ExtResource("3_wx7ef")
+id = 48
+card_type = "Unit"
+color = 4
+type = "Giant"
+trigger_type = 64
+stat_l = 6
+stat_c = 3
+stat_r = 8
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

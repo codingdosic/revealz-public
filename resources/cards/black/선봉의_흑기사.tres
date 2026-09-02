@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://cwtf0ood5m7nq"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_qikn5"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_tyumy"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="3_msgtg"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_owjws"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_owjws"]
+load_path = "res://.godot/imported/흑-선봉의 흑기사.png-763fff7d1ae2eb4011b28d2c1fe8721c.ctex"
+
+[resource]
+script = ExtResource("3_msgtg")
+card_name = "선봉의 흑기사"
+illustration = SubResource("CompressedTexture2D_owjws")
+illustration_back = ExtResource("2_tyumy")
+id = 7
+card_type = "Unit"
+color = 1
+type = "Knight"
+trigger_type = 64
+stat_l = 6
+stat_c = 1
+stat_r = 6
+stat_spd = 1

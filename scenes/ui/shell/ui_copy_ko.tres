@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="UiCopy" load_steps=2 format=3 uid="uid://cndr7i2g3wb6a"]
+
+[ext_resource type="Script" uid="uid://bv8eg64b5unqu" path="res://scenes/ui/shell/ui_copy.gd" id="1_copy"]
+
+[resource]
+script = ExtResource("1_copy")

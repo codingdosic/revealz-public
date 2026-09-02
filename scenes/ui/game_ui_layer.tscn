@@ -1,0 +1,142 @@
+[gd_scene load_steps=13 format=3 uid="uid://diwi7vqv582im"]
+
+[ext_resource type="Script" uid="uid://b3fmyfohdvs1q" path="res://scenes/ui/game_ui_layer.gd" id="1_ui"]
+[ext_resource type="PackedScene" uid="uid://cqopp7gem84im" path="res://scenes/ui/field_target_prompt.tscn" id="6_ftp"]
+[ext_resource type="PackedScene" uid="uid://bmatchversus01" path="res://scenes/ui/match_versus_overlay.tscn" id="7_versus"]
+[ext_resource type="PackedScene" uid="uid://bduoje78wcfc7" path="res://scenes/screen/settings_screen.tscn" id="10_ss"]
+[ext_resource type="PackedScene" uid="uid://ckst5d74wlpc5" path="res://scenes/ui/shell/minimize_handle.tscn" id="11_mh"]
+[ext_resource type="PackedScene" uid="uid://0fxvwnj8dcn7" path="res://scenes/ui/shell/sidebar_shell.tscn" id="12_sshell"]
+[ext_resource type="PackedScene" uid="uid://blisl5kocdsl2" path="res://scenes/ui/shell/popup_shell.tscn" id="13_pshell"]
+[ext_resource type="PackedScene" uid="uid://b0t0q2gkqkc07" path="res://scenes/ui/shell/bottom_sheet_shell.tscn" id="14_bshell"]
+[ext_resource type="PackedScene" uid="uid://cphasetoast01" path="res://scenes/ui/phase_toast.tscn" id="15_toast"]
+[ext_resource type="Resource" uid="uid://3usn03pvye3e" path="res://scenes/ui/shell/ui_chrome_cyan.tres" id="16_chrome"]
+[ext_resource type="PackedScene" uid="uid://ducnh4cil3r6h" path="res://scenes/ui/player_badge.tscn" id="17_badge"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tooltip"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.05, 0.05, 0.08, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.25, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="GameUILayer" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_ui")
+chrome_style = ExtResource("16_chrome")
+
+[node name="PhaseToast" parent="." instance=ExtResource("15_toast")]
+z_index = 250
+
+[node name="CardInfoShell" parent="." instance=ExtResource("12_sshell")]
+
+[node name="MatchMenuDimmer" type="ColorRect" parent="."]
+visible = false
+z_index = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.62)
+
+[node name="MatchMenuShell" parent="." instance=ExtResource("12_sshell")]
+z_index = 20
+dismiss_on_outside_click = false
+
+[node name="SettingsOverlayHost" type="Control" parent="."]
+visible = false
+z_index = 15
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 212.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="SettingsOverlayHost"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.2)
+
+[node name="SettingsScreen" parent="SettingsOverlayHost" instance=ExtResource("10_ss")]
+layout_mode = 1
+
+[node name="ZoneCountTooltip" type="PanelContainer" parent="."]
+visible = false
+offset_right = 56.0
+offset_bottom = 28.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tooltip")
+
+[node name="Label" type="Label" parent="ZoneCountTooltip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "0장"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EffectDialogShell" parent="." instance=ExtResource("13_pshell")]
+dismiss_on_right_click = false
+dismiss_on_esc = false
+
+[node name="MinimizeHandle" parent="." instance=ExtResource("11_mh")]
+
+[node name="ZoneBrowseShell" parent="." instance=ExtResource("12_sshell")]
+dismiss_on_outside_click = false
+shell_side = 1
+
+[node name="TargetListSheet" parent="." instance=ExtResource("14_bshell")]
+
+[node name="FieldTargetPrompt" parent="." instance=ExtResource("6_ftp")]
+
+[node name="EffectNoticeShell" parent="." instance=ExtResource("13_pshell")]
+dismiss_on_right_click = false
+dismiss_on_esc = false
+
+[node name="MatchVersusOverlay" parent="." instance=ExtResource("7_versus")]
+
+[node name="OpponentIdBadge" parent="." instance=ExtResource("17_badge")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -189.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 48.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="LocalIdBadge" parent="." instance=ExtResource("17_badge")]
+z_index = -1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -48.0
+offset_right = 189.0
+offset_bottom = -8.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="SettingsButton" type="Button" parent="."]
+z_index = 220
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 38.0
+offset_bottom = 39.0
+text = "⚙️"

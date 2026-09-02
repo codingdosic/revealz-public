@@ -1,0 +1,14 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://dlbpwqrghky6c"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_holo"]
+noise_type = 0
+frequency = 0.065
+fractal_type = 2
+fractal_octaves = 2
+fractal_gain = 0.35
+
+[resource]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_holo")
+seamless = true

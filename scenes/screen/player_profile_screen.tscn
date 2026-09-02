@@ -1,0 +1,153 @@
+[gd_scene load_steps=2 format=3 uid="uid://3jtqlg0wojuj"]
+
+[ext_resource type="Script" uid="uid://bsdvru3eny25t" path="res://scenes/screen/player_profile_screen.gd" id="1_script"]
+
+[node name="PlayerProfileScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MarginContainer2" type="MarginContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="TitleSection" type="PanelContainer" parent="Margin/VBox/MarginContainer2"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/MarginContainer2/TitleSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Player Profile"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="AccountSection" type="PanelContainer" parent="Margin/VBox/MarginContainer"]
+layout_mode = 2
+
+[node name="AccountVBox" type="HBoxContainer" parent="Margin/VBox/MarginContainer/AccountSection"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Margin/VBox/MarginContainer/AccountSection/AccountVBox"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Account Key"
+
+[node name="AccountKeyField" type="TextEdit" parent="Margin/VBox/MarginContainer/AccountSection/AccountVBox"]
+custom_minimum_size = Vector2(384.705, 30)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+text = "guest_..."
+editable = false
+wrap_mode = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="NameSection" type="PanelContainer" parent="Margin/VBox/MarginContainer3"]
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="Margin/VBox/MarginContainer3/NameSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/MarginContainer3/NameSection/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Display Name"
+
+[node name="NameEdit" type="LineEdit" parent="Margin/VBox/MarginContainer3/NameSection/NameRow"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+placeholder_text = "표시명"
+max_length = 10
+
+[node name="MarginContainer4" type="MarginContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 100
+
+[node name="IconSection" type="PanelContainer" parent="Margin/VBox/MarginContainer4"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridArea" type="Control" parent="Margin/VBox/MarginContainer4/IconSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridScroll" type="ScrollContainer" parent="Margin/VBox/MarginContainer4/IconSection/GridArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemGrid" type="GridContainer" parent="Margin/VBox/MarginContainer4/IconSection/GridArea/GridScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="EmptyLabel" type="Label" parent="Margin/VBox/MarginContainer4/IconSection/GridArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "(보유 아이콘 없음)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[connection signal="focus_exited" from="Margin/VBox/MarginContainer3/NameSection/NameRow/NameEdit" to="." method="_on_name_focus_exited"]
+[connection signal="text_submitted" from="Margin/VBox/MarginContainer3/NameSection/NameRow/NameEdit" to="." method="_on_name_text_submitted"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://bsp3a64vurg6i"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_b6uf3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_m4sk3"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="3_16lf1"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_s46ea"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u1fxm"]
+load_path = "res://.godot/imported/흑-영혼에 잠식된 늑대.png-78426d74bfe22d0f1a17eea46e176c39.ctex"
+
+[resource]
+script = ExtResource("3_16lf1")
+card_name = "영혼에 잠식된 늑대"
+illustration = SubResource("CompressedTexture2D_u1fxm")
+illustration_back = ExtResource("2_m4sk3")
+id = 11
+card_type = "Unit"
+color = 1
+type = "Zombie"
+trigger_type = 64
+stat_l = 7
+stat_c = 2
+stat_r = 4
+stat_spd = 2

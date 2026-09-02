@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://bxcjf5b7jukdd"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://de8dt3qrh713c" path="res://assets_lite/White/백-전파자 P-333.png" id="2_oy1ff"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_oy1ff"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="5"]
+[ext_resource type="Script" uid="uid://b0fkt6j54b34v" path="res://resources/effects/primitives/step_spawn_token.gd" id="6"]
+
+[sub_resource type="Resource" id="step_slot"]
+script = ExtResource("5")
+line_scope = 4
+
+[sub_resource type="Resource" id="step_spawn"]
+script = ExtResource("6")
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("step_slot"), SubResource("step_spawn")])
+
+[resource]
+script = ExtResource("2")
+card_name = "전파자 P-534"
+illustration = ExtResource("2_oy1ff")
+illustration_back = ExtResource("3_oy1ff")
+id = 42
+card_type = "Unit"
+color = 2
+type = "Machine"
+trigger_type = 1
+effect_text = "$Trigger 자신의 유닛이 없는 라인에 \"기사\" 토큰 1장을 배치한다."
+stat_l = 5
+stat_c = 3
+stat_r = 4
+stat_spd = 3
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://brgpd38386c00"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_fr5gv"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_fviqp"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_g4hql"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5_vu0br"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="6_rcfcq"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6_v1sfk"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7_g4hql"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="8_vu0br"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_g4hql"]
+load_path = "res://.godot/imported/흑-반역의 군주 벨리알.png-6b0bf59675c3ac37c6c808eced86d8d0.ctex"
+
+[sub_resource type="Resource" id="Resource_fviqp"]
+script = ExtResource("6_v1sfk")
+zone = 1
+min_count = 10
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_rcfcq"]
+script = ExtResource("6_v1sfk")
+relative_side = 1
+line_scope = 1
+units_only = true
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_jcv5q"]
+script = ExtResource("7_g4hql")
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_624cm"]
+script = ExtResource("8_vu0br")
+kind = 2
+relative_side = 1
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4_g4hql")
+steps = Array[ExtResource("5_vu0br")]([SubResource("Resource_fviqp"), SubResource("Resource_rcfcq"), SubResource("Resource_jcv5q"), SubResource("Resource_624cm")])
+
+[resource]
+script = ExtResource("6_rcfcq")
+card_name = "반역의 군주 벨리알"
+illustration = SubResource("CompressedTexture2D_g4hql")
+illustration_back = ExtResource("2_fviqp")
+id = 4
+card_type = "Unit"
+color = 1
+type = "Knight"
+trigger_type = 1
+effect_text = "$Trigger 자신의 트래쉬존에 카드가 10장 이상이라면, 이 라인에서 상대 유닛 1장을 선택해 트래쉬한다."
+stat_l = 4
+stat_c = 2
+stat_r = 2
+stat_spd = 2
+oncePerTurn = true
+pipelines = Array[ExtResource("4_g4hql")]([SubResource("pipeline_open")])

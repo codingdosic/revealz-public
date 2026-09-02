@@ -1,0 +1,84 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=21 format=3 uid="uid://dbscj3ywdkx47"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_gr6uw"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_ejsua"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_iehhu"]
+[ext_resource type="Texture2D" uid="uid://drqd7t7v6baea" path="res://assets_lite/Green/녹-숲속의 중재자 루인.png" id="2_u3fbd"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_u3fbd"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="6"]
+[ext_resource type="Script" uid="uid://chknoallystak" path="res://resources/effects/primitives/step_check_no_ally_stacks.gd" id="6_u3fbd"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="7"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="7_yeoa7"]
+[ext_resource type="Script" uid="uid://oeldhhpfvipv" path="res://resources/effects/primitives/step_store_count.gd" id="8"]
+
+[sub_resource type="Resource" id="Resource_o7l70"]
+script = ExtResource("6_u3fbd")
+min_count = 1
+metadata/_custom_type_script = "uid://chknoallystak"
+
+[sub_resource type="Resource" id="Resource_xqc25"]
+script = ExtResource("7_yeoa7")
+relative_side = 1
+line_scope = 1
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_store_opp_cap"]
+script = ExtResource("8")
+relative_side = 1
+line_scope = 1
+units_only = true
+store_key = "opp_cap"
+
+[sub_resource type="Resource" id="step_pick_stacks"]
+script = ExtResource("5")
+relative_side = 0
+zone = 5
+line_scope = 2
+count = -2
+max_count_key = "opp_cap"
+units_only = false
+include_types = null
+store_key = "trash_pick"
+
+[sub_resource type="Resource" id="step_trash"]
+script = ExtResource("6")
+kind = 11
+targets_key = "trash_pick"
+store_key = "trash_count"
+
+[sub_resource type="Resource" id="step_pick_opponents"]
+script = ExtResource("5")
+count_key = "trash_count"
+include_types = null
+store_key = "opp_targets"
+abort_on_fail = false
+
+[sub_resource type="Resource" id="step_debuff"]
+script = ExtResource("7")
+targets_key = "opp_targets"
+delta = -2
+fx_projectile_color = Color(0, 0.7490196, 0, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2_ejsua")
+steps = Array[ExtResource("4")]([SubResource("Resource_o7l70"), SubResource("Resource_xqc25"), SubResource("step_store_opp_cap"), SubResource("step_pick_stacks"), SubResource("step_trash"), SubResource("step_pick_opponents"), SubResource("step_debuff")])
+
+[resource]
+script = ExtResource("2_iehhu")
+card_name = "숲속의 중재자 루인"
+illustration = ExtResource("2_u3fbd")
+illustration_back = ExtResource("3_u3fbd")
+id = 56
+card_type = "Unit"
+color = 4
+type = "Fairy"
+trigger_type = 1
+effect_text = "$Trigger 모든 라인에서 자신의 스택을 원하는 만큼 트래쉬한다. 그 후, 트래쉬한 수만큼 이 라인에서 서로 다른 상대 유닛을 선택해 LP -2"
+stat_l = 3
+stat_c = 2
+stat_r = 4
+stat_spd = 3
+oncePerTurn = true
+pipelines = Array[ExtResource("2_ejsua")]([SubResource("pipeline_open")])

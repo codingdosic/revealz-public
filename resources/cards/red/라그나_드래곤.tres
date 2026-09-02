@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=14 format=3 uid="uid://c5giohin2clwk"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_r5g4x"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_3djh4"]
+[ext_resource type="Texture2D" uid="uid://xmln40t0iidm" path="res://assets_lite/Red/적-라그나 드래곤.png" id="2_ap4k1"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_ap4k1"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6"]
+[ext_resource type="Script" uid="uid://bx6cow22y7ay" path="res://resources/effects/primitives/step_check_source_line.gd" id="7"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="8"]
+
+[sub_resource type="Resource" id="step_banish_min"]
+script = ExtResource("6")
+zone = 4
+min_count = 3
+
+[sub_resource type="Resource" id="step_lr_only"]
+script = ExtResource("7")
+allow_center = false
+
+[sub_resource type="Resource" id="step_buff_self"]
+script = ExtResource("8")
+use_self = true
+delta = 7
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+steps = Array[ExtResource("5")]([SubResource("step_banish_min"), SubResource("step_lr_only"), SubResource("step_buff_self")])
+
+[resource]
+script = ExtResource("2_3djh4")
+card_name = "라그나 드래곤"
+illustration = ExtResource("2_ap4k1")
+illustration_back = ExtResource("3_ap4k1")
+id = 20
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 1
+effect_text = "$Trigger 바인드된 자신의 카드가 3장 이상이라면, 이 유닛을 L / R 라인에 배치 시 LP +7"
+stat_l = 1
+stat_c = 6
+stat_r = 1
+stat_spd = 1
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

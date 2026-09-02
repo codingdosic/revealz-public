@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="GameRulesResource" load_steps=2 format=3 uid="uid://bbjvdppq04b3j"]
+
+[ext_resource type="Script" uid="uid://ctp6begnnelur" path="res://scripts/game_rules_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+setting_effects_enabled = true

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EffectPipeline" load_steps=3 format=3 uid="uid://wr7yumf1kqei"]
+
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="1"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="2"]
+
+[resource]
+script = ExtResource("1")

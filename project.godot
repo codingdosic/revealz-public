@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="revealz"
+run/main_scene="res://scenes/ui/shell/menu_host.tscn"
+config/features=PackedStringArray("4.5", "Mobile")
+config/icon="res://icon.svg"
+run/main_scene.dedicated_server="res://scenes/server/server_main.tscn"
+
+[autoload]
+
+GameSession="*res://scripts/game_session_hub.gd"
+SceneTransition="*res://scripts/ui/scene_transition.gd"
+NetworkManager="*res://scripts/network_manager.gd"
+AccountService="*res://scripts/account/account_service.gd"
+MetaSync="*res://scripts/meta/meta_sync.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
+
+[revealz]
+
+lobby_base_url="http://127.0.0.1:8080"

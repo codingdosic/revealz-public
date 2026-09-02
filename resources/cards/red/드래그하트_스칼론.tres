@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=10 format=3 uid="uid://brlbhlnhktw8m"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_t18rj"]
+[ext_resource type="Texture2D" uid="uid://deny8snf4xdei" path="res://assets_lite/Red/적-드래그하트 스칼론.png" id="2_a0dhr"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_hdb04"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_a0dhr"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="6"]
+
+[sub_resource type="Resource" id="step_draw"]
+script = ExtResource("6")
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+trigger = "BIND"
+steps = Array[ExtResource("5")]([SubResource("step_draw")])
+
+[resource]
+script = ExtResource("2_hdb04")
+card_name = "드래그하트 스칼론"
+illustration = ExtResource("2_a0dhr")
+illustration_back = ExtResource("3_a0dhr")
+id = 18
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 8
+effect_text = "$Trigger 자신의 덱에서 1장을 드로우한다."
+stat_l = 1
+stat_c = 4
+stat_r = 6
+stat_spd = 1
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

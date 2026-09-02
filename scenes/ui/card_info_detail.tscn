@@ -1,0 +1,176 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpmdaem1bop7b"]
+
+[ext_resource type="Script" uid="uid://cwsfuir2jfk7g" path="res://scenes/ui/card_info_detail.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cefoc117uqe8x" path="res://assets_lite/Black/흑-그레이브.png" id="2_art"]
+
+[node name="DetailRoot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 70
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 60
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(332, 460)
+layout_mode = 2
+texture = ExtResource("2_art")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RarityFrame" type="Panel" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer/TextureRect"]
+visible = false
+layout_mode = 0
+mouse_filter = 2
+
+[node name="PowerRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -46.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+alignment = 1
+
+[node name="LeftPowerLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer/TextureRect/PowerRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterPowerLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer/TextureRect/PowerRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPowerLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer/MarginContainer2/VBoxContainer/TextureRect/PowerRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+text = "카드명"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+
+[node name="ColorLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "COLOR: BLACK"
+vertical_alignment = 1
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+
+[node name="SpeedLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2/MarginContainer2"]
+layout_mode = 2
+text = "SPD 0"
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+
+[node name="CardTypeLabel" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2/MarginContainer3"]
+layout_mode = 2
+text = "타입 / 종족"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+
+[node name="EffectLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer2/MarginContainer4"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "효과"
+fit_content = true
+scroll_active = false

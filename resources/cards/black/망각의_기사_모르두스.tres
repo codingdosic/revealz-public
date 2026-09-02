@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=18 format=3 uid="uid://c8xb62yurmyu6"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_5i804"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_fhu0k"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="4"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="8_fhu0k"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="9_tsnqv"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tsnqv"]
+load_path = "res://.godot/imported/흑-망각의 기사 모르두스.png-6dd4bf513f7b501d9772a7bbf1d2d81c.ctex"
+
+[sub_resource type="Resource" id="Resource_fhu0k"]
+script = ExtResource("4")
+line_scope = 1
+min_count = 2
+units_only = true
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_tsnqv"]
+script = ExtResource("5")
+relative_side = 0
+exclude_source = true
+exclude_name_substring = "흑-망각의 군주 모르두스"
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_m53nh"]
+script = ExtResource("8_fhu0k")
+kind = 2
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="Resource_ymw50"]
+script = ExtResource("5")
+relative_side = 0
+zone = 1
+exclude_source = true
+exclude_name_substring = "흑-망각의 기사 모르두스"
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_62n5n"]
+script = ExtResource("9_tsnqv")
+metadata/_custom_type_script = "uid://b86mtq86dv8r7"
+
+[sub_resource type="Resource" id="Resource_c3tsp"]
+script = ExtResource("8_fhu0k")
+kind = 4
+fx_trail = 1
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2")
+steps = Array[ExtResource("3")]([SubResource("Resource_fhu0k"), SubResource("Resource_tsnqv"), SubResource("Resource_m53nh"), SubResource("Resource_ymw50"), SubResource("Resource_62n5n"), SubResource("Resource_c3tsp")])
+
+[resource]
+script = ExtResource("1")
+card_name = "망각의 기사 모르두스"
+illustration = SubResource("CompressedTexture2D_tsnqv")
+illustration_back = ExtResource("2_fhu0k")
+id = 3
+card_type = "Unit"
+color = 1
+type = "Zombie"
+trigger_type = 1
+rarity = 3
+effect_text = "$Trigger 이 라인에서 \"망각의 군주 모르두스\"를 제외한 자신의 유닛 1장을 선택해 트래쉬한다. 그 후 트래쉬존에서 유닛 1장을 이 라인에 배치한다."
+stat_l = 2
+stat_c = 3
+stat_r = 4
+stat_spd = 3
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_open")])

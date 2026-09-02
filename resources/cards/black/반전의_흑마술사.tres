@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=14 format=3 uid="uid://rtg4kjxiubne"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_wqeka"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_cimbj"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="4"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="5"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="6"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wqeka"]
+load_path = "res://.godot/imported/흑-반전의 흑마술사.png-ab683dd361af7a04e7d9bf40aa2ac0fd.ctex"
+
+[sub_resource type="Resource" id="step_ally_field_min"]
+script = ExtResource("4")
+line_scope = 2
+
+[sub_resource type="Resource" id="step_pick_ally"]
+script = ExtResource("5")
+relative_side = 0
+line_scope = 2
+include_types = null
+
+[sub_resource type="Resource" id="step_buff"]
+script = ExtResource("6")
+delta = 3
+
+[sub_resource type="Resource" id="pipeline_trash"]
+script = ExtResource("2")
+trigger = "TRASH"
+steps = Array[ExtResource("3")]([SubResource("step_ally_field_min"), SubResource("step_pick_ally"), SubResource("step_buff")])
+
+[resource]
+script = ExtResource("1")
+card_name = "반전의 흑마술사"
+illustration = SubResource("CompressedTexture2D_wqeka")
+illustration_back = ExtResource("2_cimbj")
+id = 5
+card_type = "Unit"
+color = 1
+type = "Magician"
+trigger_type = 2
+effect_text = "$Trigger 모든 라인에서 자신의 유닛 1장을 선택해 LP +3"
+stat_l = 1
+stat_c = 6
+stat_r = 3
+stat_spd = 1
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_trash")])

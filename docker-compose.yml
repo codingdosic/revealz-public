@@ -1,0 +1,56 @@
+# Hetzner Linux VM. lobby/poller use host network (UDP 7700–7799 spawn).
+# Postgres is bound to loopback only — do not publish 5432 on a public interface.
+services:
+  postgres:
+    image: postgres:16
+    env_file: lobby/.env
+    environment:
+      POSTGRES_DB: revealz_meta
+      POSTGRES_USER: revealz_meta
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U revealz_meta -d revealz_meta"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  lobby:
+    build:
+      context: .
+      dockerfile: lobby/Dockerfile
+    network_mode: host
+    env_file: lobby/.env
+    volumes:
+      - ./export:/app/export
+      - ./lobby/ops-data:/app/lobby/ops-data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  poller:
+    build:
+      context: .
+      dockerfile: tools/poller.Dockerfile
+    network_mode: host
+    pid: host
+    volumes:
+      - ./tools/ops_health_poll.py:/poll.py:ro
+      - ./lobby/ops-data:/data
+    command:
+      [
+        "python",
+        "-u",
+        "/poll.py",
+        "--url",
+        "http://127.0.0.1:8080/v1/health",
+        "--out",
+        "/data/health.jsonl",
+      ]
+    depends_on:
+      - lobby
+
+volumes:
+  pgdata:

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://c8neonback001"]
+
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://c87j8n0ejj06y" path="res://assets_lite/accessories/card_back/neon_back.png" id="2_preview"]
+
+[resource]
+script = ExtResource("1_def")
+accessory_id = "neon_back"
+display_name = "네온"
+description = "네온 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("2_preview")
+preview_path = "res://assets_lite/accessories/card_back/neon_back.png"

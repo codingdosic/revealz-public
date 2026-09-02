@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=16 format=3 uid="uid://44od1kuatfrl"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://keb3xjx4vk4l" path="res://assets_lite/White/백-자유의 성기사 세르무스.png" id="2_xhqv2"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_xhqv2"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="6_xhqv2"]
+[ext_resource type="Script" uid="uid://b0fkt6j54b34v" path="res://resources/effects/primitives/step_spawn_token.gd" id="7_bvget"]
+[ext_resource type="Script" uid="uid://oeldhhpfvipv" path="res://resources/effects/primitives/step_store_count.gd" id="8_ddf5y"]
+[ext_resource type="Script" uid="uid://c8c744cu72j4v" path="res://resources/effects/primitives/step_modify_stat_from_key.gd" id="9_t7boh"]
+
+[sub_resource type="Resource" id="Resource_yjotj"]
+script = ExtResource("6_xhqv2")
+metadata/_custom_type_script = "uid://b86mtq86dv8r7"
+
+[sub_resource type="Resource" id="Resource_2naa4"]
+script = ExtResource("7_bvget")
+metadata/_custom_type_script = "uid://b0fkt6j54b34v"
+
+[sub_resource type="Resource" id="Resource_72sa3"]
+script = ExtResource("8_ddf5y")
+line_scope = 1
+include_name_exact = "기사"
+require_token = true
+store_key = "knight_count"
+metadata/_custom_type_script = "uid://oeldhhpfvipv"
+
+[sub_resource type="Resource" id="Resource_1f3nt"]
+script = ExtResource("9_t7boh")
+use_self = true
+value_key = "knight_count"
+scale = 2
+metadata/_custom_type_script = "uid://c8c744cu72j4v"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("Resource_yjotj"), SubResource("Resource_2naa4"), SubResource("Resource_72sa3"), SubResource("Resource_1f3nt")])
+
+[resource]
+script = ExtResource("2")
+card_name = "자유의 성기사 세르무스"
+illustration = ExtResource("2_xhqv2")
+illustration_back = ExtResource("3_xhqv2")
+id = 41
+card_type = "Unit"
+color = 2
+type = "Knight"
+trigger_type = 1
+effect_text = "$Trigger 이 라인에 \"기사\" 토큰 1장을 배치한다. 그 후, 이 라인의 자신의 \"기사\" 토큰 1장당 이 유닛의 LP +2"
+stat_l = 3
+stat_c = 4
+stat_r = 2
+stat_spd = 3
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

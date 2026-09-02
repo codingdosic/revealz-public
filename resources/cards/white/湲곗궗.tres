@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://cour8jpe5i227"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_dsvqw"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_40ud2"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_akatv"]
+[ext_resource type="Texture2D" uid="uid://jlue1kwe18hw" path="res://assets_lite/White/백-기사.png" id="2_l3cmi"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_l3cmi"]
+
+[resource]
+script = ExtResource("2_40ud2")
+card_name = "기사"
+illustration = ExtResource("2_l3cmi")
+illustration_back = ExtResource("3_l3cmi")
+id = 46
+card_type = "Unit"
+color = 2
+type = "Knight"
+trigger_type = 128
+effect_text = "$Trigger 이 유닛은 \"기사\" 토큰으로 사용한다."
+stat_l = 1
+stat_c = 1
+stat_r = 1
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

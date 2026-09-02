@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://bokutl38g0y82"]
+
+[ext_resource type="Script" uid="uid://b7xnkiscbrrw6" path="res://scenes/screen/accessory_settings_screen.gd" id="1_script"]
+
+[node name="AccessorySettingsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DecktitleSection" type="PanelContainer" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/DecktitleSection"]
+layout_mode = 2
+text = "Accessory"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TabSection" type="PanelContainer" parent="Margin/VBox/HBoxContainer"]
+layout_mode = 2
+
+[node name="TabBar" type="VBoxContainer" parent="Margin/VBox/HBoxContainer/TabSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GridSection" type="PanelContainer" parent="Margin/VBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridArea" type="Control" parent="Margin/VBox/HBoxContainer/GridSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridScroll" type="ScrollContainer" parent="Margin/VBox/HBoxContainer/GridSection/GridArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemGrid" type="GridContainer" parent="Margin/VBox/HBoxContainer/GridSection/GridArea/GridScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
+[node name="EmptyLabel" type="Label" parent="Margin/VBox/HBoxContainer/GridSection/GridArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "(보유 악세서리 없음)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

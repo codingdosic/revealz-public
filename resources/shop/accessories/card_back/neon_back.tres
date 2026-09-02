@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShopAccessoryProduct" load_steps=3 format=3 uid="uid://ckiaglugn1mo"]
+
+[ext_resource type="Texture2D" uid="uid://c87j8n0ejj06y" path="res://assets_lite/accessories/card_back/neon_back.png" id="1_n3cvi"]
+[ext_resource type="Script" uid="uid://bdorsnpo5khl8" path="res://scripts/shop/shop_accessory_product.gd" id="2_khsg5"]
+
+[resource]
+script = ExtResource("2_khsg5")
+accessory_type = "card_back"
+accessory_id = "neon_back"
+product_id = "shop_neon_back"
+display_name = "네온"
+price_gold = 200
+description = "네온 카드 뒷면"
+icon = ExtResource("1_n3cvi")
+detail_main = ExtResource("1_n3cvi")

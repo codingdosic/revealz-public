@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=10 format=3 uid="uid://wx2lrdpa1dxg"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_n3kgy"]
+[ext_resource type="Texture2D" uid="uid://bkgwofpnwd5es" path="res://assets_lite/Green/녹-숲속의 바위술사.png" id="2_8dsw8"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_c0nry"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_hxr5q"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_8dsw8"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3_ubsl2"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="4_enwp6"]
+
+[sub_resource type="Resource" id="Resource_yobya"]
+script = ExtResource("4_enwp6")
+kind = 9
+count = 2
+fx_trail = 1
+fx_trail_color = Color(0, 0.77254903, 0.16470589, 1)
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="Resource_enwp6"]
+script = ExtResource("2_hxr5q")
+steps = Array[ExtResource("3_ubsl2")]([SubResource("Resource_yobya")])
+metadata/_custom_type_script = "uid://bgmsxn07y877s"
+
+[resource]
+script = ExtResource("2_c0nry")
+card_name = "숲속의 바위술사"
+illustration = ExtResource("2_8dsw8")
+illustration_back = ExtResource("3_8dsw8")
+id = 52
+card_type = "Unit"
+color = 4
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 덱 위에서 2장을 이 유닛에게 스택으로 넣는다."
+stat_l = 4
+stat_c = 5
+stat_r = 3
+stat_spd = 3
+pipelines = Array[ExtResource("2_hxr5q")]([SubResource("Resource_enwp6")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

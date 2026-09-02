@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://dtgy063tyov0t"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_kdmwj"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_3rqw4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6_3rqw4"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7_l8678"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7_p4ec2"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l8678"]
+load_path = "res://.godot/imported/흑-흑마 바브.png-120ac5e0d14da4e5fb109a1e4b83003d.ctex"
+
+[sub_resource type="Resource" id="Resource_p4ec2"]
+script = ExtResource("6_3rqw4")
+zone = 0
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_avjoa"]
+script = ExtResource("7_p4ec2")
+relative_side = 0
+zone = 0
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_pwcik"]
+script = ExtResource("7_l8678")
+kind = 2
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="Resource_kwyuj"]
+script = ExtResource("7_l8678")
+count = 2
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2")
+steps = Array[ExtResource("3")]([SubResource("Resource_p4ec2"), SubResource("Resource_avjoa"), SubResource("Resource_pwcik"), SubResource("Resource_kwyuj")])
+
+[resource]
+script = ExtResource("1")
+card_name = "흑마 바브"
+illustration = SubResource("CompressedTexture2D_l8678")
+illustration_back = ExtResource("2_3rqw4")
+id = 15
+card_type = "Unit"
+color = 1
+type = "Zombie"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드에서 카드 1장을 트래쉬한다. 그 후, 덱에서 2장을 드로우한다."
+stat_l = 3
+stat_c = 4
+stat_r = 2
+stat_spd = 3
+oncePerTurn = true
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_open")])

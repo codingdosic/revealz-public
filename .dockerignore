@@ -1,0 +1,9 @@
+.git
+.github
+.cursor
+**/node_modules
+lobby/ops-data
+lobby/.env
+**/.env
+export
+*.md

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://c57e7ubwe5lqu"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://o6dyvdofmiii" path="res://assets_lite/White/백-평화의 대사제.png" id="2_81lbl"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_81lbl"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://dy71s64ljncd6" path="res://resources/effects/primitives/step_check_line_all_tokens.gd" id="5"]
+[ext_resource type="Script" uid="uid://diu2dhkhcbmk" path="res://resources/effects/primitives/step_set_field_line_stat.gd" id="6"]
+
+[sub_resource type="Resource" id="step_check"]
+script = ExtResource("5")
+abort_on_fail = false
+
+[sub_resource type="Resource" id="step_set_lp"]
+script = ExtResource("6")
+condition_key = "line_all_tokens"
+
+[sub_resource type="Resource" id="pipeline_passive"]
+script = ExtResource("3")
+trigger = "PASSIVE"
+steps = Array[ExtResource("4")]([SubResource("step_check"), SubResource("step_set_lp")])
+
+[resource]
+script = ExtResource("2")
+card_name = "평화의 대주교"
+illustration = ExtResource("2_81lbl")
+illustration_back = ExtResource("3_81lbl")
+id = 45
+card_type = "Unit"
+color = 2
+type = "Priest"
+trigger_type = 32
+effect_text = "$Trigger 이 라인에 자신의 유닛이 \"기사\" 토큰만 있다면 이 유닛의 LP는 10이 된다."
+stat_spd = 1
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_passive")])

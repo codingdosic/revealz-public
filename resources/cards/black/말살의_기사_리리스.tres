@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://dtc1d0a7uwmbd"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_ibioc"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_1o75o"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="4"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="5"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="6"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o4wl5"]
+load_path = "res://.godot/imported/흑-말살의 기사 리리스.png-76482921a1f84eb90c5ea1af7be9f659.ctex"
+
+[sub_resource type="Resource" id="step_opp_field_min"]
+script = ExtResource("4")
+relative_side = 1
+line_scope = 1
+min_count = 2
+
+[sub_resource type="Resource" id="step_grave_min"]
+script = ExtResource("4")
+zone = 1
+min_count = 7
+
+[sub_resource type="Resource" id="step_pick_targets"]
+script = ExtResource("5")
+count = 2
+include_types = null
+
+[sub_resource type="Resource" id="step_debuff"]
+script = ExtResource("6")
+delta = -3
+fx_projectile_color = Color(0.6058506, 0.002884187, 0.8802037, 1)
+fx_aura_color = Color(1, 0, 0, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2")
+steps = Array[ExtResource("3")]([SubResource("step_opp_field_min"), SubResource("step_grave_min"), SubResource("step_pick_targets"), SubResource("step_debuff")])
+
+[resource]
+script = ExtResource("1")
+card_name = "말살의 기사 리리스"
+illustration = SubResource("CompressedTexture2D_o4wl5")
+illustration_back = ExtResource("2_1o75o")
+id = 2
+card_type = "Unit"
+color = 1
+type = "Knight"
+trigger_type = 1
+rarity = 2
+effect_text = "$Trigger 자신의 트래쉬존에 카드가 7장 이상이라면, 이 라인의 상대 유닛 2장을 선택해 LP -3"
+stat_l = 3
+stat_c = 5
+stat_r = 3
+stat_spd = 1
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_open")])

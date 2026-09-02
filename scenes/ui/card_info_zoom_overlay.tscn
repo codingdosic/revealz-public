@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnmvfnljs3t8c"]
+
+[ext_resource type="Script" uid="uid://dalnhngjfx1xm" path="res://scenes/ui/card_info_zoom_overlay.gd" id="1_script"]
+
+[node name="CardInfoZoomOverlay" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1_script")
+
+[node name="ZoomRoot" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="ZoomRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="ZoomRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ZoomImage" type="TextureRect" parent="ZoomRoot/Center"]
+layout_mode = 2
+mouse_filter = 0
+expand_mode = 1
+stretch_mode = 5

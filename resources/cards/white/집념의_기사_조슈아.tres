@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://elcsxh28lqhu"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_pj3wo"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_0vkf1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_1oths"]
+[ext_resource type="Texture2D" uid="uid://bf6apg6grapwi" path="res://assets_lite/White/백-순백의 기사 조슈아.png" id="2_bahkn"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_bahkn"]
+
+[resource]
+script = ExtResource("2_1oths")
+card_name = "집념의 기사 조슈아"
+illustration = ExtResource("2_bahkn")
+illustration_back = ExtResource("3_bahkn")
+id = 44
+card_type = "Unit"
+color = 2
+type = "Knight"
+trigger_type = 64
+stat_l = 4
+stat_c = 7
+stat_r = 4
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

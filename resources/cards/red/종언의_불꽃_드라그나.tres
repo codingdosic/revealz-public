@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=14 format=3 uid="uid://bk4rfu8iiwqx6"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_e6x6g"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_5ujkd"]
+[ext_resource type="Texture2D" uid="uid://dwipvsiwlptra" path="res://assets_lite/Red/적-종언의 불꽃 드라그나.png" id="2_k716h"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_k716h"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="8"]
+
+[sub_resource type="Resource" id="step_banish_min"]
+script = ExtResource("6")
+zone = 4
+min_count = 7
+
+[sub_resource type="Resource" id="step_pick_all_opponent"]
+script = ExtResource("7")
+line_scope = 2
+count = -1
+selection_mode = 2
+include_types = null
+
+[sub_resource type="Resource" id="step_debuff"]
+script = ExtResource("8")
+delta = -2
+fx_line_wave = true
+fx_projectile_color = Color(1, 0.21268043, 0.15969583, 1)
+fx_wave_color = Color(1, 0.21268043, 0.15969583, 1)
+fx_wave_width = 20.0
+fx_wave_sec = 2.0
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+steps = Array[ExtResource("5")]([SubResource("step_banish_min"), SubResource("step_pick_all_opponent"), SubResource("step_debuff")])
+
+[resource]
+script = ExtResource("2_5ujkd")
+card_name = "종언의 불꽃 드라그나"
+illustration = ExtResource("2_k716h")
+illustration_back = ExtResource("3_k716h")
+id = 28
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 1
+effect_text = "$Trigger 바인드된 자신의 카드가 7장 이상이라면, 모든 라인의 상대 유닛 전부 LP -2"
+stat_l = 5
+stat_c = 3
+stat_r = 2
+stat_spd = 2
+oncePerTurn = true
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

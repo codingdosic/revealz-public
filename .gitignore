@@ -1,0 +1,38 @@
+# Godot 4+
+.godot/
+/android/
+
+# Local export dump (binaries + handoff docs)
+/export/
+
+# Discussion / design docs (not needed to run)
+/HANDOFF.md
+/MULTIPLAYER_HANDOFF.md
+/multiplayer_design.md
+/effect.txt
+/game.txt
+*.txt
+
+# Android release keystores
+android/*.keystore
+
+# Lobby Node deps + local ops logs
+/lobby/node_modules/
+/lobby/ops-data/
+
+# Editor / OS
+.cursor/
+*.apk
+Thumbs.db
+.DS_Store
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+/lobby/ops.env.bat
+*.pem
+*.key

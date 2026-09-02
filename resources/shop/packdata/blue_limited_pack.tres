@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShopPackProduct" load_steps=8 format=3 uid="uid://6qrsvqf74um"]
+
+[ext_resource type="Texture2D" uid="uid://7hoac6svuobt" path="res://assets_lite/ShopAsset/blue_back.png" id="1_yvs21"]
+[ext_resource type="Texture2D" uid="uid://do6ril6dkp5c7" path="res://assets_lite/Blue/청-제약의 마술사 제노.png" id="2_1hqy1"]
+[ext_resource type="Script" uid="uid://c38wd0ugoo4jy" path="res://scripts/shop/shop_pack_product.gd" id="2_7e7wg"]
+[ext_resource type="Texture2D" uid="uid://djum74hcdrgw0" path="res://assets_lite/Blue/청-복사 마술사 미요.png" id="3_u6q6i"]
+[ext_resource type="Texture2D" uid="uid://6acl4k2ippdp" path="res://assets_lite/Blue/청-깨달음의 마녀 이스텔.png" id="4_l1244"]
+[ext_resource type="Texture2D" uid="uid://brrw6q0ictno2" path="res://assets_lite/Blue/청-대가의 마술사 로스톰.png" id="5_lnbta"]
+[ext_resource type="Texture2D" uid="uid://dmpyjtvi25jqf" path="res://assets_lite/Blue/청-장전의 마술사 슈티.png" id="6_0u6j5"]
+
+[resource]
+script = ExtResource("2_7e7wg")
+pool_json = "res://resources/shop/pools/limited_blue_pool.json"
+pool_card_ids = null
+pool_weights = null
+product_id = "limited_blue"
+display_name = "Limited blue"
+price_gold = 150
+description = "청색 카드 한정 획득 가능"
+icon = ExtResource("2_1hqy1")
+detail_main = ExtResource("1_yvs21")
+detail_sample_1 = ExtResource("2_1hqy1")
+detail_sample_2 = ExtResource("3_u6q6i")
+detail_sample_3 = ExtResource("4_l1244")
+detail_sample_4 = ExtResource("5_lnbta")
+detail_sample_5 = ExtResource("6_0u6j5")
+metadata/_custom_type_script = "uid://c38wd0ugoo4jy"

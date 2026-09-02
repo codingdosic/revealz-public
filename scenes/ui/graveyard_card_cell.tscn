@@ -1,0 +1,87 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqxgraveyardcell01"]
+
+[ext_resource type="Script" path="res://scenes/ui/graveyard_card_cell.gd" id="1_cell"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cell"]
+bg_color = Color(0.12, 0.12, 0.16, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.45, 1)
+
+[node name="GraveyardCardCell" type="PanelContainer"]
+custom_minimum_size = Vector2(72, 100)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cell")
+script = ExtResource("1_cell")
+
+[node name="Highlight" type="ColorRect" parent="."]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 0, 0.35)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="CardImage" type="TextureRect" parent="Margin"]
+layout_mode = 2
+custom_minimum_size = Vector2(64, 88)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RarityFrame" type="Panel" parent="Margin/CardImage"]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RarityBadge" type="Panel" parent="Margin/CardImage"]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -22.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 13.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Margin/CardImage/RarityBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 8
+text = "N"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectionRing" type="Panel" parent="."]
+visible = false
+z_index = 30
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

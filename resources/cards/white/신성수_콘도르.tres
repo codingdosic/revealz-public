@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://ditgyeuxmfjs5"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_bym1b"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_44m6o"]
+[ext_resource type="Texture2D" uid="uid://58c4sb25x7yr" path="res://assets_lite/White/백-신성수 콘도르.png" id="2_hd7e4"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_uvhxx"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_hd7e4"]
+
+[resource]
+script = ExtResource("2_44m6o")
+card_name = "신성수 콘도르"
+illustration = ExtResource("2_hd7e4")
+illustration_back = ExtResource("3_hd7e4")
+id = 38
+card_type = "Unit"
+color = 2
+type = "Beast"
+trigger_type = 64
+stat_l = 6
+stat_c = 3
+stat_r = 6
+stat_spd = 2
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

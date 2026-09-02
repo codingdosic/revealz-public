@@ -1,0 +1,115 @@
+[gd_scene load_steps=3 format=3 uid="uid://bypshorf5xt41"]
+
+[ext_resource type="Script" uid="uid://0h4kpmo7ty10" path="res://scenes/screen/online_prepare_screen.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/screen/deck_select_cell.tscn" id="2_cell"]
+
+[node name="OnlinePrepareScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderSection" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/HeaderSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer/HeaderSection/VBox"]
+layout_mode = 2
+text = "멀티플레이"
+horizontal_alignment = 1
+
+[node name="HintLabel" type="Label" parent="CenterContainer/VBoxContainer/HeaderSection/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+text = "Create로 방을 만들고 코드를 공유하세요.
+Join에 코드를 입력하거나, Random으로 상대를 찾습니다."
+
+[node name="RoomCodeSection" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RoomCodeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/RoomCodeSection"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/RoomCodeSection/RoomCodeRow"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Room code"
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/RoomCodeSection/RoomCodeRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+placeholder_text = "AB12"
+alignment = 1
+max_length = 8
+
+[node name="DeckSection" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/DeckSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/DeckSection/VBox"]
+layout_mode = 2
+text = "Deck"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeckCell" parent="CenterContainer/VBoxContainer/DeckSection/VBox" instance=ExtResource("2_cell")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CreateRoomButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create Room"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="RandomButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Random"
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/CreateRoomButton" to="." method="_on_create_room_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_join_lobby_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://b6cgirasbjvy7"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_ap57m"]
+[ext_resource type="Texture2D" uid="uid://carr5fge12138" path="res://assets_lite/White/백-용감한 성기사 솔라니.png" id="2_d5lwf"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_yyx76"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_d5lwf"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_4i2ve"]
+
+[resource]
+script = ExtResource("2_yyx76")
+card_name = "불굴의 기사 베르트"
+illustration = ExtResource("2_d5lwf")
+illustration_back = ExtResource("3_d5lwf")
+id = 34
+card_type = "Unit"
+color = 2
+type = "Knight"
+trigger_type = 64
+stat_l = 4
+stat_c = 4
+stat_r = 7
+stat_spd = 2
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

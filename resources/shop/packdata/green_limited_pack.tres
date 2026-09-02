@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShopPackProduct" load_steps=8 format=3 uid="uid://djtk7xouui2pv"]
+
+[ext_resource type="Texture2D" uid="uid://bmt11q6lfmhgg" path="res://assets_lite/ShopAsset/green_back.png" id="1_c88vd"]
+[ext_resource type="Texture2D" uid="uid://dr15wiouv7eki" path="res://assets_lite/Green/녹-자연의 분노 바쿠.png" id="2_hsgqp"]
+[ext_resource type="Script" uid="uid://c38wd0ugoo4jy" path="res://scripts/shop/shop_pack_product.gd" id="2_uwnej"]
+[ext_resource type="Texture2D" uid="uid://yauojmm745r6" path="res://assets_lite/Green/녹-관찰자 드루이어드.png" id="3_vi40s"]
+[ext_resource type="Texture2D" uid="uid://tvsh0cpiduag" path="res://assets_lite/Green/녹-숲속의 방랑자 리나.png" id="4_uqrkf"]
+[ext_resource type="Texture2D" uid="uid://drqd7t7v6baea" path="res://assets_lite/Green/녹-숲속의 중재자 루인.png" id="5_3vg56"]
+[ext_resource type="Texture2D" uid="uid://88jb264vkg30" path="res://assets_lite/Green/녹-자이언트 가드너.png" id="6_orlg3"]
+
+[resource]
+script = ExtResource("2_uwnej")
+pool_json = "res://resources/shop/pools/limited_green_pool.json"
+pool_card_ids = null
+pool_weights = null
+product_id = "limited_green"
+display_name = "Limited green"
+price_gold = 150
+description = "녹색 카드 한정 획득 가능"
+icon = ExtResource("2_hsgqp")
+detail_main = ExtResource("1_c88vd")
+detail_sample_1 = ExtResource("2_hsgqp")
+detail_sample_2 = ExtResource("3_vi40s")
+detail_sample_3 = ExtResource("4_uqrkf")
+detail_sample_4 = ExtResource("5_3vg56")
+detail_sample_5 = ExtResource("6_orlg3")
+metadata/_custom_type_script = "uid://c38wd0ugoo4jy"

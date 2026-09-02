@@ -1,0 +1,129 @@
+[gd_scene load_steps=2 format=3 uid="uid://bduoje78wcfc7"]
+
+[ext_resource type="Script" uid="uid://cv1fvtxt1e2gf" path="res://scenes/screen/settings_screen.gd" id="1_script"]
+
+[node name="SettingsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="ResolutionSection" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResolutionRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/ResolutionSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/ResolutionSection/ResolutionRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Resolution"
+
+[node name="OptionButton" type="OptionButton" parent="CenterContainer/VBoxContainer/ResolutionSection/ResolutionRow"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="VolumeSection" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/VolumeSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/VolumeSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/MasterVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+text = "Master"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/MasterVolumeRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="BgmVolumeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/VolumeSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/BgmVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+text = "BGM"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/BgmVolumeRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SfxVolumeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/VolumeSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/SfxVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+text = "SFX"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/VolumeSection/VBox/SfxVolumeRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[connection signal="item_selected" from="CenterContainer/VBoxContainer/ResolutionSection/ResolutionRow/OptionButton" to="." method="_on_resolution_item_selected"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/VolumeSection/VBox/MasterVolumeRow/HSlider" to="." method="_on_volume_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/VolumeSection/VBox/BgmVolumeRow/HSlider" to="." method="_on_volume_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/VolumeSection/VBox/SfxVolumeRow/HSlider" to="." method="_on_volume_changed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

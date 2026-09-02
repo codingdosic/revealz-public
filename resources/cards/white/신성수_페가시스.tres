@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://drxstds8kxqra"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://bixf6q2djmj5v" path="res://assets_lite/White/백-신성수 페가시스.png" id="2_d5ngb"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_d5ngb"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://dgegi51dinli0" path="res://resources/effects/primitives/step_store_lines_meeting_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="6"]
+
+[sub_resource type="Resource" id="step_count_lines"]
+script = ExtResource("5")
+store_key = "draw_count"
+
+[sub_resource type="Resource" id="step_draw"]
+script = ExtResource("6")
+count_key = "draw_count"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("step_count_lines"), SubResource("step_draw")])
+
+[resource]
+script = ExtResource("2")
+card_name = "신성수 페가시스"
+illustration = ExtResource("2_d5ngb")
+illustration_back = ExtResource("3_d5ngb")
+id = 39
+card_type = "Unit"
+color = 2
+type = "Beast"
+trigger_type = 1
+effect_text = "$Trigger 자신의 유닛이 2장 이상인 라인 수만큼 덱에서 드로우한다."
+stat_l = 4
+stat_c = 4
+stat_r = 3
+stat_spd = 3
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

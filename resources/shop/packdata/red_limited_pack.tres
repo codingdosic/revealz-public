@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShopPackProduct" load_steps=8 format=3 uid="uid://561tbsrhqcpx"]
+
+[ext_resource type="Texture2D" uid="uid://bwb5v7xjuwv3b" path="res://assets_lite/ShopAsset/red_back.png" id="1_hp377"]
+[ext_resource type="Script" uid="uid://c38wd0ugoo4jy" path="res://scripts/shop/shop_pack_product.gd" id="2_2dxa6"]
+[ext_resource type="Texture2D" uid="uid://dwipvsiwlptra" path="res://assets_lite/Red/적-종언의 불꽃 드라그나.png" id="2_pirkc"]
+[ext_resource type="Texture2D" uid="uid://deny8snf4xdei" path="res://assets_lite/Red/적-드래그하트 스칼론.png" id="3_72sgc"]
+[ext_resource type="Texture2D" uid="uid://b56tf2qesgi7r" path="res://assets_lite/Red/적-천공룡 지오빌란.png" id="4_yi2cg"]
+[ext_resource type="Texture2D" uid="uid://chlp6rfdn8vx7" path="res://assets_lite/Red/적-용의 아이 피로.png" id="5_c7efp"]
+[ext_resource type="Texture2D" uid="uid://cst6m0ln0rf3m" path="res://assets_lite/Red/적-비룡 브레시아.png" id="6_3pdto"]
+
+[resource]
+script = ExtResource("2_2dxa6")
+pool_json = "res://resources/shop/pools/limited_red_pool.json"
+pool_card_ids = null
+pool_weights = null
+product_id = "limited_red"
+display_name = "Limited red"
+price_gold = 150
+description = "적색 카드 한정 획득 가능"
+icon = ExtResource("2_pirkc")
+detail_main = ExtResource("1_hp377")
+detail_sample_1 = ExtResource("2_pirkc")
+detail_sample_2 = ExtResource("3_72sgc")
+detail_sample_3 = ExtResource("4_yi2cg")
+detail_sample_4 = ExtResource("5_c7efp")
+detail_sample_5 = ExtResource("6_3pdto")
+metadata/_custom_type_script = "uid://c38wd0ugoo4jy"

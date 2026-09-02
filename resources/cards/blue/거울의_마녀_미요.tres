@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=19 format=3 uid="uid://bg0qjf0xpgvsu"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://djum74hcdrgw0" path="res://assets_lite/Blue/청-복사 마술사 미요.png" id="2_a5ag8"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_a5ag8"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="6"]
+[ext_resource type="Script" uid="uid://b0fkt6j54b34v" path="res://resources/effects/primitives/step_spawn_token.gd" id="7"]
+[ext_resource type="Script" uid="uid://bluemaxopplp" path="res://resources/effects/primitives/step_store_max_opponent_line_power.gd" id="8"]
+[ext_resource type="Script" uid="uid://c8c744cu72j4v" path="res://resources/effects/primitives/step_modify_stat_from_key.gd" id="9"]
+
+[sub_resource type="Resource" id="Resource_a5ag8"]
+script = ExtResource("5")
+relative_side = 1
+line_scope = 1
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_hand_min"]
+script = ExtResource("5")
+zone = 0
+min_count = 3
+
+[sub_resource type="Resource" id="step_pick_slot"]
+script = ExtResource("6")
+
+[sub_resource type="Resource" id="step_spawn"]
+script = ExtResource("7")
+token_card_name = "거울상"
+store_key = "token"
+
+[sub_resource type="Resource" id="step_store_max"]
+script = ExtResource("8")
+
+[sub_resource type="Resource" id="step_buff"]
+script = ExtResource("9")
+targets_key = "token"
+value_key = "max_lp"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("Resource_a5ag8"), SubResource("step_hand_min"), SubResource("step_pick_slot"), SubResource("step_spawn"), SubResource("step_store_max"), SubResource("step_buff")])
+
+[resource]
+script = ExtResource("2")
+card_name = "거울의 마녀 미요"
+illustration = ExtResource("2_a5ag8")
+illustration_back = ExtResource("3_a5ag8")
+id = 62
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드가 3장 이상이라면, 이 라인에 \"거울상\" 토큰을 배치한다. 그 후, 이 라인에서 LP가 가장 높은 상대 유닛의 LP만큼 \"거울상\" 토큰의 LP에 +한다."
+stat_l = 1
+stat_c = 1
+stat_r = 1
+stat_spd = 3
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

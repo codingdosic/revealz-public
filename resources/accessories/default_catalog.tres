@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="AccessoryCatalog" load_steps=17 format=3 uid="uid://bbnrsu10cm3mo"]
+
+[ext_resource type="Script" uid="uid://nokcsku8qq3j" path="res://scripts/accessories/accessory_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="2_def"]
+[ext_resource type="Texture2D" uid="uid://b8xiobdwdn150" path="res://assets_lite/accessories/icon/icon_default.png" id="3_icon_default"]
+[ext_resource type="Texture2D" uid="uid://cjrdxq8tc12ge" path="res://assets_lite/accessories/card_back/card_back_default.png" id="4_back_default"]
+[ext_resource type="Texture2D" uid="uid://w4eourqg84yd" path="res://assets_lite/accessories/card_back/blue_back.png" id="5_blue"]
+[ext_resource type="Texture2D" uid="uid://bvhh4ibxcuk21" path="res://assets_lite/accessories/card_back/green_back.png" id="6_green"]
+[ext_resource type="Texture2D" uid="uid://bsxqmym87fmwt" path="res://assets_lite/accessories/card_back/red_back.png" id="7_red"]
+[ext_resource type="Texture2D" uid="uid://7s5ftj02na1f" path="res://assets_lite/accessories/card_back/purple_back.png" id="8_purple"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="9_field_placeholder"]
+
+[sub_resource type="Resource" id="Resource_icon_default"]
+script = ExtResource("2_def")
+accessory_id = "icon_default"
+display_name = "기본 아이콘"
+preview = ExtResource("3_icon_default")
+preview_path = "res://assets_lite/accessories/icon/icon_default.png"
+
+[sub_resource type="Resource" id="Resource_back_default"]
+script = ExtResource("2_def")
+accessory_id = "card_back_default"
+display_name = "기본 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("4_back_default")
+preview_path = "res://assets_lite/accessories/card_back/card_back_default.png"
+
+[sub_resource type="Resource" id="Resource_blue_back"]
+script = ExtResource("2_def")
+accessory_id = "blue_back"
+display_name = "블루 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("5_blue")
+preview_path = "res://assets_lite/accessories/card_back/blue_back.png"
+
+[sub_resource type="Resource" id="Resource_green_back"]
+script = ExtResource("2_def")
+accessory_id = "green_back"
+display_name = "그린 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("6_green")
+preview_path = "res://assets_lite/accessories/card_back/green_back.png"
+
+[sub_resource type="Resource" id="Resource_red_back"]
+script = ExtResource("2_def")
+accessory_id = "red_back"
+display_name = "레드 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("7_red")
+preview_path = "res://assets_lite/accessories/card_back/red_back.png"
+
+[sub_resource type="Resource" id="Resource_purple_back"]
+script = ExtResource("2_def")
+accessory_id = "purple_back"
+display_name = "퍼플 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("8_purple")
+preview_path = "res://assets_lite/accessories/card_back/purple_back.png"
+
+[sub_resource type="Resource" id="Resource_field"]
+script = ExtResource("2_def")
+accessory_id = "default_field"
+display_name = "기본 필드"
+accessory_type = "field"
+preview = ExtResource("9_field_placeholder")
+preview_path = "res://assets_lite/ShopAsset/card_back.png"
+
+[resource]
+script = ExtResource("1_catalog")
+items = Array[ExtResource("2_def")]([SubResource("Resource_icon_default"), SubResource("Resource_back_default"), SubResource("Resource_blue_back"), SubResource("Resource_green_back"), SubResource("Resource_red_back"), SubResource("Resource_purple_back"), SubResource("Resource_field")])

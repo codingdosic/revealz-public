@@ -1,0 +1,147 @@
+[gd_scene load_steps=3 format=3 uid="uid://drcq0aa0lm6om"]
+
+[ext_resource type="Script" uid="uid://bgbdqup6ekvrb" path="res://scenes/ui/match_versus_overlay.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ducnh4cil3r6h" path="res://scenes/ui/player_badge.tscn" id="2_badge"]
+
+[node name="MatchVersusOverlay" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dimmer" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.09815734, 0.09813384, 0.14779761, 0.94)
+
+[node name="CenterAnchor" type="CenterContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MainVBox" type="VBoxContainer" parent="Root/CenterAnchor"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="HeadlineLabel" type="Label" parent="Root/CenterAnchor/MainVBox"]
+custom_minimum_size = Vector2(480, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoinArea" type="Control" parent="Root/CenterAnchor/MainVBox"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="CoinPivot" type="Control" parent="Root/CenterAnchor/MainVBox/CoinArea"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.7853982
+pivot_offset = Vector2(40, 40)
+
+[node name="CoinFront" type="PanelContainer" parent="Root/CenterAnchor/MainVBox/CoinArea/CoinPivot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CoinBack" type="PanelContainer" parent="Root/CenterAnchor/MainVBox/CoinArea/CoinPivot"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ReasonLabel" type="Label" parent="Root/CenterAnchor/MainVBox"]
+custom_minimum_size = Vector2(420, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BadgeRow" type="HBoxContainer" parent="Root/CenterAnchor/MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 500
+alignment = 1
+
+[node name="PlayerBadgeSlot" type="Control" parent="Root/CenterAnchor/MainVBox/BadgeRow"]
+custom_minimum_size = Vector2(181, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="PlayerBadge" parent="Root/CenterAnchor/MainVBox/BadgeRow/PlayerBadgeSlot" instance=ExtResource("2_badge")]
+custom_minimum_size = Vector2(181, 40)
+layout_mode = 0
+offset_right = 181.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="OpponentBadgeSlot" type="Control" parent="Root/CenterAnchor/MainVBox/BadgeRow"]
+custom_minimum_size = Vector2(181, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="OpponentBadge" parent="Root/CenterAnchor/MainVBox/BadgeRow/OpponentBadgeSlot" instance=ExtResource("2_badge")]
+custom_minimum_size = Vector2(181, 40)
+layout_mode = 0
+offset_right = 181.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="ConfirmAnchor" type="CenterContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -88.0
+offset_right = 120.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ConfirmButton" type="Button" parent="Root/ConfirmAnchor"]
+visible = false
+custom_minimum_size = Vector2(200, 44)
+layout_mode = 2
+text = "확인"

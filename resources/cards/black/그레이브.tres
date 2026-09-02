@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://ebej8pnbnwaw"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_6ptwe"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_1qp6l"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="3_3jwty"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3_qodvm"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qodvm"]
+load_path = "res://.godot/imported/흑-그레이브.png-0fcbd4b83784a0ceefd1b8940095f082.ctex"
+
+[resource]
+script = ExtResource("3_3jwty")
+card_name = "그레이브"
+illustration = SubResource("CompressedTexture2D_qodvm")
+illustration_back = ExtResource("2_1qp6l")
+id = 1
+card_type = "Unit"
+color = 1
+type = "Zombie"
+trigger_type = 64
+rarity = 1
+stat_l = 7
+stat_c = 5
+stat_r = 1
+stat_spd = 2

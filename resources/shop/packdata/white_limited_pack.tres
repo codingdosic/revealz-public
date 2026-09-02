@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ShopPackProduct" load_steps=8 format=3 uid="uid://dwtffoo155lks"]
+
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="1_hddgd"]
+[ext_resource type="Texture2D" uid="uid://keb3xjx4vk4l" path="res://assets_lite/White/백-자유의 성기사 세르무스.png" id="2_0teep"]
+[ext_resource type="Script" uid="uid://c38wd0ugoo4jy" path="res://scripts/shop/shop_pack_product.gd" id="2_mukab"]
+[ext_resource type="Texture2D" uid="uid://bixf6q2djmj5v" path="res://assets_lite/White/백-신성수 페가시스.png" id="3_2jxwt"]
+[ext_resource type="Texture2D" uid="uid://byirsg12um8tm" path="res://assets_lite/White/백-순백의 기사 베르트.png" id="4_q1a3u"]
+[ext_resource type="Texture2D" uid="uid://bxcnm0gm7lwqm" path="res://assets_lite/White/백-신성한 날개 이즈라엘.png" id="5_w2f23"]
+[ext_resource type="Texture2D" uid="uid://bwhyvkvsay6d6" path="res://assets_lite/White/백-기사단장 룩스.png" id="6_wan5b"]
+
+[resource]
+script = ExtResource("2_mukab")
+pool_json = "res://resources/shop/pools/limited_white_pool.json"
+pool_card_ids = null
+pool_weights = null
+product_id = "limited_white"
+display_name = "Limited white"
+price_gold = 150
+description = "백색 카드 한정 획득 가능"
+icon = ExtResource("2_0teep")
+detail_main = ExtResource("1_hddgd")
+detail_sample_1 = ExtResource("2_0teep")
+detail_sample_2 = ExtResource("3_2jxwt")
+detail_sample_3 = ExtResource("4_q1a3u")
+detail_sample_4 = ExtResource("5_w2f23")
+detail_sample_5 = ExtResource("6_wan5b")
+metadata/_custom_type_script = "uid://c38wd0ugoo4jy"

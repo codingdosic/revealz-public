@@ -1,0 +1,42 @@
+# Lobby syntax check + GET /v1/health smoke. Does not deploy or spawn Dedicated.
+name: Lobby CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lobby/**"
+      - ".github/workflows/lobby.yml"
+  pull_request:
+    paths:
+      - "lobby/**"
+      - ".github/workflows/lobby.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: lobby/package-lock.json
+      - name: npm ci
+        working-directory: lobby
+        run: npm ci
+      - name: node --check lobby JS
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(git ls-files 'lobby/**/*.js' | grep -v '/node_modules/')
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "no lobby JS files"
+            exit 1
+          fi
+          for f in "${files[@]}"; do
+            echo "check $f"
+            node --check "$f"
+          done
+      - name: GET /v1/health smoke
+        working-directory: lobby
+        run: npm run smoke

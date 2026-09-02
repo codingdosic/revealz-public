@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://c6w1agvxsijee"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_j08uy"]
+[ext_resource type="Texture2D" uid="uid://bobcrxthxcata" path="res://assets_lite/White/백-지혜의 눈 라파엘.png" id="2_5u2ag"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_cmd4b"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_5u2ag"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_g1bkk"]
+
+[resource]
+script = ExtResource("2_cmd4b")
+card_name = "지혜의 천사 라파엘"
+illustration = ExtResource("2_5u2ag")
+illustration_back = ExtResource("3_5u2ag")
+id = 43
+card_type = "Unit"
+color = 2
+type = "Angel"
+trigger_type = 64
+stat_l = 2
+stat_c = 6
+stat_r = 7
+stat_spd = 2
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

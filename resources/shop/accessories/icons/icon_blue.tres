@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ShopAccessoryProduct" load_steps=4 format=3 uid="uid://b37ei2hd6fmef"]
+
+[ext_resource type="Texture2D" uid="uid://8atqwqtu34t3" path="res://assets_lite/accessories/icon/icon_red.png" id="1_mxmqd"]
+[ext_resource type="Script" uid="uid://bdorsnpo5khl8" path="res://scripts/shop/shop_accessory_product.gd" id="2_qs48x"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_worrq"]
+load_path = "res://.godot/imported/icon_red.png-e614ebf2ae159d7e0df0e9a5c8e13fe1.ctex"
+
+[resource]
+script = ExtResource("2_qs48x")
+accessory_type = "icon"
+accessory_id = "icon_red"
+product_id = "shop_icon_red"
+display_name = "레드 아이콘"
+price_gold = 150
+description = "레드 프로필 아이콘을 획득합니다."
+icon = ExtResource("1_mxmqd")
+detail_main = SubResource("CompressedTexture2D_worrq")

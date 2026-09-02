@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://cpn3b0xt8yg70"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cq0mmu5s28x5d" path="res://assets_lite/Blue/청-마술사 지도 교수.png" id="2_u7f4n"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_u7f4n"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+
+[sub_resource type="Resource" id="step_hand_min"]
+script = ExtResource("5")
+zone = 0
+
+[sub_resource type="Resource" id="step_pick_hand"]
+script = ExtResource("6")
+relative_side = 0
+zone = 0
+units_only = false
+include_types = null
+store_key = "hand_pick"
+
+[sub_resource type="Resource" id="step_to_deck"]
+script = ExtResource("7")
+kind = 14
+targets_key = "hand_pick"
+fx_trail = 1
+fx_trail_color = Color(0, 0.40784314, 0.84705883, 1)
+
+[sub_resource type="Resource" id="step_draw"]
+script = ExtResource("7")
+count = 2
+fx_trail_color = Color(0, 0.40784314, 0.84705883, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("step_hand_min"), SubResource("step_pick_hand"), SubResource("step_to_deck"), SubResource("step_draw")])
+
+[resource]
+script = ExtResource("2")
+card_name = "마술사 지도 교수"
+illustration = ExtResource("2_u7f4n")
+illustration_back = ExtResource("3_u7f4n")
+id = 71
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드에서 카드 1장을 덱 아래에 넣는다. 그 후, 덱에서 2장을 드로우한다."
+stat_l = 3
+stat_c = 2
+stat_r = 5
+stat_spd = 1
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

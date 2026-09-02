@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://cx63gpr8e2b1r"]
+
+[ext_resource type="Texture2D" uid="uid://c7macjisjybpi" path="res://assets_lite/accessories/field/red_board_img.png" id="1_db8li"]
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+accessory_id = "field_board2"
+display_name = "레드 필드"
+description = "레드 필드"
+accessory_type = "field"
+preview = ExtResource("1_db8li")
+preview_path = "res://assets_lite/ShopAsset/card_back.png"
+scene_path = "res://assets_lite/accessories/field/board2.glb"

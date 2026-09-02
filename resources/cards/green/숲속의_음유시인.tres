@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://b637pp14pd0j3"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_f21x7"]
+[ext_resource type="Texture2D" uid="uid://dbg43y5voyypg" path="res://assets_lite/Green/녹-숲속의 음유시인.png" id="2_erea6"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_u3e5v"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_u4k5m"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_erea6"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="6"]
+[ext_resource type="Script" uid="uid://chknoallystak" path="res://resources/effects/primitives/step_check_no_ally_stacks.gd" id="7"]
+
+[sub_resource type="Resource" id="step_check"]
+script = ExtResource("7")
+min_count = 1
+
+[sub_resource type="Resource" id="step_pick_stack"]
+script = ExtResource("5")
+relative_side = 0
+zone = 5
+line_scope = 2
+units_only = false
+include_types = null
+store_key = "stack_card"
+
+[sub_resource type="Resource" id="step_to_hand"]
+script = ExtResource("6")
+kind = 12
+targets_key = "stack_card"
+fx_trail_color = Color(0, 0.77254903, 0.16470589, 1)
+
+[sub_resource type="Resource" id="step_pick_hand"]
+script = ExtResource("5")
+relative_side = 0
+zone = 0
+line_scope = 0
+units_only = false
+include_types = null
+store_key = "hand_card"
+
+[sub_resource type="Resource" id="step_pick_host"]
+script = ExtResource("5")
+relative_side = 0
+line_scope = 0
+include_types = null
+store_key = "host"
+
+[sub_resource type="Resource" id="step_attach"]
+script = ExtResource("6")
+kind = 10
+targets_key = "hand_card"
+host_key = "host"
+fx_trail = 1
+fx_trail_color = Color(0, 0.77254903, 0.16470589, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2_u4k5m")
+steps = Array[ExtResource("4")]([SubResource("step_check"), SubResource("step_pick_stack"), SubResource("step_to_hand"), SubResource("step_pick_hand"), SubResource("step_pick_host"), SubResource("step_attach")])
+
+[resource]
+script = ExtResource("2_u3e5v")
+card_name = "숲속의 음유시인"
+illustration = ExtResource("2_erea6")
+illustration_back = ExtResource("3_erea6")
+id = 55
+card_type = "Unit"
+color = 4
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 모든 라인에서 자신의 스택 1장을 핸드에 넣는다. 그 후, 핸드에서 카드 1장을 자신의 유닛 1장에게 스택으로 넣는다."
+stat_l = 3
+stat_c = 5
+stat_r = 4
+stat_spd = 3
+pipelines = Array[ExtResource("2_u4k5m")]([SubResource("pipeline_open")])

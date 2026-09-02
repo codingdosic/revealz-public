@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=18 format=3 uid="uid://dmqdar051yyue"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_o7nui"]
+[ext_resource type="Texture2D" uid="uid://chlp6rfdn8vx7" path="res://assets_lite/Red/적-용의 아이 피로.png" id="2_groho"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_groho"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="4_xowiy"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="5"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="6"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6_groho"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+[ext_resource type="Script" uid="uid://1lfhjsmsyq02" path="res://resources/effects/primitives/step_store_card_stat.gd" id="7_jdvj3"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="8_groho"]
+[ext_resource type="Script" uid="uid://c8c744cu72j4v" path="res://resources/effects/primitives/step_modify_stat_from_key.gd" id="9_h2xhj"]
+
+[sub_resource type="Resource" id="Resource_h2xhj"]
+script = ExtResource("6_groho")
+relative_side = 1
+line_scope = 1
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_fnmvx"]
+script = ExtResource("7")
+kind = 7
+store_key = "bound_cards"
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="Resource_60qno"]
+script = ExtResource("7_jdvj3")
+store_key = "bound_spd"
+metadata/_custom_type_script = "uid://1lfhjsmsyq02"
+
+[sub_resource type="Resource" id="Resource_mxemb"]
+script = ExtResource("8_groho")
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_334ea"]
+script = ExtResource("9_h2xhj")
+value_key = "bound_spd"
+scale = -1
+metadata/_custom_type_script = "uid://c8c744cu72j4v"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("5")
+steps = Array[ExtResource("6")]([SubResource("Resource_h2xhj"), SubResource("Resource_fnmvx"), SubResource("Resource_60qno"), SubResource("Resource_mxemb"), SubResource("Resource_334ea")])
+
+[resource]
+script = ExtResource("4_xowiy")
+card_name = "대담한 용녀 피로"
+illustration = ExtResource("2_groho")
+illustration_back = ExtResource("3_groho")
+id = 26
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 1
+effect_text = "$Trigger 자신의 덱 위에서 1장을 바인드한다. 그 후, 이 라인에서 상대 유닛 1장을 선택해 이 스킬로 바인드한 카드의 속도만큼 LP를 -한다."
+stat_l = 2
+stat_c = 4
+stat_r = 2
+stat_spd = 2
+pipelines = Array[ExtResource("5")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

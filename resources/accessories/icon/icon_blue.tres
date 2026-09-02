@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://cjsb7i0e2uay5"]
+
+[ext_resource type="Texture2D" uid="uid://c7m447duh0gf5" path="res://assets_lite/accessories/icon/icon_blue.png" id="1_7dirp"]
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="2_blnb4"]
+
+[resource]
+script = ExtResource("2_blnb4")
+accessory_id = "icon_blue"
+display_name = "블루 아이콘"
+description = "블루 프로필 아이콘"
+preview = ExtResource("1_7dirp")
+preview_path = "res://assets_lite/accessories/icon/icon_blue.png"

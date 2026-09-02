@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckst5d74wlpc5"]
+
+[ext_resource type="Script" uid="uid://bemr0cligw347" path="res://scenes/ui/shell/minimize_handle.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_handle"]
+bg_color = Color(0.15, 0.2, 0.35, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.65, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="MinimizeHandle" type="Button"]
+z_index = 200
+offset_left = 500.0
+offset_top = 602.0
+offset_right = 580.0
+offset_bottom = 632.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_handle")
+text = "복귀"
+script = ExtResource("1_script")

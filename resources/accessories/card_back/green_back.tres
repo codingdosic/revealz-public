@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://c8greenback01"]
+
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://bvhh4ibxcuk21" path="res://assets_lite/accessories/card_back/green_back.png" id="2_preview"]
+
+[resource]
+script = ExtResource("1_def")
+accessory_id = "green_back"
+display_name = "green back"
+description = "그린 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("2_preview")
+preview_path = "res://assets_lite/accessories/card_back/green_back.png"

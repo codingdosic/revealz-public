@@ -1,0 +1,18 @@
+{
+  "name": "revealz-lobby",
+  "version": "0.2.0",
+  "private": true,
+  "description": "revealz G4 lobby — create/join + random matchmaking + dedicated worker spawn + MetaSrv",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "smoke": "node smoke_health.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pg": "^8.16.0"
+  }
+}

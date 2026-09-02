@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdg1t28rk43ch"]
+
+[ext_resource type="Script" uid="uid://cr750b1uqv076" path="res://scenes/screen/shop_product_cell.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_li1bo"]
+
+[node name="ShopProductCell" type="Button"]
+custom_minimum_size = Vector2(160, 200)
+focus_mode = 0
+script = ExtResource("1_script")
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Content/VBox"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("2_li1bo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Content/VBox"]
+layout_mode = 2
+text = "Product"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PriceLabel" type="Label" parent="Content/VBox"]
+layout_mode = 2
+text = "0 G"
+horizontal_alignment = 1

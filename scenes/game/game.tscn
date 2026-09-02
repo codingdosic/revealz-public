@@ -1,0 +1,404 @@
+[gd_scene load_steps=21 format=3 uid="uid://0k3pixvydux5"]
+
+[ext_resource type="Script" uid="uid://c3x8w3dp0hru" path="res://scenes/game/card_manager.gd" id="1_7h61r"]
+[ext_resource type="PackedScene" uid="uid://dlhs26xk15y8k" path="res://scenes/card_slot/card_slot.tscn" id="3_0sr1o"]
+[ext_resource type="PackedScene" uid="uid://yghg3270rvs0" path="res://scenes/player_deck/player_deck.tscn" id="3_kelw5"]
+[ext_resource type="Script" uid="uid://crfxdl1nc3bna" path="res://scenes/game/opponent_hand.gd" id="4_4j704"]
+[ext_resource type="Script" uid="uid://rfbptmgsb6mi" path="res://scenes/game/player_hand.gd" id="4_kelw5"]
+[ext_resource type="Script" uid="uid://bjce4apqeciie" path="res://scenes/game/input_manager.gd" id="4_lfrn8"]
+[ext_resource type="Script" uid="uid://cmfsxm773bpmr" path="res://scenes/player_deck/opponent_deck.gd" id="5_kp23o"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="6_5v6r0"]
+[ext_resource type="PackedScene" uid="uid://ooynuo5mrybo" path="res://scenes/card_slot/opponent_card_slot.tscn" id="7_bdhmt"]
+[ext_resource type="Script" uid="uid://cmq5t2siy5dh4" path="res://scenes/game/phase_manager.gd" id="9_pmgr"]
+[ext_resource type="Script" uid="uid://cva1vm5gpghog" path="res://scenes/game/field_manager.gd" id="10_fmgr"]
+[ext_resource type="Script" uid="uid://db7px0qn8hwc6" path="res://scenes/game/life_container.gd" id="11_life"]
+[ext_resource type="Script" uid="uid://lrrf8biyuvvo" path="res://scripts/effect_manager.gd" id="12_emgr"]
+[ext_resource type="Script" uid="uid://c3ycnliccy7qq" path="res://scenes/game/graveyard_area.gd" id="13_gy"]
+[ext_resource type="PackedScene" uid="uid://diwi7vqv582im" path="res://scenes/ui/game_ui_layer.tscn" id="14_ui"]
+[ext_resource type="Script" uid="uid://tqytjpj1w32n" path="res://scenes/game/banish_zone.gd" id="15_bz"]
+[ext_resource type="Script" uid="uid://c57gv0v4ueqem" path="res://scenes/game/opponent_hand_hover.gd" id="16_ohh"]
+[ext_resource type="PackedScene" uid="uid://cqb28x6lvp853" path="res://scenes/ui/placement_permission_display.tscn" id="17_perm"]
+
+[sub_resource type="Environment" id="Environment_field3d"]
+background_mode = 1
+background_color = Color(0.1, 0.12, 0.16, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.5, 0.58, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_field3d"]
+viewport_path = NodePath("Field/Board3DViewports/SubViewport")
+
+[node name="Game" type="Node2D"]
+
+[node name="Field" type="Node2D" parent="."]
+
+[node name="FieldBackdrop" type="Sprite2D" parent="Field"]
+z_index = -50
+
+[node name="Board3DViewports" type="Node2D" parent="Field"]
+visible = false
+z_index = -25
+
+[node name="SubViewport" type="SubViewport" parent="Field/Board3DViewports"]
+own_world_3d = true
+handle_input_locally = false
+gui_disable_input = true
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Field/Board3DViewports/SubViewport"]
+environment = SubResource("Environment_field3d")
+
+[node name="SunLight" type="DirectionalLight3D" parent="Field/Board3DViewports/SubViewport"]
+transform = Transform3D(0.3923082, 0.9198334, 0.0008734849, -0.06610273, 0.027245576, 0.9974407, 0.91745555, -0.39136192, 0.07149215, 6.43308, 28, -6.43308)
+light_color = Color(0.895, 0.838, 0.774, 1)
+shadow_enabled = true
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="Field/Board3DViewports/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 22, 0)
+current = true
+fov = 57.3
+size = 23.0
+
+[node name="PlayerBoard" type="Node3D" parent="Field/Board3DViewports/SubViewport"]
+transform = Transform3D(8.2, 0, 0, 0, 8.2, 0, 0, 0, 8.2, 0, 0, 5.305)
+
+[node name="OpponentBoard" type="Node3D" parent="Field/Board3DViewports/SubViewport"]
+transform = Transform3D(-8.2, 0, -7.1686674e-07, 0, 8.2, 0, 7.1686674e-07, 0, -8.2, 0, 0, -5.265)
+
+[node name="Display" type="Sprite2D" parent="Field/Board3DViewports"]
+position = Vector2(576, 324)
+texture = SubResource("ViewportTexture_field3d")
+
+[node name="PlayerBoard" type="Node2D" parent="Field"]
+
+[node name="CardSlots" type="Node2D" parent="Field/PlayerBoard"]
+
+[node name="PlayerLeftCardSlot" type="Node2D" parent="Field/PlayerBoard/CardSlots"]
+
+[node name="CardSlot" parent="Field/PlayerBoard/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(264, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot2" parent="Field/PlayerBoard/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(340, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot3" parent="Field/PlayerBoard/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(416, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot4" parent="Field/PlayerBoard/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(302, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/PlayerBoard/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(378, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlayerCenterCardSlot" type="Node2D" parent="Field/PlayerBoard/CardSlots"]
+
+[node name="CardSlot2" parent="Field/PlayerBoard/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(500, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/PlayerBoard/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(576, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot6" parent="Field/PlayerBoard/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(652, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot7" parent="Field/PlayerBoard/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(538, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot8" parent="Field/PlayerBoard/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(614, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlayerRightCardSlot" type="Node2D" parent="Field/PlayerBoard/CardSlots"]
+
+[node name="CardSlot3" parent="Field/PlayerBoard/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(736, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot9" parent="Field/PlayerBoard/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(812, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot10" parent="Field/PlayerBoard/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(888, 391)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot11" parent="Field/PlayerBoard/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(774, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot12" parent="Field/PlayerBoard/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(850, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlayerDeck" parent="Field/PlayerBoard" instance=ExtResource("3_kelw5")]
+z_index = -2
+position = Vector2(970, 485)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlacementPermissionDisplay" parent="Field/PlayerBoard" instance=ExtResource("17_perm")]
+position = Vector2(888, 485)
+
+[node name="PlayerLifeContainer" type="Node2D" parent="Field/PlayerBoard"]
+position = Vector2(167, 438)
+script = ExtResource("11_life")
+
+[node name="PlayerGraveyard" type="Node2D" parent="Field/PlayerBoard"]
+position = Vector2(970, 407)
+rotation = 4.712389
+scale = Vector2(0.4, 0.4)
+script = ExtResource("13_gy")
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/PlayerBoard/PlayerGraveyard"]
+visible = false
+modulate = Color(0.0036933613, 0.18192261, 0.7821716, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_5v6r0")
+
+[node name="PlayerBanishZone" type="Node2D" parent="Field/PlayerBoard"]
+position = Vector2(970, 358)
+rotation = -1.5707964
+scale = Vector2(0.4, 0.4)
+script = ExtResource("15_bz")
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/PlayerBoard/PlayerBanishZone"]
+visible = false
+modulate = Color(0.7019608, 0.015686275, 1, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_5v6r0")
+
+[node name="OpponentBoard" type="Node2D" parent="Field"]
+
+[node name="CardSlots" type="Node2D" parent="Field/OpponentBoard"]
+
+[node name="OpponentLeftCardSlot" type="Node2D" parent="Field/OpponentBoard/CardSlots"]
+
+[node name="CardSlot" parent="Field/OpponentBoard/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(302, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot2" parent="Field/OpponentBoard/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(378, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot3" parent="Field/OpponentBoard/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(264, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot4" parent="Field/OpponentBoard/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(340, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/OpponentBoard/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(416, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentCenterCardSlot" type="Node2D" parent="Field/OpponentBoard/CardSlots"]
+
+[node name="CardSlot6" parent="Field/OpponentBoard/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(538, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot7" parent="Field/OpponentBoard/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(614, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot8" parent="Field/OpponentBoard/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(500, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot9" parent="Field/OpponentBoard/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(576, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot10" parent="Field/OpponentBoard/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(652, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentRightCardSlot" type="Node2D" parent="Field/OpponentBoard/CardSlots"]
+
+[node name="CardSlot11" parent="Field/OpponentBoard/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(774, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot12" parent="Field/OpponentBoard/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(850, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot13" parent="Field/OpponentBoard/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(736, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot14" parent="Field/OpponentBoard/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(812, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot15" parent="Field/OpponentBoard/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(888, 257)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentDeck" type="Node2D" parent="Field/OpponentBoard"]
+position = Vector2(182, 163)
+scale = Vector2(0.4, 0.4)
+script = ExtResource("5_kp23o")
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentBoard/OpponentDeck"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_5v6r0")
+flip_v = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Field/OpponentBoard/OpponentDeck"]
+modulate = Color(0, 0, 0, 1)
+offset_left = -19.999998
+offset_top = -79.99999
+offset_right = 20.000002
+offset_bottom = -39.999992
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="OpponentLifeContainer" type="Node2D" parent="Field/OpponentBoard"]
+position = Vector2(985, 210)
+script = ExtResource("11_life")
+
+[node name="OpponentGraveyard" type="Node2D" parent="Field/OpponentBoard"]
+position = Vector2(182, 241)
+rotation = 4.712389
+scale = Vector2(0.4, 0.4)
+script = ExtResource("13_gy")
+owner_side = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentBoard/OpponentGraveyard"]
+visible = false
+modulate = Color(0.0036933613, 0.18192261, 0.7821716, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_5v6r0")
+
+[node name="OpponentBanishZone" type="Node2D" parent="Field/OpponentBoard"]
+position = Vector2(182, 290)
+rotation = -1.5707964
+scale = Vector2(0.4, 0.4)
+script = ExtResource("15_bz")
+owner_side = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentBoard/OpponentBanishZone"]
+visible = false
+modulate = Color(0.7019608, 0.015686275, 1, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_5v6r0")
+
+[node name="CardManager" type="Node2D" parent="Field"]
+script = ExtResource("1_7h61r")
+
+[node name="PlayerHand" type="Node2D" parent="Field"]
+script = ExtResource("4_kelw5")
+
+[node name="OpponentHand" type="Node2D" parent="Field"]
+script = ExtResource("4_4j704")
+
+[node name="InputManager" type="Node2D" parent="Field"]
+script = ExtResource("4_lfrn8")
+
+[node name="PhaseButton" type="Button" parent="Field"]
+offset_left = 965.0
+offset_top = 298.0
+offset_right = 1115.0
+offset_bottom = 329.0
+text = "확정"
+
+[node name="PhaseManager" type="Node" parent="Field"]
+script = ExtResource("9_pmgr")
+
+[node name="FieldManager" type="Node2D" parent="Field"]
+script = ExtResource("10_fmgr")
+
+[node name="EffectManager" type="Node" parent="Field"]
+script = ExtResource("12_emgr")
+
+[node name="BattleTimer" type="Timer" parent="Field"]
+
+[node name="LeftPowerLabel" type="PanelContainer" parent="Field"]
+offset_left = 315.0
+offset_top = 311.0
+offset_right = 365.0
+offset_bottom = 339.0
+
+[node name="ValueLabel" type="Label" parent="Field/LeftPowerLabel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterPowerLabel" type="PanelContainer" parent="Field"]
+offset_left = 551.0
+offset_top = 311.0
+offset_right = 601.0
+offset_bottom = 339.0
+
+[node name="ValueLabel" type="Label" parent="Field/CenterPowerLabel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPowerLabel" type="PanelContainer" parent="Field"]
+offset_left = 787.0
+offset_top = 311.0
+offset_right = 837.0
+offset_bottom = 339.0
+
+[node name="ValueLabel" type="Label" parent="Field/RightPowerLabel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OpponentHandHover" type="Area2D" parent="Field"]
+script = ExtResource("16_ohh")
+
+[node name="GameUILayer" parent="Field" instance=ExtResource("14_ui")]

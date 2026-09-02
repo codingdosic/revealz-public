@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AccessoryDefinition" load_steps=3 format=3 uid="uid://c62qi86lc1m3y"]
+
+[ext_resource type="Script" uid="uid://bxl0e2kg643tu" path="res://scripts/accessories/accessory_definition.gd" id="1_def"]
+[ext_resource type="Texture2D" uid="uid://cjrdxq8tc12ge" path="res://assets_lite/accessories/card_back/card_back_default.png" id="2_preview"]
+
+[resource]
+script = ExtResource("1_def")
+accessory_id = "card_back_default"
+display_name = "basic back"
+description = "기본 카드 뒷면"
+accessory_type = "card_back"
+preview = ExtResource("2_preview")
+preview_path = "res://assets_lite/accessories/card_back/card_back_default.png"

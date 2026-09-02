@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://dab7feamh3vmd"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_c3sqr"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_1evc8"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_4f5gv"]
+[ext_resource type="Texture2D" uid="uid://ce6rhug58n78p" path="res://assets_lite/Blue/청-마녀의 사역마.png" id="2_ri53h"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_ri53h"]
+
+[resource]
+script = ExtResource("2_4f5gv")
+card_name = "마녀의 사역마"
+illustration = ExtResource("2_ri53h")
+illustration_back = ExtResource("3_ri53h")
+id = 68
+card_type = "Unit"
+color = 16
+type = "Beast"
+trigger_type = 64
+stat_l = 2
+stat_c = 8
+stat_r = 3
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

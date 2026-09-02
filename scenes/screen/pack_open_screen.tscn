@@ -1,0 +1,139 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsltjjmpa0f4k"]
+
+[ext_resource type="Script" uid="uid://b5iq8muoiksnw" path="res://scenes/screen/pack_open_screen.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cmkn8rrs8jxed" path="res://assets_lite/ShopAsset/cardpack.png" id="2_pack"]
+
+[node name="PackOpenScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="ClickCatcher" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MultiGridRoot" type="CenterContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PackGrid" type="GridContainer" parent="MultiGridRoot"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 18
+columns = 5
+
+[node name="PackPreviewRoot" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PackVisual" type="Control" parent="PackPreviewRoot"]
+custom_minimum_size = Vector2(220, 308)
+anchors_preset = 0
+offset_right = 220.0
+offset_bottom = 308.0
+
+[node name="Art" type="TextureRect" parent="PackPreviewRoot/PackVisual"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_pack")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="PackPreviewRoot/PackVisual"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TearHost" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ChipRow" type="HBoxContainer" parent="Center"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PackLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 72.0
+offset_right = -24.0
+offset_bottom = 104.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 32
+text = "1/1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomRight" type="HBoxContainer" parent="."]
+z_index = 20
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -72.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 2
+
+[node name="SkipButton" type="Button" parent="BottomRight"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+focus_mode = 0
+text = "Skip"

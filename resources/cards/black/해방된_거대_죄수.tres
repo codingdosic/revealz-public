@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://df5i3kul7rkqk"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_nmkie"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_f7tw5"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_p6agv"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_5yctr"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5yctr"]
+load_path = "res://.godot/imported/흑-해방된 거대 죄수.png-e535c050a126a3c64600672cf2225244.ctex"
+
+[resource]
+script = ExtResource("2_p6agv")
+card_name = "해방된 거대 죄수"
+illustration = SubResource("CompressedTexture2D_5yctr")
+illustration_back = ExtResource("2_f7tw5")
+id = 14
+card_type = "Unit"
+color = 1
+type = "Giant"
+trigger_type = 64
+stat_l = 3
+stat_c = 7
+stat_r = 3
+stat_spd = 2

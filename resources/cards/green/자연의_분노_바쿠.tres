@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://dwmq5ads60mo3"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_ddqkf"]
+[ext_resource type="Texture2D" uid="uid://dr15wiouv7eki" path="res://assets_lite/Green/녹-자연의 분노 바쿠.png" id="2_x8rqp"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_xv346"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_x8rqp"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_yc3ek"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="6"]
+[ext_resource type="Script" uid="uid://wugnvb8t6l32" path="res://resources/effects/primitives/step_store_stack_count.gd" id="7"]
+[ext_resource type="Script" uid="uid://c8c744cu72j4v" path="res://resources/effects/primitives/step_modify_stat_from_key.gd" id="8"]
+[ext_resource type="Script" uid="uid://chknoallystak" path="res://resources/effects/primitives/step_check_no_ally_stacks.gd" id="9"]
+
+[sub_resource type="Resource" id="step_check"]
+script = ExtResource("9")
+min_count = 1
+
+[sub_resource type="Resource" id="step_gather"]
+script = ExtResource("6")
+kind = 13
+fx_trail = 1
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4_yc3ek")
+steps = Array[ExtResource("5")]([SubResource("step_check"), SubResource("step_gather")])
+
+[sub_resource type="Resource" id="step_store"]
+script = ExtResource("7")
+
+[sub_resource type="Resource" id="step_passive"]
+script = ExtResource("8")
+use_self = true
+value_key = "stack_count"
+scale = 3
+
+[sub_resource type="Resource" id="pipeline_passive"]
+script = ExtResource("4_yc3ek")
+trigger = "PASSIVE"
+steps = Array[ExtResource("5")]([SubResource("step_store"), SubResource("step_passive")])
+
+[resource]
+script = ExtResource("2_xv346")
+card_name = "자연의 분노 바쿠"
+illustration = ExtResource("2_x8rqp")
+illustration_back = ExtResource("3_x8rqp")
+id = 59
+card_type = "Unit"
+color = 4
+type = "Beast"
+trigger_type = 33
+effect_text = "$Trigger 모든 라인의 자신의 스택 전부 이 유닛에게 스택으로 넣는다.$Trigger 이 유닛이 가진 스택 1장당 이 유닛의 LP +3"
+stat_l = 4
+stat_c = 4
+stat_r = 4
+stat_spd = 2
+pipelines = Array[ExtResource("4_yc3ek")]([SubResource("pipeline_open"), SubResource("pipeline_passive")])

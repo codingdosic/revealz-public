@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://d2lcqnclhlqw5"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_tjb4a"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_vj8y7"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_lh43h"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lh43h"]
+load_path = "res://.godot/imported/흑-새침한 악마 소녀.png-3b4b667da18a23efc4fb5159258de2fa.ctex"
+
+[resource]
+script = ExtResource("1")
+card_name = "새침한 악마 소녀"
+illustration = SubResource("CompressedTexture2D_lh43h")
+illustration_back = ExtResource("2_vj8y7")
+id = 6
+card_type = "Unit"
+color = 1
+type = "Fiend"
+trigger_type = 64
+stat_l = 4
+stat_c = 5
+stat_r = 4
+stat_spd = 1

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://bcssq3vyadyyh"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_qfax3"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_85vqc"]
+[ext_resource type="Texture2D" uid="uid://d1s435d4keuh1" path="res://assets_lite/Blue/청-마공학 장치.png" id="2_546wj"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_cc6v7"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_546wj"]
+
+[resource]
+script = ExtResource("2_cc6v7")
+card_name = "마공학 꿈 장치"
+illustration = ExtResource("2_546wj")
+illustration_back = ExtResource("3_546wj")
+id = 66
+card_type = "Unit"
+color = 16
+type = "Machine"
+trigger_type = 64
+stat_l = 1
+stat_c = 6
+stat_r = 5
+stat_spd = 3
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

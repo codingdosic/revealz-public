@@ -1,0 +1,323 @@
+[gd_scene load_steps=15 format=3 uid="uid://0k3pixvydux5"]
+
+[ext_resource type="Script" uid="uid://c3x8w3dp0hru" path="res://scenes/game/card_manager.gd" id="1_7h61r"]
+[ext_resource type="PackedScene" uid="uid://dlhs26xk15y8k" path="res://scenes/card_slot/card_slot.tscn" id="3_0sr1o"]
+[ext_resource type="Texture2D" uid="uid://b48vepi78l4c8" path="res://assets/리빌즈 카드뒷면.png" id="3_5i0tg"]
+[ext_resource type="PackedScene" uid="uid://yghg3270rvs0" path="res://scenes/player_deck/player_deck.tscn" id="3_kelw5"]
+[ext_resource type="Script" uid="uid://crfxdl1nc3bna" path="res://scenes/game/opponent_hand.gd" id="4_4j704"]
+[ext_resource type="Script" uid="uid://rfbptmgsb6mi" path="res://scenes/game/player_hand.gd" id="4_kelw5"]
+[ext_resource type="Script" uid="uid://bjce4apqeciie" path="res://scenes/game/input_manager.gd" id="4_lfrn8"]
+[ext_resource type="Script" uid="uid://cmfsxm773bpmr" path="res://scenes/player_deck/opponent_deck.gd" id="5_kp23o"]
+[ext_resource type="PackedScene" uid="uid://ooynuo5mrybo" path="res://scenes/card_slot/opponent_card_slot.tscn" id="7_bdhmt"]
+[ext_resource type="Script" uid="uid://cmq5t2siy5dh4" path="res://scenes/game/phase_manager.gd" id="9_pmgr"]
+[ext_resource type="Script" uid="uid://cva1vm5gpghog" path="res://scenes/game/field_manager.gd" id="10_fmgr"]
+[ext_resource type="Script" uid="uid://db7px0qn8hwc6" path="res://scenes/game/life_container.gd" id="11_life"]
+[ext_resource type="Script" uid="uid://lrrf8biyuvvo" path="res://scripts/effect_manager.gd" id="12_emgr"]
+[ext_resource type="Script" uid="uid://c3ycnliccy7qq" path="res://scenes/game/graveyard_area.gd" id="13_gy"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Field" type="Node2D" parent="."]
+
+[node name="CardManager" type="Node2D" parent="Field"]
+script = ExtResource("1_7h61r")
+
+[node name="PlayerHand" type="Node2D" parent="Field"]
+script = ExtResource("4_kelw5")
+
+[node name="PlayerDeck" parent="Field" instance=ExtResource("3_kelw5")]
+z_index = -2
+position = Vector2(1070, 550)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentHand" type="Node2D" parent="Field"]
+script = ExtResource("4_4j704")
+
+[node name="OpponentDeck" type="Node2D" parent="Field"]
+position = Vector2(80, 96)
+scale = Vector2(0.4, 0.4)
+script = ExtResource("5_kp23o")
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentDeck"]
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_5i0tg")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Field/OpponentDeck"]
+modulate = Color(0, 0, 0, 1)
+offset_left = -19.999998
+offset_top = -79.99999
+offset_right = 20.000002
+offset_bottom = -39.999992
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="InputManager" type="Node2D" parent="Field"]
+script = ExtResource("4_lfrn8")
+
+[node name="CardSlots" type="Node2D" parent="Field"]
+
+[node name="PlayerLeftCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot" parent="Field/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(296.00003, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot2" parent="Field/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(362.00003, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot3" parent="Field/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(428.00003, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot4" parent="Field/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(330.00003, 472.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/CardSlots/PlayerLeftCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(396.00003, 472.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlayerCenterCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot2" parent="Field/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(512, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(578, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot6" parent="Field/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(644, 382.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot7" parent="Field/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(545.9999, 472.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot8" parent="Field/CardSlots/PlayerCenterCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(612, 472.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="PlayerRightCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot3" parent="Field/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(728, 384.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot9" parent="Field/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(794, 384.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot10" parent="Field/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(860, 384.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot11" parent="Field/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(761.9999, 474.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot12" parent="Field/CardSlots/PlayerRightCardSlot" instance=ExtResource("3_0sr1o")]
+z_index = -3
+position = Vector2(828, 474.99994)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentLeftCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot" parent="Field/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(330, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot2" parent="Field/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(396, 163)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot3" parent="Field/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(296, 253)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot4" parent="Field/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(362, 253)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot5" parent="Field/CardSlots/OpponentLeftCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(428, 253)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentCenterCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot6" parent="Field/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(546, 163.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot7" parent="Field/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(612, 163.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot8" parent="Field/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(512, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot9" parent="Field/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(578, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot10" parent="Field/CardSlots/OpponentCenterCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(644, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="OpponentRightCardSlot" type="Node2D" parent="Field/CardSlots"]
+
+[node name="CardSlot11" parent="Field/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(762.00006, 163.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot12" parent="Field/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(828.00006, 163.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot13" parent="Field/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(728.00006, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot14" parent="Field/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(794.00006, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="CardSlot15" parent="Field/CardSlots/OpponentRightCardSlot" instance=ExtResource("7_bdhmt")]
+z_index = -3
+position = Vector2(860.00006, 253.00002)
+scale = Vector2(0.4, 0.4)
+
+[node name="PhaseButton" type="Button" parent="Field"]
+offset_left = 1032.0
+offset_top = 297.0
+offset_right = 1107.0
+offset_bottom = 328.0
+text = "확정"
+
+[node name="PhaseManager" type="Node" parent="Field"]
+script = ExtResource("9_pmgr")
+
+[node name="FieldManager" type="Node2D" parent="Field"]
+script = ExtResource("10_fmgr")
+
+[node name="EffectManager" type="Node" parent="Field"]
+script = ExtResource("12_emgr")
+
+[node name="BattleTimer" type="Timer" parent="Field"]
+
+[node name="PlayerLifeContainer" type="Node2D" parent="Field"]
+position = Vector2(1070, 170)
+script = ExtResource("11_life")
+
+[node name="OpponentLifeContainer" type="Node2D" parent="Field"]
+position = Vector2(80, 468)
+script = ExtResource("11_life")
+
+[node name="PlayerGraveyard" type="Node2D" parent="Field"]
+position = Vector2(1070, 470)
+rotation = 4.712389
+scale = Vector2(0.4, 0.4)
+script = ExtResource("13_gy")
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/PlayerGraveyard"]
+modulate = Color(0.0036933613, 0.18192261, 0.7821716, 1)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_5i0tg")
+
+[node name="OpponentGraveyard" type="Node2D" parent="Field"]
+position = Vector2(80, 176)
+rotation = 4.712389
+scale = Vector2(0.4, 0.4)
+script = ExtResource("13_gy")
+owner_side = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentGraveyard"]
+modulate = Color(0.0036933613, 0.18192261, 0.7821716, 1)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_5i0tg")
+
+[node name="PlayerBanishZone" type="Node2D" parent="Field"]
+position = Vector2(1070, 400)
+rotation = -1.5707964
+scale = Vector2(0.4, 0.4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/PlayerBanishZone"]
+modulate = Color(0.7019608, 0.015686275, 1, 1)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_5i0tg")
+
+[node name="OpponentBanishZone" type="Node2D" parent="Field"]
+position = Vector2(80, 246)
+rotation = -1.5707964
+scale = Vector2(0.4, 0.4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Field/OpponentBanishZone"]
+modulate = Color(0.7019608, 0.015686275, 1, 1)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_5i0tg")
+
+[node name="LeftPowerLabel" type="Label" parent="Field"]
+offset_left = 343.0
+offset_top = 306.0
+offset_right = 383.0
+offset_bottom = 329.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterPowerLabel" type="Label" parent="Field"]
+offset_left = 558.0
+offset_top = 306.0
+offset_right = 598.0
+offset_bottom = 329.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPowerLabel" type="Label" parent="Field"]
+offset_left = 775.0
+offset_top = 306.0
+offset_right = 815.0
+offset_bottom = 329.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="."]
+offset_left = 187.8548
+offset_top = 540.81494
+offset_right = 227.8548
+offset_bottom = 563.81494

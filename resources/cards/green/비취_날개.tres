@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://cij4jik7xefhf"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_hect5"]
+[ext_resource type="Texture2D" uid="uid://b8p2fhir51erc" path="res://assets_lite/Green/녹-비취 날개.png" id="2_h2py4"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_s7dpc"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_h2py4"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4_0ingm"]
+
+[resource]
+script = ExtResource("2_s7dpc")
+card_name = "비취 날개"
+illustration = ExtResource("2_h2py4")
+illustration_back = ExtResource("3_h2py4")
+id = 50
+card_type = "Unit"
+color = 4
+type = "Beast"
+trigger_type = 64
+stat_l = 7
+stat_c = 7
+stat_r = 3
+stat_spd = 2
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=12 format=3 uid="uid://w6c2oe4xginy"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_t0e8s"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_fvr8e"]
+[ext_resource type="Texture2D" uid="uid://y45oj3gn5ba2" path="res://assets_lite/Red/적-드라그나의 권속.png" id="2_n8nq7"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_n8nq7"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://oeldhhpfvipv" path="res://resources/effects/primitives/step_store_count.gd" id="6"]
+[ext_resource type="Script" uid="uid://c8c744cu72j4v" path="res://resources/effects/primitives/step_modify_stat_from_key.gd" id="7"]
+
+[sub_resource type="Resource" id="step_store_banish"]
+script = ExtResource("6")
+zone = 4
+store_key = "bind_count"
+
+[sub_resource type="Resource" id="step_apply"]
+script = ExtResource("7")
+use_self = true
+value_key = "bind_count"
+
+[sub_resource type="Resource" id="pipeline_passive"]
+script = ExtResource("4")
+trigger = "PASSIVE"
+steps = Array[ExtResource("5")]([SubResource("step_store_banish"), SubResource("step_apply")])
+
+[resource]
+script = ExtResource("2_fvr8e")
+card_name = "드라그나의 권속"
+illustration = ExtResource("2_n8nq7")
+illustration_back = ExtResource("3_n8nq7")
+id = 17
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 32
+effect_text = "$Trigger 바인드된 자신의 카드 1장당 이 유닛의 LP +1"
+stat_l = 2
+stat_c = 2
+stat_r = 2
+stat_spd = 2
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_passive")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://hf5w8qfoogk2"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_f4ot8"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_55hdg"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2_h8ox7"]
+[ext_resource type="Texture2D" uid="uid://dtxc7em1vir6" path="res://assets_lite/Blue/청-마력 증폭자.png" id="2_i1mr5"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_i1mr5"]
+
+[resource]
+script = ExtResource("2_55hdg")
+card_name = "신참 마술사"
+illustration = ExtResource("2_i1mr5")
+illustration_back = ExtResource("3_i1mr5")
+id = 73
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 64
+stat_l = 5
+stat_c = 2
+stat_r = 5
+stat_spd = 1
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

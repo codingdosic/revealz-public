@@ -1,0 +1,105 @@
+[gd_scene load_steps=3 format=3 uid="uid://cf7ue6hrgd25j"]
+
+[ext_resource type="Script" uid="uid://c57o6l3ktag7w" path="res://scenes/screen/deck_select_screen.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://djikcyolmy3ra" path="res://scenes/screen/deck_select_cell.tscn" id="2_cell"]
+
+[node name="DeckSelectScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="Body" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="GridSection" type="PanelContainer" parent="Margin/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Margin/Body/GridSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+
+[node name="GridScroll" type="ScrollContainer" parent="Margin/Body/GridSection/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="DeckGrid" type="GridContainer" parent="Margin/Body/GridSection/MarginContainer/GridScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="AddCell" parent="Margin/Body/GridSection/MarginContainer/GridScroll/DeckGrid" instance=ExtResource("2_cell")]
+layout_mode = 2
+
+[node name="OptionsSection" type="PanelContainer" parent="Margin/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OptionsMargin" type="MarginContainer" parent="Margin/Body/OptionsSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+
+[node name="OptionsVBox" type="VBoxContainer" parent="Margin/Body/OptionsSection/OptionsMargin"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="SelectButton" type="Button" parent="Margin/Body/OptionsSection/OptionsMargin/OptionsVBox"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Select Deck"
+
+[node name="EditButton" type="Button" parent="Margin/Body/OptionsSection/OptionsMargin/OptionsVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Edit Deck"
+
+[node name="AccessoryButton" type="Button" parent="Margin/Body/OptionsSection/OptionsMargin/OptionsVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Change Accessory"
+
+[node name="DeleteButton" type="Button" parent="Margin/Body/OptionsSection/OptionsMargin/OptionsVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Delete deck"
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

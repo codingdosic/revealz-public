@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=16 format=3 uid="uid://dct2kd4r88454"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dmpyjtvi25jqf" path="res://assets_lite/Blue/청-장전의 마술사 슈티.png" id="2_vbvs5"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_vbvs5"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="8"]
+
+[sub_resource type="Resource" id="step_hand_min"]
+script = ExtResource("5")
+zone = 0
+min_count = 3
+
+[sub_resource type="Resource" id="step_pick_ally"]
+script = ExtResource("6")
+relative_side = 0
+exclude_source = true
+include_types = null
+store_key = "ally_pick"
+
+[sub_resource type="Resource" id="step_to_hand"]
+script = ExtResource("7")
+kind = 15
+targets_key = "ally_pick"
+
+[sub_resource type="Resource" id="step_buff"]
+script = ExtResource("8")
+use_self = true
+delta = 4
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("step_hand_min"), SubResource("step_pick_ally"), SubResource("step_to_hand"), SubResource("step_buff")])
+
+[resource]
+script = ExtResource("2")
+card_name = "장전의 마술사 슈티"
+illustration = ExtResource("2_vbvs5")
+illustration_back = ExtResource("3_vbvs5")
+id = 74
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드가 3장 이상이라면, 이 라인에서 자신의 유닛 1장을 선택해 핸드에 넣는다. 그 후, 이 유닛의 LP +4"
+stat_l = 3
+stat_c = 3
+stat_r = 3
+stat_spd = 3
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

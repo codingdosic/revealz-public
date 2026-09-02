@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://ducnh4cil3r6h"]
+
+[ext_resource type="Script" uid="uid://ddc1ciixe6rku" path="res://scenes/ui/player_badge.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_icon"]
+
+[node name="PlayerBadge" type="Button"]
+custom_minimum_size = Vector2(100, 40)
+focus_mode = 0
+script = ExtResource("1_script")
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Content/HBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Content/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player"
+text_overrun_behavior = 3

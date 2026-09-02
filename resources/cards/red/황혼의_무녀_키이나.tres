@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://dndgyihw3vf71"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_ki6m7"]
+[ext_resource type="Texture2D" uid="uid://dwf0q3ocdyvxh" path="res://assets_lite/Red/적-황혼의 무녀.png" id="2_rr3ka"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_rr3ka"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="4_t0jma"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="5"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="6"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6_rr3ka"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="8"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="9"]
+
+[sub_resource type="Resource" id="Resource_45r2r"]
+script = ExtResource("6_rr3ka")
+zone = 4
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_pick_banish_unit"]
+script = ExtResource("7")
+relative_side = 0
+zone = 4
+line_scope = 0
+include_types = null
+
+[sub_resource type="Resource" id="step_pick_slot"]
+script = ExtResource("8")
+
+[sub_resource type="Resource" id="step_reborn"]
+script = ExtResource("9")
+kind = 4
+fx_trail = 1
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+
+[sub_resource type="Resource" id="step_bind_self"]
+script = ExtResource("9")
+kind = 8
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("5")
+steps = Array[ExtResource("6")]([SubResource("Resource_45r2r"), SubResource("step_pick_banish_unit"), SubResource("step_pick_slot"), SubResource("step_reborn"), SubResource("step_bind_self")])
+
+[resource]
+script = ExtResource("4_t0jma")
+card_name = "황혼의 무녀 키이나"
+illustration = ExtResource("2_rr3ka")
+illustration_back = ExtResource("3_rr3ka")
+id = 30
+card_type = "Unit"
+color = 8
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 바인드된 자신의 유닛 1장을 이 라인에 배치한다. 그 후, 이 유닛을 바인드한다."
+stat_l = 3
+stat_c = 1
+stat_r = 4
+stat_spd = 3
+pipelines = Array[ExtResource("5")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

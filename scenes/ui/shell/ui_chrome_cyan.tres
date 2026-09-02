@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UiChromeStyle" load_steps=3 format=3 uid="uid://3usn03pvye3e"]
+
+[ext_resource type="Script" uid="uid://02hiwsiummki" path="res://scenes/ui/shell/ui_chrome_style.gd" id="1_chrome"]
+[ext_resource type="Resource" uid="uid://cndr7i2g3wb6a" path="res://scenes/ui/shell/ui_copy_ko.tres" id="2_copy"]
+
+[resource]
+script = ExtResource("1_chrome")
+panel_border_width = 0.3
+button_border_width = 0.3
+button_margin_h = 6
+sheet_bg = Color(0.16824481, 0.16822004, 0.24079719, 0.9607843)
+screen_bg = Color(0.16517395, 0.16516936, 0.23356318, 0.9607843)
+section_bg = Color(0.19950792, 0.19947737, 0.28134608, 0.9607843)
+section_border_width = 0.3
+copy = ExtResource("2_copy")

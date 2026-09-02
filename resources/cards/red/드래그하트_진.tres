@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=14 format=3 uid="uid://g3sa4xrb8kg2"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_nhyt6"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_ltlgp"]
+[ext_resource type="Texture2D" uid="uid://cbgpc6p6kj5i3" path="res://assets_lite/Red/적-드래그하트 진.png" id="2_ogd0e"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_ogd0e"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="8"]
+
+[sub_resource type="Resource" id="step_grave_min"]
+script = ExtResource("6")
+zone = 1
+
+[sub_resource type="Resource" id="step_pick_grave_random"]
+script = ExtResource("7")
+relative_side = 0
+zone = 1
+line_scope = 0
+units_only = false
+selection_mode = 1
+include_types = null
+
+[sub_resource type="Resource" id="step_bind"]
+script = ExtResource("8")
+kind = 6
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+trigger = "BIND"
+steps = Array[ExtResource("5")]([SubResource("step_grave_min"), SubResource("step_pick_grave_random"), SubResource("step_bind")])
+
+[resource]
+script = ExtResource("2_ltlgp")
+card_name = "드래그하트 진"
+illustration = ExtResource("2_ogd0e")
+illustration_back = ExtResource("3_ogd0e")
+id = 19
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 8
+effect_text = "$Trigger 자신의 트래쉬존에서 랜덤으로 카드 1장을 바인드한다."
+stat_l = 4
+stat_c = 4
+stat_r = 3
+stat_spd = 2
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

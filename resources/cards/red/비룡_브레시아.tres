@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=13 format=3 uid="uid://74758j6xlsf2"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_3j6g6"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_2hajv"]
+[ext_resource type="Texture2D" uid="uid://cst6m0ln0rf3m" path="res://assets_lite/Red/적-비룡 브레시아.png" id="2_wipos"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_wipos"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="4"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+
+[sub_resource type="Resource" id="step_pick_hand"]
+script = ExtResource("6")
+relative_side = 0
+zone = 0
+line_scope = 0
+units_only = false
+include_types = null
+
+[sub_resource type="Resource" id="step_bind"]
+script = ExtResource("7")
+kind = 6
+fx_trail_color = Color(1, 0.16862746, 0, 1)
+
+[sub_resource type="Resource" id="step_draw"]
+script = ExtResource("7")
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("4")
+steps = Array[ExtResource("5")]([SubResource("step_pick_hand"), SubResource("step_bind"), SubResource("step_draw")])
+
+[resource]
+script = ExtResource("2_2hajv")
+card_name = "비룡 브레시아"
+illustration = ExtResource("2_wipos")
+illustration_back = ExtResource("3_wipos")
+id = 24
+card_type = "Unit"
+color = 8
+type = "Dragon"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드에서 카드 1장을 바인드한다. 그 후, 덱에서 1장 드로우한다."
+stat_l = 5
+stat_c = 3
+stat_r = 1
+stat_spd = 2
+pipelines = Array[ExtResource("4")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

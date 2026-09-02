@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://b45x7dt2l1hem"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://brrw6q0ictno2" path="res://assets_lite/Blue/청-대가의 마술사 로스톰.png" id="2_21qc2"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_21qc2"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://b86mtq86dv8r7" path="res://resources/effects/primitives/step_select_slot.gd" id="7"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="8"]
+
+[sub_resource type="Resource" id="Resource_21qc2"]
+script = ExtResource("5")
+relative_side = 1
+line_scope = 3
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="step_hand_min"]
+script = ExtResource("5")
+zone = 0
+min_count = 4
+
+[sub_resource type="Resource" id="step_pick_unit"]
+script = ExtResource("6")
+line_scope = 3
+include_types = null
+store_key = "move_target"
+
+[sub_resource type="Resource" id="step_pick_slot"]
+script = ExtResource("7")
+relative_side = 1
+store_key = "dest_slot"
+check_at_preflight = false
+
+[sub_resource type="Resource" id="step_relocate"]
+script = ExtResource("8")
+kind = 16
+targets_key = "move_target"
+slot_key = "dest_slot"
+fx_trail = 1
+fx_trail_color = Color(0, 0.40784314, 0.84705883, 1)
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3")
+steps = Array[ExtResource("4")]([SubResource("Resource_21qc2"), SubResource("step_hand_min"), SubResource("step_pick_unit"), SubResource("step_pick_slot"), SubResource("step_relocate")])
+
+[resource]
+script = ExtResource("2")
+card_name = "공간의 마술사 로스톰"
+illustration = ExtResource("2_21qc2")
+illustration_back = ExtResource("3_21qc2")
+id = 63
+card_type = "Unit"
+color = 16
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드가 4장 이상이라면, 다른 라인에서 상대 유닛 1장을 선택해 이 라인으로 옮긴다."
+stat_l = 3
+stat_c = 4
+stat_r = 3
+stat_spd = 2
+oncePerTurn = true
+pipelines = Array[ExtResource("3")]([SubResource("pipeline_open")])

@@ -1,0 +1,39 @@
+# Push → VM git pull only. Does not compose up / restart lobby or Dedicated.
+name: Pull VM
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git fetch && pull on VM
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: ${{ secrets.VM_PORT || 22 }}
+          timeout: 30s
+          command_timeout: 2m
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.VM_REPO_PATH }}"
+            git fetch origin
+            b=$(git rev-parse --abbrev-ref HEAD)
+            echo "HEAD=$b"
+            if [ "$b" != "main" ]; then
+              echo "skip pull: not on main (rollback checkout left as-is)"
+              git log -1 --oneline
+              exit 0
+            fi
+            before=$(git rev-parse HEAD)
+            git pull --ff-only origin main
+            git log -1 --oneline
+            git status -sb
+            changed=$(git diff --name-only "$before" HEAD || true)
+            if printf '%s\n' "$changed" | grep -qx 'lobby/package.json'; then
+              echo "NOTE: lobby/package.json changed. On the VM: docker compose build lobby && docker compose up -d lobby (manual; this workflow does not restart)."
+            fi

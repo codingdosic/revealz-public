@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://lwwyd41f1if6"]
+
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_owq1u"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="2_or2ei"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="3"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="6_xv37k"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="7_m7mvd"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="8_2u7l7"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xv37k"]
+load_path = "res://.godot/imported/흑-영혼 수집가 랑.png-f2bb6b4a3da031d45f7cbbb20879e1b2.ctex"
+
+[sub_resource type="Resource" id="Resource_6bdp8"]
+script = ExtResource("6_xv37k")
+zone = 0
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_mtksx"]
+script = ExtResource("6_xv37k")
+zone = 1
+metadata/_custom_type_script = "uid://efw6d401lcsb"
+
+[sub_resource type="Resource" id="Resource_t3fkn"]
+script = ExtResource("7_m7mvd")
+relative_side = 0
+zone = 0
+units_only = false
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_hswh8"]
+script = ExtResource("8_2u7l7")
+kind = 2
+add_to_execution_pool = true
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="Resource_h56cm"]
+script = ExtResource("7_m7mvd")
+relative_side = 0
+zone = 1
+units_only = false
+exclude_execution_pool = true
+include_types = null
+metadata/_custom_type_script = "uid://bcfp5up0kmhwu"
+
+[sub_resource type="Resource" id="Resource_6w6xc"]
+script = ExtResource("8_2u7l7")
+kind = 3
+metadata/_custom_type_script = "uid://cifg4a85huwq4"
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("2")
+steps = Array[ExtResource("3")]([SubResource("Resource_6bdp8"), SubResource("Resource_mtksx"), SubResource("Resource_t3fkn"), SubResource("Resource_hswh8"), SubResource("Resource_h56cm"), SubResource("Resource_6w6xc")])
+
+[resource]
+script = ExtResource("1")
+card_name = "영혼 수집가 랑"
+illustration = SubResource("CompressedTexture2D_xv37k")
+illustration_back = ExtResource("2_or2ei")
+id = 9
+card_type = "Unit"
+color = 1
+type = "Magician"
+trigger_type = 1
+effect_text = "$Trigger 자신의 핸드에서 카드 1장을 선택해 트래쉬한다. 그 후, 트래쉬존에서 이 스킬로  트래쉬한 카드를 제외한 카드 1장을 핸드에 넣는다."
+stat_c = 3
+stat_r = 4
+stat_spd = 3
+pipelines = Array[ExtResource("2")]([SubResource("pipeline_open")])

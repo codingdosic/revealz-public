@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://cbxdll44wbou5"]
+
+[ext_resource type="Script" uid="uid://dqcdlr68s1fs5" path="res://resources/effects/default/effect_bundle.gd" id="1_vuvon"]
+[ext_resource type="Texture2D" uid="uid://sksvi506hecy" path="res://assets_lite/Green/녹-원혼에 침식된 엘프.png" id="2_0d0jd"]
+[ext_resource type="Script" uid="uid://bt2mcd6fwi7kg" path="res://resources/cards/card_data.gd" id="2_c8tot"]
+[ext_resource type="Texture2D" uid="uid://dvfn7lc8o70bu" path="res://assets_lite/ShopAsset/card_back.png" id="3_0d0jd"]
+[ext_resource type="Script" uid="uid://bgmsxn07y877s" path="res://resources/effects/schema/effect_pipeline.gd" id="3_43q73"]
+[ext_resource type="Script" uid="uid://esh3oh1q7f3y" path="res://resources/effects/schema/effect_step_base.gd" id="4"]
+[ext_resource type="Script" uid="uid://efw6d401lcsb" path="res://resources/effects/primitives/step_min_count.gd" id="5"]
+[ext_resource type="Script" uid="uid://bcfp5up0kmhwu" path="res://resources/effects/primitives/step_select_targets.gd" id="6"]
+[ext_resource type="Script" uid="uid://cifg4a85huwq4" path="res://resources/effects/primitives/step_move_cards.gd" id="7"]
+[ext_resource type="Script" uid="uid://cmvf7sy3y5cko" path="res://resources/effects/primitives/step_modify_stat.gd" id="8"]
+
+[sub_resource type="Resource" id="step_grave_min"]
+script = ExtResource("5")
+zone = 1
+
+[sub_resource type="Resource" id="step_pick_grave"]
+script = ExtResource("6")
+relative_side = 0
+zone = 1
+line_scope = 0
+units_only = false
+include_types = null
+store_key = "grave_card"
+
+[sub_resource type="Resource" id="step_pick_host"]
+script = ExtResource("6")
+relative_side = 0
+line_scope = 0
+include_types = null
+store_key = "host"
+
+[sub_resource type="Resource" id="step_stack"]
+script = ExtResource("7")
+kind = 10
+targets_key = "grave_card"
+host_key = "host"
+fx_trail = 1
+fx_trail_color = Color(0, 0.77254903, 0.16470589, 1)
+
+[sub_resource type="Resource" id="step_debuff"]
+script = ExtResource("8")
+use_self = true
+delta = -1
+
+[sub_resource type="Resource" id="pipeline_open"]
+script = ExtResource("3_43q73")
+steps = Array[ExtResource("4")]([SubResource("step_grave_min"), SubResource("step_pick_grave"), SubResource("step_pick_host"), SubResource("step_stack"), SubResource("step_debuff")])
+
+[resource]
+script = ExtResource("2_c8tot")
+card_name = "원한의 다크엘프"
+illustration = ExtResource("2_0d0jd")
+illustration_back = ExtResource("3_0d0jd")
+id = 58
+card_type = "Unit"
+color = 4
+type = "Fairy"
+trigger_type = 1
+effect_text = "$Trigger 자신의 트래쉬존에서 카드 1장을 자신의 유닛 1장에게 스택으로 넣는다. 그 후, 이 유닛의 LP -1"
+stat_l = 6
+stat_c = 4
+stat_r = 5
+stat_spd = 3
+pipelines = Array[ExtResource("3_43q73")]([SubResource("pipeline_open")])
+metadata/_custom_type_script = "uid://bt2mcd6fwi7kg"

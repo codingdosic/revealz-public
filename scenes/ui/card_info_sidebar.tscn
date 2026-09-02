@@ -1,0 +1,128 @@
+[gd_scene load_steps=4 format=3 uid="uid://dehdqxf82cxae"]
+
+[ext_resource type="Script" uid="uid://8ag01b21chqg" path="res://scenes/ui/card_info_sidebar.gd" id="1_cs"]
+[ext_resource type="Texture2D" uid="uid://cefoc117uqe8x" path="res://assets_lite/Black/흑-그레이브.png" id="2_auuny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cs"]
+bg_color = Color(0.08, 0.08, 0.12, 0.92)
+
+[node name="CardInfoSidebar" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cs")
+script = ExtResource("1_cs")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CardImage" type="TextureRect" parent="Margin/VBox"]
+custom_minimum_size = Vector2(166, 230)
+layout_mode = 2
+texture = ExtResource("2_auuny")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RarityFrame" type="Panel" parent="Margin/VBox/CardImage"]
+visible = false
+layout_mode = 0
+mouse_filter = 2
+
+[node name="LeftPowerLabel" type="Label" parent="Margin/VBox/CardImage"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -23.0
+offset_right = 54.0
+grow_vertical = 0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterPowerLabel" type="Label" parent="Margin/VBox/CardImage"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 72.0
+offset_top = -22.0
+offset_right = 112.0
+offset_bottom = 1.0
+grow_vertical = 0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPowerLabel" type="Label" parent="Margin/VBox/CardImage"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 129.0
+offset_top = -23.0
+offset_right = 169.0
+grow_vertical = 0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "카드명"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HSeparator2" type="HSeparator" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="ColorLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "COLOR: BLACK"
+
+[node name="HSeparatorRarity" type="HSeparator" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="RarityLabel" type="Label" parent="Margin/VBox"]
+visible = false
+layout_mode = 2
+text = "RARITY: N"
+
+[node name="HSeparator5" type="HSeparator" parent="Margin/VBox"]
+visible = false
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "SPD 0"
+
+[node name="HSeparator3" type="HSeparator" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="CardTypeLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "타입 / 종족"
+
+[node name="HSeparator4" type="HSeparator" parent="Margin/VBox"]
+layout_mode = 2
+
+[node name="EffectLabel" type="RichTextLabel" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+bbcode_enabled = true
+text = "효과"
+fit_content = true
+scroll_active = false
