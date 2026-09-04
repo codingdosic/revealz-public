@@ -124,6 +124,8 @@ poller가 주기적으로 `/v1/health`를 찔러 결과를 JSON Lines로 쌓고,
 | 데이터 (PostgreSQL) | 스키마 설계, 상점 카탈로그, 선물함, 백업/복구 |
 | 인프라 · 운영 | Docker Compose, GitHub Actions, health poller, 운영 화면 |
 
+설계 배경 · 트레이드오프 기록: [`docs/server_authority_decisions.md`](docs/server_authority_decisions.md)
+
 ---
 
 ## 기술 스택
@@ -138,63 +140,22 @@ poller가 주기적으로 `/v1/health`를 찔러 결과를 JSON Lines로 쌓고,
 
 ---
 
-## 코드 리뷰 가이드
+## 클라이언트 실행
 
-처음 보시는 분이 짧게 훑을 수 있도록, 성격별 진입점을 정리했습니다.
+**[📥 Releases에서 다운로드](https://github.com/codingdosic/revealz-public/releases/latest)**
 
-### 서버 · 운영
+`revealz_app.exe` 하나만 받아서 바로 실행할 수 있습니다. 설치 불필요, Godot 엔진 불필요.
 
-| 보고 싶은 것 | 경로 |
-|--------------|------|
-| 매칭 큐 · 전용 서버 spawn · warm 풀 · 준비 판정 | [`lobby/server.js`](lobby/server.js) |
-| 메타 API · revision 충돌 · 계정 상태 | [`lobby/meta/routes.js`](lobby/meta/routes.js) |
-| 구매 트랜잭션 · 확률 뽑기 (서버 권위) | [`lobby/meta/purchase.js`](lobby/meta/purchase.js) |
-| 상점 카탈로그 · 선물함 | [`lobby/meta/shop_catalog.js`](lobby/meta/shop_catalog.js), [`lobby/meta/mailbox.js`](lobby/meta/mailbox.js) |
-| 서버 측 덱 검증 | [`lobby/meta/validate_deck.js`](lobby/meta/validate_deck.js) |
-| 운영 라우팅 · 모니터 · 점검/백업 | [`lobby/ops_http.js`](lobby/ops_http.js), [`lobby/meta/ops.js`](lobby/meta/ops.js) |
-| DB 스키마 | [`lobby/meta/schema.sql`](lobby/meta/schema.sql) |
-| health poller | [`tools/ops_health_poll.py`](tools/ops_health_poll.py) |
-| CI / VM 배포 | [`.github/workflows/`](.github/workflows/) |
-| 스택 구성 | [`docker-compose.yml`](docker-compose.yml) |
+- 싱글 플레이, 덱 편집, 상점, 팩 오픈 등 대부분의 기능은 클라이언트만으로 동작합니다.
+- 온라인 매칭은 서버 연결이 필요하며, 현재는 실서버 운영 상태에 따라 가능 여부가 달라집니다.
 
-### 클라이언트
-
-| 보고 싶은 것 | 경로 |
-|--------------|------|
-| 전용 서버 진입점 (headless) | [`scripts/server_main.gd`](scripts/server_main.gd) |
-| ENet 접속 · 호스트 | [`scripts/network_manager.gd`](scripts/network_manager.gd) |
-| 서버 권위 매치 세션 | [`scripts/server_authority_session.gd`](scripts/server_authority_session.gd) |
-| 메타 동기화 · 점검 게이트 | [`scripts/meta/meta_sync.gd`](scripts/meta/meta_sync.gd) |
-| 카드 카탈로그 로딩 | [`scripts/card_registry.gd`](scripts/card_registry.gd) |
-| 온라인 준비 · 매칭 UI | [`scenes/screen/online_prepare_screen.gd`](scenes/screen/online_prepare_screen.gd) |
-| 덱 편집 · 상점 · 선물함 | [`scenes/screen/deck_editor_screen.gd`](scenes/screen/deck_editor_screen.gd), [`scenes/screen/shop_screen.gd`](scenes/screen/shop_screen.gd), [`scenes/screen/mailbox_screen.gd`](scenes/screen/mailbox_screen.gd) |
-
-### 기술적 문제 해결 (포트폴리오 항목 ↔ 코드)
-
-별도 포트폴리오에 서술한 문제 해결 과정이 어느 코드에 해당하는지 대응표입니다.
-
-| 문제 | 관련 코드 |
-|------|-----------|
-| 매칭은 성사되는데 접속은 실패하던 전용 서버 준비 판정 | [`lobby/server.js`](lobby/server.js), [`scripts/server_main.gd`](scripts/server_main.gd) |
-| 매치 워커 콜드스타트 — 카드 로딩을 부팅 임계 경로에서 제거 | [`scripts/card_registry.gd`](scripts/card_registry.gd), [`scripts/server_main.gd`](scripts/server_main.gd) |
-| 클라이언트를 믿던 경제 로직의 서버 권위 전환 | [`lobby/meta/purchase.js`](lobby/meta/purchase.js), [`lobby/meta/routes.js`](lobby/meta/routes.js), [`scripts/meta/meta_sync.gd`](scripts/meta/meta_sync.gd) |
-| 라이브 서비스 운영 체계 — 배포 경계 · 관측 · 점검 | [`.github/workflows/`](.github/workflows/), [`tools/ops_health_poll.py`](tools/ops_health_poll.py), [`lobby/ops_http.js`](lobby/ops_http.js), [`lobby/meta/ops.js`](lobby/meta/ops.js) |
-
-설계 배경과 트레이드오프 기록: [`docs/server_authority_decisions.md`](docs/server_authority_decisions.md)
-
----
-
-## 로컬 실행
-
-### 게임 클라이언트
+### 소스에서 직접 실행 (Godot 4 필요)
 
 1. [Godot 4.x](https://godotengine.org/) 설치
 2. 레포를 clone 한 뒤 `project.godot` 열기
-3. F5 실행 — 싱글 플레이, 덱 편집, UI 흐름은 로비 없이도 확인 가능
+3. F5 실행
 
-온라인 매칭은 로비 서버와 전용 서버 바이너리가 필요합니다. 바이너리는 이 레포에 **포함하지 않습니다**.
-
-### 로비 서버
+### 로비 서버 직접 구동 (선택)
 
 ```bash
 cd lobby
@@ -203,13 +164,11 @@ npm ci
 npm start
 ```
 
-- 기본 주소는 `http://127.0.0.1:8080`
-- `GET /v1/health` 로 상태 확인
-- 메타 DB를 쓰려면 PostgreSQL과 `META_DATABASE_URL` 설정이 필요합니다 (Compose 참고)
-
-### Docker Compose (로비 + DB + poller)
+- 기본 주소 `http://127.0.0.1:8080`, `GET /v1/health` 로 상태 확인
+- 메타 DB 사용 시 PostgreSQL과 `META_DATABASE_URL` 설정 필요 (Compose 참고)
 
 ```bash
+# Docker Compose로 한번에 (로비 + DB + poller)
 cp lobby/.env.example lobby/.env
 docker compose up -d
 ```
