@@ -110,3 +110,123 @@ func make_draw_result_event(self_draw: Dictionary, opponent_draw: Dictionary) ->
 		"opponentLifeRemaining": opponent_draw.get("life_remaining", []),
 		"opponentStartHandSize": int(opponent_draw.get("start_hand_size", 0)),
 	}
+
+
+## Meta validate-deck. 실패·Meta 불가 시 거부 (서버 권위 — skip 없음).
+func validate_deck_owned_async(
+	account_key: String,
+	card_ids: Array[int],
+	card_rarities: Array[int]
+) -> Dictionary:
+	var http := _meta_http()
+	if http == null:
+		return {"ok": false, "error": "meta_unavailable"}
+	if account_key.is_empty():
+		return {"ok": false, "error": "account_key_required"}
+	if card_ids.is_empty():
+		return {"ok": false, "error": "empty_deck"}
+	var ids_wire: Array = []
+	for id in card_ids:
+		ids_wire.append(int(id))
+	var rar_wire: Array = []
+	for r in card_rarities:
+		rar_wire.append(int(r))
+	var res: Dictionary = await MetaRemote.validate_deck(http, account_key, {
+		"card_ids": ids_wire,
+		"card_rarities": rar_wire,
+	})
+	if bool(res.get("ok", false)):
+		return {"ok": true, "error": ""}
+	var err := String(res.get("error", "validate_failed"))
+	if err.is_empty():
+		err = "validate_failed"
+	return {"ok": false, "error": err}
+
+
+## 덱 거부 이벤트 후 peer 연결 종료.
+func reject_deck_peer(peer_id: int, reason: String) -> void:
+	NetworkManager.send_event_to_peer(peer_id, {
+		"type": NetworkConstants.EVENT_DECK_REJECTED,
+		"reason": reason,
+	})
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree != null:
+		await tree.create_timer(0.15).timeout
+	var mp := NetworkManager.multiplayer.multiplayer_peer if NetworkManager else null
+	if mp != null and peer_id > 0:
+		mp.disconnect_peer(peer_id)
+
+
+## Meta 스냅샷에서 표시명·아이콘·보유 악세를 읽어온다. 실패 시 {}.
+func fetch_account_profile_async(account_key: String) -> Dictionary:
+	var key := account_key.strip_edges()
+	if key.is_empty():
+		return {}
+	var http := _meta_http()
+	if http == null:
+		return {}
+	var res: Dictionary = await MetaRemote.get_snapshot(http, key)
+	if not bool(res.get("ok", false)):
+		return {}
+	var data: Dictionary = {}
+	if typeof(res.get("data", {})) == TYPE_DICTIONARY:
+		data = res.get("data", {}) as Dictionary
+	var account: Dictionary = {}
+	if typeof(data.get("account", {})) == TYPE_DICTIONARY:
+		account = data.get("account", {}) as Dictionary
+	var display := String(account.get("displayName", "")).strip_edges()
+	var icon := String(account.get("profileIconId", "")).strip_edges()
+	if display.is_empty():
+		display = key
+	var owned_acc: Dictionary = {}
+	if typeof(data.get("ownedAccessories", {})) == TYPE_DICTIONARY:
+		owned_acc = data.get("ownedAccessories", {}) as Dictionary
+	return {
+		"displayName": display,
+		"profileIconId": icon,
+		"ownedAccessories": owned_acc,
+	}
+
+
+## INTENT 악세 id가 Meta 보유(또는 카탈로그 default)일 때만 허용.
+func resolve_owned_accessory_id(
+	raw_id: String,
+	accessory_type: String,
+	owned_accessories: Dictionary,
+	default_id: String
+) -> String:
+	var resolved := ""
+	match accessory_type:
+		AccessoryTypes.TYPE_CARD_BACK:
+			resolved = AccessoryCatalog.resolve_card_back_id(raw_id)
+		AccessoryTypes.TYPE_FIELD:
+			resolved = AccessoryCatalog.resolve_field_id(raw_id)
+		AccessoryTypes.TYPE_ICON:
+			resolved = AccessoryCatalog.resolve_icon_id(raw_id)
+		_:
+			resolved = raw_id.strip_edges()
+	if resolved.is_empty() or resolved == default_id:
+		return default_id
+	var owned_list: Array = []
+	if typeof(owned_accessories.get(accessory_type, [])) == TYPE_ARRAY:
+		owned_list = owned_accessories.get(accessory_type, []) as Array
+	for item in owned_list:
+		if String(item).strip_edges() == resolved:
+			return resolved
+	return default_id
+
+
+## 트리에 검증용 HTTPRequest를 두거나 재사용.
+func _meta_http() -> HTTPRequest:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		return null
+	var existing := tree.root.get_node_or_null("MetaValidateHttp") as HTTPRequest
+	if existing != null:
+		return existing
+	var http := HTTPRequest.new()
+	http.name = "MetaValidateHttp"
+	http.timeout = 12.0
+	tree.root.add_child(http)
+	return http
+

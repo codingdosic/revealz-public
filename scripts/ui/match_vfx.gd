@@ -10,7 +10,8 @@ extends RefCounted
 ## 패·드로우: scenes/game/player_hand.gd · opponent_hand.gd (speed→duration) + DeckZone.CARD_DRAW_SPEED
 ## 라이프→패: DeckZone._place_card_at_life_for_hand_fx + CARD_DRAW_SPEED (배틀·셔플·드로우 라이프)
 ## 필드 배치·리로케이트·스왑: default_field_params() · PhaseManager._place_* · EffectContext.place_on_slot_with_fx
-## 슬롯 착지: 배치 직후 play_slot_land · 오픈: play_slot_land_after_flip (플립 완료 후)
+## 슬롯 착지: 배치 직후 play_slot_land · 오픈: play_slot_land_after_flip (tilt 플립 완료 후)
+## 공개 플립 쾅 착지: play_flip_land_camera_shake (CardHoverTilt slam)
 ## 필드→묘지: default_grave_params() · move_to_graveyard
 ## CLEAN 일괄 묘지: FieldManager.clear_field_to_graveyard (trail off)
 ## 바인드/제외: default_banish_params() · move_to_banishzone / bind_*
@@ -42,6 +43,10 @@ const DEFAULT_BATTLE_HIT_SHAKE_STEPS := 4
 const DEFAULT_BATTLE_CAMERA_SHAKE_SEC := 0.3
 const DEFAULT_BATTLE_CAMERA_SHAKE_PX := 10
 const DEFAULT_BATTLE_CAMERA_SHAKE_STEPS := 7
+## 공개 플립 착지용 — 배틀보다 짧고 약하게.
+const DEFAULT_FLIP_LAND_CAMERA_SHAKE_SEC := 0.16
+const DEFAULT_FLIP_LAND_CAMERA_SHAKE_PX := 4.0
+const DEFAULT_FLIP_LAND_CAMERA_SHAKE_STEPS := 4
 const DEFAULT_TRAIL_WIDTH := 4.0
 const DEFAULT_TRAIL_FADE_SEC := 0.12
 const DEFAULT_TRAIL_COLOR := Color(0.35, 0.85, 1.0, 0.55)
@@ -333,6 +338,14 @@ static func await_line_clash(cards: Array, clash_pos: Vector2) -> void:
 	if host == null or not host.is_vfx_active():
 		return
 	await host.await_line_clash(cards, clash_pos)
+
+
+## tilt 공개 플립 착지 — Field 루트 약한 카메라 쉐이크.
+static func play_flip_land_camera_shake(card: Node2D = null) -> void:
+	var host := _resolve_play_host(card)
+	if host == null or not host.is_vfx_active():
+		return
+	host.play_flip_land_camera_shake()
 
 
 ## 토큰 등 슬롯 팝인(스케일). card_flip과 겹치지 않게 호출측에서 instant reveal 후 사용.

@@ -25,6 +25,16 @@ static func purchase_url(account_key: String) -> String:
 	return "%s/purchase" % account_url(account_key)
 
 
+## 프로필(표시명·아이콘) 전용 업데이트 URL.
+static func profile_url(account_key: String) -> String:
+	return "%s/profile" % account_url(account_key)
+
+
+## 상점 카탈로그 URL (서버 SoT).
+static func shop_catalog_url() -> String:
+	return "%s/v1/shop/catalog" % lobby_base_url()
+
+
 ## 덱 검증 API URL (G3.1).
 static func validate_deck_url(account_key: String) -> String:
 	return "%s/validate-deck" % account_url(account_key)
@@ -40,6 +50,21 @@ static func patch_note_url(note_id: int) -> String:
 	return "%s/%d" % [patch_notes_url(), note_id]
 
 
+## 선물함 목록 URL.
+static func mailbox_url(account_key: String) -> String:
+	return "%s/mailbox" % account_url(account_key)
+
+
+## 선물함 단건 수령 URL.
+static func mailbox_claim_url(account_key: String) -> String:
+	return "%s/claim" % mailbox_url(account_key)
+
+
+## 선물함 일괄 수령 URL.
+static func mailbox_claim_all_url(account_key: String) -> String:
+	return "%s/claim-all" % mailbox_url(account_key)
+
+
 ## GET 스냅샷. 반환: { ok, status, data, error }.
 static func get_snapshot(http: HTTPRequest, account_key: String) -> Dictionary:
 	return await _request(http, HTTPClient.METHOD_GET, account_url(account_key), {})
@@ -50,9 +75,19 @@ static func put_snapshot(http: HTTPRequest, account_key: String, body: Dictionar
 	return await _request(http, HTTPClient.METHOD_POST, account_url(account_key), body)
 
 
-## 팩 구매 서버 트랜잭션.
+## 팩/치장 구매 서버 트랜잭션. body: product_id, pack_count.
 static func purchase(http: HTTPRequest, account_key: String, body: Dictionary) -> Dictionary:
 	return await _request(http, HTTPClient.METHOD_POST, purchase_url(account_key), body)
+
+
+## 프로필 업데이트. body: displayName?, profileIconId?, baseRevision.
+static func update_profile(http: HTTPRequest, account_key: String, body: Dictionary) -> Dictionary:
+	return await _request(http, HTTPClient.METHOD_POST, profile_url(account_key), body)
+
+
+## GET /v1/shop/catalog. 반환: { ok, status, data, error }.
+static func get_shop_catalog(http: HTTPRequest) -> Dictionary:
+	return await _request(http, HTTPClient.METHOD_GET, shop_catalog_url(), {})
 
 
 ## 덱⊆owned 검증 (G3.1). body: card_ids, card_rarities.
@@ -68,6 +103,21 @@ static func get_patch_notes(http: HTTPRequest) -> Dictionary:
 ## GET /v1/patch-notes/{id}.
 static func get_patch_note(http: HTTPRequest, note_id: int) -> Dictionary:
 	return await _request(http, HTTPClient.METHOD_GET, patch_note_url(note_id), {})
+
+
+## GET pending mailbox. data: { items, pendingCount }.
+static func list_mailbox(http: HTTPRequest, account_key: String) -> Dictionary:
+	return await _request(http, HTTPClient.METHOD_GET, mailbox_url(account_key), {})
+
+
+## POST claim one. body: { id }. data: { claimed, snapshot }.
+static func claim_mailbox(http: HTTPRequest, account_key: String, item_id: String) -> Dictionary:
+	return await _request(http, HTTPClient.METHOD_POST, mailbox_claim_url(account_key), {"id": item_id})
+
+
+## POST claim all pending. data: { claimedCount, snapshot }.
+static func claim_mailbox_all(http: HTTPRequest, account_key: String) -> Dictionary:
+	return await _request(http, HTTPClient.METHOD_POST, mailbox_claim_all_url(account_key), {})
 
 
 ## 로비 health URL.

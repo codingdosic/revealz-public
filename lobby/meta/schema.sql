@@ -64,3 +64,59 @@ CREATE TABLE IF NOT EXISTS deleted_accounts (
   account_key TEXT PRIMARY KEY,
   deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Server-authority shop catalog (ops/db editable). Client .tres = display only.
+-- pool_mode: explicit = use pool_json card ids; all_non_token = full non-token catalog at purchase time.
+CREATE TABLE IF NOT EXISTS shop_products (
+  product_id TEXT PRIMARY KEY,
+  product_type TEXT NOT NULL CHECK (product_type IN ('pack', 'accessory')),
+  display_name TEXT NOT NULL DEFAULT '',
+  description TEXT NOT NULL DEFAULT '',
+  price_gold INTEGER NOT NULL DEFAULT 0 CHECK (price_gold >= 0),
+  enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  pack_size INTEGER NOT NULL DEFAULT 5 CHECK (pack_size >= 1),
+  weight_n INTEGER NOT NULL DEFAULT 70 CHECK (weight_n >= 0),
+  weight_r INTEGER NOT NULL DEFAULT 20 CHECK (weight_r >= 0),
+  weight_sr INTEGER NOT NULL DEFAULT 8 CHECK (weight_sr >= 0),
+  weight_ur INTEGER NOT NULL DEFAULT 2 CHECK (weight_ur >= 0),
+  pool_mode TEXT NOT NULL DEFAULT 'explicit'
+    CHECK (pool_mode IN ('explicit', 'all_non_token')),
+  pool_json JSONB NOT NULL DEFAULT '[]'::jsonb,
+  accessory_type TEXT NOT NULL DEFAULT ''
+    CHECK (accessory_type = '' OR accessory_type IN ('icon', 'card_back', 'field')),
+  accessory_id TEXT NOT NULL DEFAULT '',
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_shop_products_enabled
+  ON shop_products (enabled, product_type, sort_order);
+
+-- Key/value runtime config (catalog revision, feature flags, etc.).
+CREATE TABLE IF NOT EXISTS app_config (
+  config_key TEXT PRIMARY KEY,
+  config_value JSONB NOT NULL DEFAULT 'null'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Ops grants land here; inventory/wallet change only on claim TX.
+CREATE TABLE IF NOT EXISTS mailbox_items (
+  id BIGSERIAL PRIMARY KEY,
+  account_key TEXT NOT NULL REFERENCES accounts(account_key) ON DELETE CASCADE,
+  source TEXT NOT NULL DEFAULT 'ops',
+  title TEXT NOT NULL DEFAULT '',
+  payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+  status TEXT NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending', 'claimed')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  claimed_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_mailbox_account_status
+  ON mailbox_items (account_key, status, created_at DESC);
+
+-- Welcome gold: at most one mailbox row per account.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mailbox_welcome_once
+  ON mailbox_items (account_key)
+  WHERE source = 'welcome';

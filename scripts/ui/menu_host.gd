@@ -34,9 +34,7 @@ func _ready() -> void:
 	_mount_root(MAIN_SCENE)
 	if not extra.is_empty() and extra != MAIN_SCENE:
 		_mount_on_top(extra)
-	var fade_sec := SceneTransition.take_pending_fade_in()
-	if fade_sec >= 0.0:
-		await SceneTransition.fade_from_black(fade_sec)
+	await SceneTransition.play_armed_fade_in()
 
 
 ## 뷰포트 크기 변경 시 페이지 폭을 맞춘다.

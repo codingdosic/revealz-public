@@ -3,7 +3,8 @@ extends Control
 ## 자식: MatchVersusOverlay · LoadingGate (씬 인스턴스). 페이드는 SceneTransition autoload.
 
 const GAME_SCENE := "res://scenes/game/game.tscn"
-const SCENE_FADE_SEC := 0.55
+const FADE_TO_BLACK_SEC := 0.4
+const FADE_IN_RADIAL_SEC := 0.7
 
 @export var chrome_style: UiChromeStyle
 
@@ -27,8 +28,11 @@ func _run_entry_flow() -> void:
 	if _should_play_intro():
 		await _versus.play_entry_intro(_resolve_intro_first_player())
 	await _run_loading()
-	await SceneTransition.fade_to_black(SCENE_FADE_SEC)
-	SceneTransition.arm_fade_in_after_scene_change(SCENE_FADE_SEC)
+	await SceneTransition.fade_to_black(FADE_TO_BLACK_SEC)
+	SceneTransition.arm_fade_in_after_scene_change(
+		FADE_IN_RADIAL_SEC,
+		SceneTransition.FadeInStyle.RADIAL_CENTER
+	)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 

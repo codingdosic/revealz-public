@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bdwbb1fu0rgbf"]
 
 [ext_resource type="Script" uid="uid://ds57en006ejej" path="res://scenes/main/main.gd" id="1_hyk8p"]
-[ext_resource type="PackedScene" path="res://scenes/ui/player_badge.tscn" id="2_badge"]
+[ext_resource type="PackedScene" uid="uid://ducnh4cil3r6h" path="res://scenes/ui/player_badge.tscn" id="2_badge"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -65,6 +65,10 @@ offset_right = -10.0
 offset_bottom = 40.0
 grow_horizontal = 0
 
+[node name="mailboxButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "mailbox"
+
 [node name="PatchNoteButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 text = "note"
@@ -98,7 +102,6 @@ offset_right = -12.0
 offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
-text = ""
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -108,5 +111,6 @@ vertical_alignment = 1
 [connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="CenterContainer/MenuSection/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/mailboxButton" to="." method="_on_mailbox_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/PatchNoteButton" to="." method="_on_patch_note_button_pressed"]
 [connection signal="profile_requested" from="PlayerBadge" to="." method="_on_player_badge_pressed"]

@@ -119,14 +119,71 @@ static func validate_display_name(raw: String) -> String:
 	return ""
 
 
-## 표시명 저장. 성공 시 "". accountKey는 바꾸지 않음.
+## 표시명 저장(서버 권위). 성공 시 "". accountKey는 바꾸지 않음.
 func set_display_name(raw: String) -> String:
+	return "set_display_name_async를 사용하세요"
+
+
+## 표시명 서버 저장. 성공 시 "".
+func set_display_name_async(raw: String) -> String:
 	if not _bootstrapped or _account_key.is_empty():
 		return "계정이 없습니다"
 	var err := validate_display_name(raw)
 	if not err.is_empty():
 		return err
 	var name := raw.strip_edges()
+	if name == _display_name:
+		return ""
+	var sync := get_node_or_null("/root/MetaSync")
+	if sync == null:
+		return "서버 연결이 필요합니다"
+	var remote_err: String = await sync.update_profile_async({"displayName": name})
+	if not remote_err.is_empty():
+		return remote_err
+	return ""
+
+
+## 프로필 아이콘 저장(서버 권위). 성공 시 "".
+func set_profile_icon_id(raw: String) -> String:
+	return "set_profile_icon_id_async를 사용하세요"
+
+
+## 프로필 아이콘 서버 저장. 성공 시 "".
+func set_profile_icon_id_async(raw: String) -> String:
+	if not _bootstrapped or _account_key.is_empty():
+		return "계정이 없습니다"
+	var id := raw.strip_edges()
+	if id.is_empty():
+		return "아이콘을 선택하세요"
+	AccessoryStore.ensure_loaded()
+	if not AccessoryStore.owns(AccessoryTypes.TYPE_ICON, id):
+		return "보유하지 않은 아이콘입니다"
+	var sync := get_node_or_null("/root/MetaSync")
+	if sync == null:
+		return "서버 연결이 필요합니다"
+	var remote_err: String = await sync.update_profile_async({"profileIconId": id})
+	if not remote_err.is_empty():
+		return remote_err
+	return ""
+
+
+## MetaSync GET 적용 — 디스크만 갱신, 재푸시 없음.
+func apply_remote_profile_icon(raw: String) -> void:
+	var id := raw.strip_edges()
+	if id.is_empty():
+		id = AccessoryCatalog.DEFAULT_ICON_ID
+	_write_profile_icon_id(id)
+
+
+## MetaSync GET 표시명 적용.
+func apply_remote_display_name(raw: String) -> void:
+	var name := raw.strip_edges()
+	if name.is_empty():
+		return
+	_write_local_display_name(name)
+
+
+func _write_local_display_name(name: String) -> void:
 	var path := profile_path("account.json")
 	var data := _read_json_dict(path)
 	if data.is_empty():
@@ -140,39 +197,6 @@ func set_display_name(raw: String) -> String:
 	data["displayName"] = name
 	_write_json(path, data)
 	_display_name = name
-	_push_meta_if_needed()
-	return ""
-
-
-## 프로필 아이콘 저장. 성공 시 "". 보유 icon 타입만 허용.
-func set_profile_icon_id(raw: String) -> String:
-	if not _bootstrapped or _account_key.is_empty():
-		return "계정이 없습니다"
-	var id := raw.strip_edges()
-	if id.is_empty():
-		return "아이콘을 선택하세요"
-	AccessoryStore.ensure_loaded()
-	if not AccessoryStore.owns(AccessoryTypes.TYPE_ICON, id):
-		return "보유하지 않은 아이콘입니다"
-	_write_profile_icon_id(id)
-	_push_meta_if_needed()
-	return ""
-
-
-## MetaSync GET 적용 — 디스크만 갱신, 재푸시 없음.
-func apply_remote_profile_icon(raw: String) -> void:
-	var id := raw.strip_edges()
-	if id.is_empty():
-		id = AccessoryCatalog.DEFAULT_ICON_ID
-	_write_profile_icon_id(id)
-
-
-## MetaSync 스냅샷 푸시 (표시명 변경 반영).
-func _push_meta_if_needed() -> void:
-	var sync := get_node_or_null("/root/MetaSync")
-	if sync == null or bool(sync.get("applying_remote")):
-		return
-	sync.call("push_snapshot_async")
 
 
 ## 프로필 하위 경로. relative 예: "settings.json", "decks/foo.json". 빈 값이면 루트(끝 /).

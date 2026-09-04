@@ -84,6 +84,10 @@ func _ready() -> void:
 	if not MetaSync.online_gate_changed.is_connected(_on_online_gate_changed):
 		MetaSync.online_gate_changed.connect(_on_online_gate_changed)
 	_apply_online_gate_ui(false)
+	# 서버 카탈로그 가격·팩 설정을 UI에 반영 (구매 SoT는 서버).
+	if await MetaSync.apply_shop_catalog_to_resource(catalog):
+		_rebuild_tabs()
+		_select_tab(_tab_index)
 
 
 func _exit_tree() -> void:
@@ -587,7 +591,6 @@ func _on_buy_confirmed() -> void:
 		_toast(String(result.get(ShopService.KEY_ERROR, "구매 실패")))
 		return
 	if _selected_product is ShopAccessoryProduct:
-		await MetaSync.push_snapshot_async()
 		_toast("구매 완료")
 		_select_sub(_sub_index)
 		return

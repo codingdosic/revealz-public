@@ -10,12 +10,15 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 const db = require("./db");
 const { loadSnapshot, bumpMetaRevision } = require("./routes");
+const mailbox = require("./mailbox");
 
 const OPS_DATA = path.join(__dirname, "..", "ops-data");
 const MAINT_PATH = path.join(OPS_DATA, "maintenance.json");
 const BACKUP_DIR = path.join(OPS_DATA, "backups");
 const CARDS_ROOT = path.join(__dirname, "..", "..", "resources", "cards");
 const MAX_GRANT = 99;
+/** CardData.trigger_type TOKEN bit (클라 CollectionStore.TRIGGER_TOKEN과 동일). */
+const TRIGGER_TOKEN = 128;
 
 function ensureOpsDir() {
   fs.mkdirSync(OPS_DATA, { recursive: true });
@@ -44,10 +47,15 @@ function writeMaintenance(enabled, message) {
   return body;
 }
 
-function listCatalogCardIds() {
-  const ids = new Set();
+let catalogCardsCache = null;
+
+function listCatalogCards() {
+  if (catalogCardsCache) {
+    return catalogCardsCache;
+  }
+  const cards = [];
   if (!fs.existsSync(CARDS_ROOT)) {
-    return [];
+    return cards;
   }
   function walk(dir) {
     let ents;
@@ -66,14 +74,41 @@ function listCatalogCardIds() {
         continue;
       }
       const text = fs.readFileSync(p, "utf8");
-      const m = text.match(/^id = (\d+)\s*$/m);
-      if (m) {
-        ids.add(Number(m[1]));
+      const idM = text.match(/^id = (\d+)\s*$/m);
+      if (!idM) {
+        continue;
       }
+      const id = Number(idM[1]);
+      if (!Number.isFinite(id) || id <= 0) {
+        continue;
+      }
+      const nameM = text.match(/^card_name = "([^"]*)"/m);
+      const triggerM = text.match(/^trigger_type = (\d+)\s*$/m);
+      const triggerType = triggerM ? Number(triggerM[1]) : 0;
+      cards.push({
+        id,
+        name: nameM ? String(nameM[1]) : "",
+        triggerType: Number.isFinite(triggerType) ? triggerType : 0,
+        isToken: Number.isFinite(triggerType) && (triggerType & TRIGGER_TOKEN) !== 0,
+      });
     }
   }
   walk(CARDS_ROOT);
-  return [...ids].filter((n) => n > 0).sort((a, b) => a - b);
+  cards.sort((a, b) => a.id - b.id);
+  catalogCardsCache = cards;
+  return catalogCardsCache;
+}
+
+/** 팩 풀·grant-all용 — TOKEN 트리거 카드 제외. */
+function listCatalogCardIds() {
+  return listCatalogCards()
+    .filter((c) => !c.isToken)
+    .map((c) => c.id);
+}
+
+function catalogNameById(cardId) {
+  const found = listCatalogCards().find((c) => c.id === cardId);
+  return found && found.name ? found.name : "";
 }
 
 function clampCount(n) {
@@ -96,26 +131,18 @@ function clampRarity(n, fallback) {
 }
 
 async function grantRows(accountKey, rows) {
-  if (!db.isConfigured()) {
-    throw Object.assign(new Error("meta_db_not_configured"), { status: 503 });
-  }
-  const snap = await loadSnapshot(accountKey);
-  if (!snap) {
-    throw Object.assign(new Error("account_not_found"), { status: 404 });
-  }
-  await db.withTransaction(async (client) => {
-    for (const row of rows) {
-      await client.query(
-        `INSERT INTO owned_cards (account_key, card_id, rarity, count)
-         VALUES ($1, $2, $3, $4)
-         ON CONFLICT (account_key, card_id, rarity)
-         DO UPDATE SET count = owned_cards.count + EXCLUDED.count`,
-        [accountKey, row.cardId, row.rarity, row.count]
-      );
-    }
-    await bumpMetaRevision(client, accountKey);
+  const enqueueRows = rows.map((row) => {
+    const name = catalogNameById(row.cardId) || `카드 ${row.cardId}`;
+    return {
+      source: "ops",
+      title: name,
+      payload: {
+        cards: [{ id: row.cardId, rarity: row.rarity, count: row.count, name }],
+      },
+    };
   });
-  return loadSnapshot(accountKey);
+  const items = await mailbox.enqueueMany(accountKey, enqueueRows);
+  return { items, snapshot: await loadSnapshot(accountKey) };
 }
 
 async function grantOne(accountKey, cardId, rarity, count) {
@@ -131,8 +158,13 @@ async function grantOne(accountKey, cardId, rarity, count) {
   if (n < 1) {
     throw Object.assign(new Error("invalid_count"), { status: 400 });
   }
-  const snap = await grantRows(accountKey, [{ cardId: id, rarity: r, count: n }]);
-  return { ok: true, granted: { mode: "one", cardId: id, rarity: r, count: n }, snapshot: snap };
+  const result = await grantRows(accountKey, [{ cardId: id, rarity: r, count: n }]);
+  return {
+    ok: true,
+    granted: { mode: "one", cardId: id, rarity: r, count: n },
+    enqueued: result.items,
+    snapshot: result.snapshot,
+  };
 }
 
 async function grantAll(accountKey, count) {
@@ -150,11 +182,31 @@ async function grantAll(accountKey, count) {
       rows.push({ cardId, rarity, count: n });
     }
   }
-  const snap = await grantRows(accountKey, rows);
+  const result = await grantRows(accountKey, rows);
   return {
     ok: true,
     granted: { mode: "all", cardIds: ids.length, rarities: 4, count: n, rows: rows.length },
-    snapshot: snap,
+    enqueuedCount: result.items.length,
+    snapshot: result.snapshot,
+  };
+}
+
+async function grantGold(accountKey, goldRaw) {
+  const gold = Math.floor(Number(goldRaw));
+  if (!Number.isFinite(gold) || gold < 1) {
+    throw Object.assign(new Error("invalid_gold"), { status: 400 });
+  }
+  const capped = Math.min(gold, 999999999);
+  const item = await mailbox.enqueue(accountKey, {
+    source: "ops",
+    title: "골드",
+    payload: { gold: capped },
+  });
+  return {
+    ok: true,
+    granted: { mode: "gold", gold: capped },
+    enqueued: item,
+    snapshot: await loadSnapshot(accountKey),
   };
 }
 
@@ -430,6 +482,7 @@ module.exports = {
   listAccounts,
   grantOne,
   grantAll,
+  grantGold,
   patchAccount,
   deleteAccount,
   writePrecheck,

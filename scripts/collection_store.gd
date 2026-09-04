@@ -2,11 +2,10 @@ class_name CollectionStore
 extends RefCounted
 ## 프로필 collection/owned.json — CardData.id → { rarity → 장수 }.
 ## 토큰은 소유 개념 없음(조회 시 항상 보유·무제한).
-## 구형 flat(id→int) 또는 파일이 비면 리셋 후 5색(N)×DEFAULT_COPIES 시드.
+## 권위는 Meta 스냅샷/구매·ops. 로컬 파일은 캐시만 (빈 파일에 시드하지 않음).
 
 
 const OWNED_REL := "collection/owned.json"
-const DEFAULT_COPIES := 2
 ## CardData.trigger_type TOKEN 비트 (OPEN=1 … VANILLA=64 다음).
 const TRIGGER_TOKEN := 128
 ## 토큰 get_count 반환값(무제한 표시용). owns()는 true.
@@ -22,7 +21,7 @@ static func owned_path() -> String:
 	return AccountService.profile_path(OWNED_REL)
 
 
-## 현재 계정 보유를 메모리에 올린다. 구형/빈 파일이면 시드 후 저장.
+## 현재 계정 보유를 메모리에 올린다. 없거나 비면 빈 보유(시드 없음).
 static func ensure_loaded() -> void:
 	if not AccountService.is_bootstrapped():
 		_counts.clear()
@@ -39,9 +38,6 @@ static func ensure_loaded() -> void:
 		return
 	if FileAccess.file_exists(path):
 		_counts = _parse_counts(_read_json_dict(path))
-	if _counts.is_empty():
-		_seed_defaults()
-		save()
 
 
 ## 디스크에서 다시 읽는다(테스트·계정 전환용).
@@ -51,7 +47,7 @@ static func reload() -> void:
 	ensure_loaded()
 
 
-## 메모리 보유를 owned.json에 쓴다. 성공 시 true. Meta 사용 중이면 스냅샷 PUT도 시도.
+## 메모리 보유를 owned.json에 쓴다. 성공 시 true (캐시만 · Meta PUT 없음).
 static func save() -> bool:
 	var path := owned_path()
 	if path.is_empty():
@@ -68,10 +64,7 @@ static func save() -> bool:
 		if rarity_payload.is_empty():
 			continue
 		payload[str(int(id))] = rarity_payload
-	if not _write_json(path, payload):
-		return false
-	_push_meta_if_needed()
-	return true
+	return _write_json(path, payload)
 
 
 ## 서버 스냅샷 owned로 메모리·캐시 교체 (MetaSync 전용 · 재푸시 없음).
@@ -95,22 +88,6 @@ static func apply_remote_owned(owned: Dictionary) -> void:
 			continue
 		payload[str(int(id))] = rarity_payload
 	_write_json(path, payload)
-
-
-## MetaSync가 있으면 스냅샷 푸시(비동기 fire-and-forget).
-static func _push_meta_if_needed() -> void:
-	var sync := _meta_sync_node()
-	if sync == null or bool(sync.get("applying_remote")):
-		return
-	sync.call("push_snapshot_async")
-
-
-## Autoload MetaSync 노드.
-static func _meta_sync_node() -> Node:
-	var tree := Engine.get_main_loop() as SceneTree
-	if tree == null or tree.root == null:
-		return null
-	return tree.root.get_node_or_null("/root/MetaSync")
 
 
 ## 특정 등급 보유 장수. 토큰은 UNLIMITED.
@@ -186,28 +163,7 @@ static func owns_name_any(card_name: String) -> bool:
 	return owns_any(int(data.id))
 
 
-## 보유 장수 추가(토큰·비양수 무시). rarity는 N~UR.
-static func add(card_id: int, rarity: int = CardRarity.Tier.N, amount: int = 1) -> void:
-	if amount <= 0 or card_id <= 0:
-		return
-	if is_token_id(card_id):
-		return
-	var tier := clampi(rarity, CardRarity.Tier.N, CardRarity.Tier.UR)
-	ensure_loaded()
-	var by_rarity: Dictionary = {}
-	if _counts.has(card_id) and typeof(_counts[card_id]) == TYPE_DICTIONARY:
-		by_rarity = (_counts[card_id] as Dictionary).duplicate()
-	by_rarity[tier] = int(by_rarity.get(tier, 0)) + amount
-	_counts[card_id] = by_rarity
-	save()
-
-
-## 이름으로 보유 추가.
-static func add_by_name(card_name: String, rarity: int = CardRarity.Tier.N, amount: int = 1) -> void:
-	var data := CardRegistry.get_by_name(card_name)
-	if data == null:
-		return
-	add(int(data.id), rarity, amount)
+## 보유 장수 조회 등은 캐시 기준. 지급·차감은 Meta TX만 (로컬 add API 없음).
 
 
 ## id → { rarity → count } 사본.
@@ -241,29 +197,7 @@ static func is_token_name(card_name: String) -> bool:
 	return (int(data.trigger_type) & TRIGGER_TOKEN) != 0
 
 
-## 5색(BASE_COLORS) 비토큰 전종에 N×DEFAULT_COPIES 부여. colorless 제외.
-static func _seed_defaults() -> void:
-	CardRegistry.ensure_loaded()
-	_counts.clear()
-	for color_key in DeckStore.BASE_COLORS:
-		for card_name in CardRegistry.list_card_names_for_filter(color_key, false):
-			var data := CardRegistry.get_by_name(String(card_name))
-			if data == null:
-				continue
-			if (int(data.trigger_type) & TRIGGER_TOKEN) != 0:
-				continue
-			var id := int(data.id)
-			if id <= 0:
-				push_warning("[CollectionStore] skip seed — invalid id for '%s'" % data.card_name)
-				continue
-			var by_rarity: Dictionary = _counts.get(id, {})
-			if typeof(by_rarity) != TYPE_DICTIONARY:
-				by_rarity = {}
-			by_rarity[CardRarity.Tier.N] = DEFAULT_COPIES
-			_counts[id] = by_rarity
-
-
-## owned.json → id→{rarity→count}. 구형 flat(int)이면 {} 반환(리셋·시드).
+## owned.json → id→{rarity→count}. 구형 flat(int)이면 {} 반환.
 static func _parse_counts(raw: Dictionary) -> Dictionary:
 	if raw.is_empty():
 		return {}

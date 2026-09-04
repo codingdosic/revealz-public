@@ -134,9 +134,7 @@ func _ready() -> void:
 
 ## 로딩→game 페이드인이 있으면 밝아진 뒤 start_match (페이즈 토스트 포함).
 func _boot_match() -> void:
-	var fade_sec := SceneTransition.take_pending_fade_in()
-	if fade_sec >= 0.0:
-		await SceneTransition.fade_from_black(fade_sec)
+	await SceneTransition.play_armed_fade_in()
 	await start_match()
 
 
@@ -1054,6 +1052,8 @@ func _flip_round_pair() -> void:
 	for c in to_flip:
 		c.reveal()
 		MatchVfx.play_slot_land_after_flip(c, "open")
+	# 오픈 플립·라인 충격이 끝난 뒤에 효과 팝업/창이 뜨도록 대기.
+	await CardHoverTilt.await_open_reveal_fx(to_flip, field_manager)
 	if _effects_enabled() and effect_manager:
 		effect_manager.schedule_passive_refresh()
 	_processing = true
@@ -1134,7 +1134,9 @@ func enter_battle_phase() -> void:
 
 ## 싱글 전용: LEFT→RIGHT 라인 격돌 후 전원 슬롯 복귀.
 func _play_battle_clash_vfx() -> void:
-	if _is_online() or not MatchVfx.is_active():
+	# 싱글 라인 격돌 연출 비활성. 다시 켤 때 true.
+	const ENABLED := false
+	if not ENABLED or _is_online() or not MatchVfx.is_active():
 		return
 	_processing = true
 	var player_by_line: Dictionary = field_manager.get_cards_by_line(GameConstants.Side.PLAYER)
@@ -1781,7 +1783,7 @@ func _apply_network_place_card(event: Dictionary) -> void:
 
 	if event.get("didFlip", false):
 		_mp_place_log("place_card_flip", "flip_uuids=%s" % str(event.get("flipUuids", [])))
-		_apply_flip_uuids(event.get("flipUuids", []))
+		await _apply_flip_uuids(event.get("flipUuids", []))
 		round_pair_cards.clear()
 
 	_mp_place_log(
@@ -1977,9 +1979,8 @@ func is_match_ready() -> bool:
 func _apply_network_reveal_pair(event: Dictionary) -> void:
 	var uuids: Array = event.get("uuids", [])
 	_mp_place_log("reveal_pair_recv", "uuids=%s" % str(uuids))
-	_apply_flip_uuids(uuids)
 	_processing = true
-	await wait(FLIP_DELAY)
+	await _apply_flip_uuids(uuids)
 	_update_line_power_labels()
 	_processing = false
 
@@ -2175,6 +2176,7 @@ func _slot_index_for_network(
 
 
 func _apply_flip_uuids(uuids: Array) -> void:
+	var flipped: Array = []
 	for uuid_value in uuids:
 		var flip_uuid := int(uuid_value)
 		var flip_card := _find_card_by_uuid(flip_uuid)
@@ -2185,9 +2187,11 @@ func _apply_flip_uuids(uuids: Array) -> void:
 			)
 			flip_card.reveal()
 			MatchVfx.play_slot_land_after_flip(flip_card, "open")
+			flipped.append(flip_card)
 			_mp_place_log("flip_uuid", "uuid=%d after=%s" % [flip_uuid, _mp_card_label(flip_card)])
 		else:
 			_mp_place_log("flip_uuid_missing", "uuid=%d not found" % flip_uuid)
+	await CardHoverTilt.await_open_reveal_fx(flipped, field_manager)
 	# 호스트 _flip_round_pair는 reveal 직후 schedule — 클라도 동일해야 PASSIVE(이즈라엘 등) 반영
 	if _effects_enabled() and effect_manager:
 		effect_manager.schedule_passive_refresh()

@@ -118,6 +118,10 @@ func _on_deck_rejected(reason: String) -> void:
 			msg = "계정 메타를 확인할 수 없습니다"
 		"empty_deck":
 			msg = "덱이 비어 있습니다"
+		"meta_unavailable", "meta_db_not_configured", "validate_failed":
+			msg = "서버에서 덱을 확인할 수 없습니다"
+		"deck_timeout":
+			msg = "상대 덱 확인에 실패했습니다"
 	print("[MP] DECK_REJECTED reason=%s" % reason)
 	GameSession.pending_lobby_message = msg
 	NetworkManager.disconnect_game()

@@ -7,6 +7,8 @@ uniform float focal_mul = 4.0;
 uniform vec2 card_half_size = vec2(0.0, 0.0);
 // 1 = Control (VERTEX 0..size). 0 = Sprite2D centered (VERTEX already around 0).
 uniform float corner_origin = 0.0;
+// 카드 로컬(중심 기준) 회전 피벗. 오픈 충격 시 먼 쪽 변/모서리.
+uniform vec2 tilt_pivot = vec2(0.0, 0.0);
 uniform float rarity_tier = 0.0;
 uniform vec4 rarity_accent = vec4(0.45, 0.45, 0.5, 1.0);
 // 1 = pack/chip rarity hint (wide glow). 0 = normal display outline only.
@@ -25,11 +27,12 @@ void vertex() {
 	float cy = cos(ay);
 	float sy = sin(ay);
 
-	vec2 center_offset = vec2(0.0, 0.0);
+	vec2 origin = vec2(0.0, 0.0);
 	if (corner_origin > 0.5 && card_half_size.x > 0.5) {
-		center_offset = card_half_size;
+		origin = card_half_size;
 	}
-	vec2 v = VERTEX - center_offset;
+	// 중심(또는 Control 코너→중심) 기준 좌표에서 tilt_pivot 주위로 회전.
+	vec2 v = VERTEX - origin - tilt_pivot;
 
 	float x1 = v.x * cy;
 	float z1 = -v.x * sy;
@@ -48,8 +51,8 @@ void vertex() {
 	}
 	float persp = focal / depth;
 
-	VERTEX.x = x2 * persp + center_offset.x;
-	VERTEX.y = y2 * persp + center_offset.y;
+	VERTEX.x = x2 * persp + origin.x + tilt_pivot.x;
+	VERTEX.y = y2 * persp + origin.y + tilt_pivot.y;
 
 	v_inv_depth = 1.0 / depth;
 	v_uv_persp = UV * v_inv_depth;

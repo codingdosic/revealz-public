@@ -15,6 +15,8 @@ var _display_name_by_peer: Dictionary = {}
 var _profile_icon_by_peer: Dictionary = {}
 var _card_back_by_peer: Dictionary = {}
 var _field_by_peer: Dictionary = {}
+## peer_id → Meta ownedAccessories (INTENT 악세 검증용).
+var _owned_accessories_by_peer: Dictionary = {}
 var _scene_ready_by_peer: Dictionary = {}
 var _match_started: bool = false
 var _begin_in_progress: bool = false
@@ -85,6 +87,7 @@ func on_player_left(peer_id: int) -> void:
 	_profile_icon_by_peer.erase(peer_id)
 	_card_back_by_peer.erase(peer_id)
 	_field_by_peer.erase(peer_id)
+	_owned_accessories_by_peer.erase(peer_id)
 	_scene_ready_by_peer.erase(peer_id)
 	print("%s player_left id=%d remaining=%s" % [LOG_PREFIX, peer_id, str(_peers)])
 
@@ -153,20 +156,46 @@ func _quit_when_room_empty() -> void:
 		push_error("%s room empty but no SceneTree — cannot quit" % LOG_PREFIX)
 
 
-## INTENT에서 displayName·profileIconId·cardBackId·fieldId를 peer dict에 반영 (DECK·SCENE_READY 공용).
-func _apply_peer_accessories(peer_id: int, intent: Dictionary) -> void:
-	var remote_name := String(intent.get("displayName", "")).strip_edges()
-	var remote_icon := AccessoryCatalog.resolve_icon_id(String(intent.get("profileIconId", "")))
-	var remote_back := AccessoryCatalog.resolve_card_back_id(String(intent.get("cardBackId", "")))
-	var remote_field := AccessoryCatalog.resolve_field_id(String(intent.get("fieldId", "")))
-	if not remote_name.is_empty():
-		_display_name_by_peer[peer_id] = remote_name
-	if not remote_icon.is_empty():
-		_profile_icon_by_peer[peer_id] = remote_icon
+## INTENT cardBack·field — Meta 보유(또는 default)만 반영. 표시명·아이콘은 Meta 스냅샷.
+func _apply_peer_accessories(peer_id: int, intent: Dictionary, owned_accessories: Dictionary = {}) -> void:
+	var owned := owned_accessories
+	if owned.is_empty() and _owned_accessories_by_peer.has(peer_id):
+		var cached: Variant = _owned_accessories_by_peer.get(peer_id, {})
+		if typeof(cached) == TYPE_DICTIONARY:
+			owned = cached as Dictionary
+	var remote_back := resolve_owned_accessory_id(
+		String(intent.get("cardBackId", "")),
+		AccessoryTypes.TYPE_CARD_BACK,
+		owned,
+		AccessoryCatalog.DEFAULT_CARD_BACK_ID
+	)
+	var remote_field := resolve_owned_accessory_id(
+		String(intent.get("fieldId", "")),
+		AccessoryTypes.TYPE_FIELD,
+		owned,
+		AccessoryCatalog.DEFAULT_FIELD_ID
+	)
 	if not remote_back.is_empty():
 		_card_back_by_peer[peer_id] = remote_back
 	if not remote_field.is_empty():
 		_field_by_peer[peer_id] = remote_field
+
+
+## Meta 계정 스냅샷의 displayName·profileIconId·ownedAccessories를 peer에 적용.
+func _apply_peer_meta_profile(peer_id: int, account_key: String) -> void:
+	var profile: Dictionary = await fetch_account_profile_async(account_key)
+	var display := String(profile.get("displayName", "")).strip_edges()
+	var icon := AccessoryCatalog.resolve_icon_id(String(profile.get("profileIconId", "")))
+	if display.is_empty():
+		display = account_key.strip_edges()
+	if not display.is_empty():
+		_display_name_by_peer[peer_id] = display
+	if not icon.is_empty():
+		_profile_icon_by_peer[peer_id] = icon
+	var owned: Dictionary = {}
+	if typeof(profile.get("ownedAccessories", {})) == TYPE_DICTIONARY:
+		owned = profile.get("ownedAccessories", {}) as Dictionary
+	_owned_accessories_by_peer[peer_id] = owned
 
 
 ## peer_id → net side(0/1). _peers 배열 인덱스가 seat. 없으면 -1.
@@ -217,7 +246,7 @@ func handle_intent(peer_id: int, intent: Dictionary) -> void:
 			_end_match_by_surrender(peer_id)
 
 
-## INTENT_DECK: 파싱 → (가능 시) Meta validate-deck → 저장 → 매치 게이트.
+## INTENT_DECK: 파싱 → Meta validate-deck(필수) → 저장 → 매치 게이트.
 func _handle_deck_intent(peer_id: int, intent: Dictionary) -> void:
 	if bool(_deck_validate_pending.get(peer_id, false)):
 		print("%s DECK ignore peer=%d (validate pending)" % [LOG_PREFIX, peer_id])
@@ -232,90 +261,31 @@ func _handle_deck_intent(peer_id: int, intent: Dictionary) -> void:
 	)
 	var account_key := String(intent.get("accountKey", "")).strip_edges()
 	_deck_validate_pending[peer_id] = true
-	var check: Dictionary = await _validate_deck_owned(account_key, parsed_ids, rarities)
+	var check: Dictionary = await validate_deck_owned_async(account_key, parsed_ids, rarities)
 	_deck_validate_pending.erase(peer_id)
 	if not bool(check.get("ok", false)):
 		var reason := String(check.get("error", "not_owned"))
 		print("%s DECK rejected peer=%d reason=%s" % [LOG_PREFIX, peer_id, reason])
-		_reject_deck(peer_id, reason)
+		await reject_deck_peer(peer_id, reason)
 		return
 	_deck_ids_by_peer[peer_id] = parsed_ids
 	_deck_rarities_by_peer[peer_id] = rarities
+	await _apply_peer_meta_profile(peer_id, account_key)
 	_apply_peer_accessories(peer_id, intent)
-	print("%s DECK peer=%d cards=%d validate=%s" % [
+	print("%s DECK peer=%d cards=%d validate=ok name=%s" % [
 		LOG_PREFIX,
 		peer_id,
 		parsed_ids.size(),
-		"skipped" if bool(check.get("skipped", false)) else "ok",
+		String(_display_name_by_peer.get(peer_id, "")),
 	])
 	_try_begin_match()
 
 
-## Meta validate-deck. META 불가·503이면 스킵(수락). 그 외 실패는 거부.
-func _validate_deck_owned(
-	account_key: String,
-	card_ids: Array[int],
-	card_rarities: Array[int]
-) -> Dictionary:
-	var http := _meta_http()
-	if http == null:
-		return {"ok": true, "skipped": true, "error": ""}
-	if account_key.is_empty():
-		# Meta URL이 있으면 키 필수 — 없으면 스킵(로컬/레거시 워커).
-		if OS.get_environment("META_LOBBY_URL").strip_edges().is_empty():
-			return {"ok": true, "skipped": true, "error": ""}
-		return {"ok": false, "error": "account_key_required"}
-	var ids_wire: Array = []
-	for id in card_ids:
-		ids_wire.append(int(id))
-	var rar_wire: Array = []
-	for r in card_rarities:
-		rar_wire.append(int(r))
-	var res: Dictionary = await MetaRemote.validate_deck(http, account_key, {
-		"card_ids": ids_wire,
-		"card_rarities": rar_wire,
-	})
-	if bool(res.get("ok", false)):
-		return {"ok": true, "skipped": false, "error": ""}
-	var status := int(res.get("status", 0))
-	var err := String(res.get("error", "validate_failed"))
-	# Meta 미설정·다운 → 매칭 막지 않음 (개발/폴백).
-	if status == 503 or err == "meta_db_not_configured" or err.begins_with("http_result"):
-		print("%s DECK validate skipped status=%d error=%s" % [LOG_PREFIX, status, err])
-		return {"ok": true, "skipped": true, "error": err}
-	return {"ok": false, "error": err}
-
-
-## 덱 거부 이벤트 후 peer 연결 종료.
+## 덱 거부 시 peer 덱 캐시 정리 후 연결 종료.
 func _reject_deck(peer_id: int, reason: String) -> void:
 	_deck_ids_by_peer.erase(peer_id)
 	_deck_rarities_by_peer.erase(peer_id)
-	NetworkManager.send_event_to_peer(peer_id, {
-		"type": NetworkConstants.EVENT_DECK_REJECTED,
-		"reason": reason,
-	})
-	var tree := Engine.get_main_loop() as SceneTree
-	if tree != null:
-		await tree.create_timer(0.15).timeout
-	var mp := NetworkManager.multiplayer.multiplayer_peer if NetworkManager else null
-	if mp != null and peer_id > 0:
-		mp.disconnect_peer(peer_id)
-
-
-## 트리에 검증용 HTTPRequest를 두거나 재사용.
-func _meta_http() -> HTTPRequest:
-	var tree := Engine.get_main_loop() as SceneTree
-	if tree == null or tree.root == null:
-		return null
-	var existing := tree.root.get_node_or_null("MetaValidateHttp") as HTTPRequest
-	if existing != null:
-		return existing
-	var http := HTTPRequest.new()
-	http.name = "MetaValidateHttp"
-	http.timeout = 12.0
-	tree.root.add_child(http)
-	return http
-
+	await reject_deck_peer(peer_id, reason)
 
 ## 자발적 항복. 양 peer에 GAME_OVER(reason=surrender). 이탈 forfeit과 달리 양쪽 유지.
 func _end_match_by_surrender(loser_peer_id: int) -> void:

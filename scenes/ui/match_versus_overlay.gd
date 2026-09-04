@@ -15,6 +15,8 @@ const COIN_RESULT_HOLD_SEC := 2.0
 const INTRO_FADE_OUT_SEC := 0.35
 const BADGE_SLIDE_SEC := 0.4
 const ENTRY_FADE_SEC := 0.75
+const HEADLINE_ENTRY_SCALE_START := 0.42
+const HEADLINE_ENTRY_SCALE_SEC := 0.65
 ## 승패 화면 딤 진입 · 확인 후 전체 덮기 페이드.
 const EXIT_REVEAL_FADE_SEC := 0.28
 const EXIT_CONFIRM_FADE_SEC := 0.35
@@ -262,7 +264,27 @@ func _play_entry_reveal() -> void:
 	if _opponent_badge:
 		tw.tween_property(_opponent_badge, "position:x", 0.0, BADGE_SLIDE_SEC) \
 			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	if _headline:
+		tw.tween_property(_headline, "scale", Vector2.ONE, HEADLINE_ENTRY_SCALE_SEC) \
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(_headline, "modulate:a", 1.0, HEADLINE_ENTRY_SCALE_SEC) \
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tw.finished
+
+
+func _snap_headline_entry_hidden() -> void:
+	if _headline == null:
+		return
+	_headline.pivot_offset = _headline.custom_minimum_size * 0.5
+	_headline.scale = Vector2(HEADLINE_ENTRY_SCALE_START, HEADLINE_ENTRY_SCALE_START)
+	_headline.modulate.a = 0.0
+
+
+func _snap_headline_rest() -> void:
+	if _headline == null:
+		return
+	_headline.scale = Vector2.ONE
+	_headline.modulate.a = 1.0
 
 
 ## 승패 화면: 딤만 빠르게 올리고 배지는 슬라이드인.
@@ -283,7 +305,7 @@ func _play_exit_reveal() -> void:
 func _prepare_entry_visuals() -> void:
 	if _headline:
 		_headline.text = "VS"
-		_headline.modulate = Color(1, 1, 1, 1)
+		_snap_headline_entry_hidden()
 	_apply_headline_color(false)
 	_reset_coin_pivot_transform()
 	if _coin_pivot:
@@ -298,7 +320,7 @@ func _prepare_entry_visuals() -> void:
 func _prepare_exit_visuals(is_victory: bool, reason: String) -> void:
 	if _headline:
 		_headline.text = "VICTORY" if is_victory else "DEFEAT"
-		_headline.modulate = Color(1, 1, 1, 1)
+		_snap_headline_rest()
 	_apply_headline_color(not is_victory)
 	if _coin_pivot:
 		_coin_pivot.visible = false
@@ -343,7 +365,7 @@ func _fade_headline_to_blank() -> void:
 	tw.tween_property(_headline, "modulate:a", 0.0, VS_FADE_SEC)
 	await tw.finished
 	_headline.text = ""
-	_headline.modulate.a = 1.0
+	_snap_headline_rest()
 
 
 func _play_coin_toss(local_first: GameConstants.Side) -> void:

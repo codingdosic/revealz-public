@@ -1371,7 +1371,7 @@ func _ensure_card_under_manager(card: Node2D) -> void:
 	card_manager.add_child(card)
 
 
-## 토큰 필드 도착: VFX 활성=instant reveal+팝인 · 비활성=기존 card_flip.
+## 토큰 필드 도착: VFX 활성=instant reveal+팝인 · 비활성=tilt 플립 reveal.
 func _play_token_field_arrival_vfx(card: Node2D) -> void:
 	if card == null or not is_instance_valid(card):
 		return
@@ -1600,6 +1600,9 @@ func place_on_slot_with_fx(card: Node, slot: CardSlot, face: String = MatchVfx.F
 	if card == null or not is_instance_valid(card) or slot == null:
 		return
 	var n2 := card as Node2D
+	# 공개 lift 플립이 남은 경우 이동 tween과 position이 충돌하지 않게 끊는다.
+	CardHoverTilt.abort_flip(n2)
+	CardHoverTilt.snap_flat(n2)
 	var from := n2.global_position
 	field_manager.place_card_on_slot(n2, slot)
 	MatchVfx.play_slot_land(slot.global_position, "place")
@@ -1813,12 +1816,25 @@ func reborn_to_field(card: Node, slot: CardSlot) -> void:
 	card.visible = true
 	card.set("zone", EffectTypes.Location.FIELD)
 	CardHelpers.enable_interaction(card)
-	if from_zone == "grave":
-		(card as Node2D).global_position = graveyard_world_pos(side)
-	elif from_zone == "banishzone":
-		(card as Node2D).global_position = banish_world_pos(side)
-	card.reveal()
-	await place_on_slot_with_fx(card, slot, MatchVfx.FACE_KEEP)
+	var n2 := card as Node2D
+	CardHoverTilt.abort_flip(n2)
+	CardHoverTilt.snap_flat(n2)
+	if from_zone == "grave" or from_zone == "banishzone":
+		# 존 앵커에서 슬롯으로 이동하는 동안 lift 플립이 position을 붙잡지 않게 한다.
+		# 비행은 뒷면 → 슬롯 도착 후 tilt+lift 공개.
+		if from_zone == "grave":
+			n2.global_position = graveyard_world_pos(side)
+		else:
+			n2.global_position = banish_world_pos(side)
+		CardHelpers.apply_setting_hidden(n2, false)
+		await place_on_slot_with_fx(card, slot, MatchVfx.FACE_KEEP)
+		card.reveal()
+		var flip_tw := CardHoverTilt.get_flip_tween(n2)
+		if flip_tw != null:
+			await flip_tw.finished
+	else:
+		CardHelpers.reveal_card_instant(n2)
+		await place_on_slot_with_fx(card, slot, MatchVfx.FACE_KEEP)
 	card.is_locked = true
 	_refresh_line_power_ui()
 	schedule_passive_refresh()

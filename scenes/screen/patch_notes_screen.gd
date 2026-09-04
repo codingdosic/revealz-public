@@ -66,6 +66,7 @@ func _load_list() -> void:
 	if typeof(res.get("data", {})) == TYPE_DICTIONARY:
 		data = res.get("data", {}) as Dictionary
 	_notes = data.get("notes", []) as Array
+	AlertSeen.mark_seen(AlertSeen.KEY_PATCH_NOTES, AlertSeen.max_id_in(_notes))
 	if _list:
 		_list.clear()
 		for note in _notes:

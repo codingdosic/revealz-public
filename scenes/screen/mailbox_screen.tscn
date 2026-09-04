@@ -1,0 +1,87 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2sqpcrccrp7u"]
+
+[ext_resource type="Script" uid="uid://bgrocmowacjhh" path="res://scenes/screen/mailbox_screen.gd" id="1_script"]
+
+[node name="MailboxScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 24
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InnerMargin" type="MarginContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="EmptyLabel" type="Label" parent="Margin/Panel/InnerMargin"]
+layout_mode = 2
+text = "받은 선물이 없습니다"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Panel/InnerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Margin/Panel/InnerMargin/VBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/Panel/InnerMargin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "선물함"
+
+[node name="ClaimAllButton" type="Button" parent="Margin/Panel/InnerMargin/VBox/Header"]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+focus_mode = 0
+text = "모두 받기"
+
+[node name="ListScroll" type="ScrollContainer" parent="Margin/Panel/InnerMargin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ItemList" type="VBoxContainer" parent="Margin/Panel/InnerMargin/VBox/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="Margin/Panel/InnerMargin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.5, 1)
+
+[node name="BackButton" type="Button" parent="."]
+z_index = 20
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 52.0
+offset_bottom = 52.0
+focus_mode = 0
+text = "<"

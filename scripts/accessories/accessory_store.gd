@@ -40,9 +40,9 @@ static func ensure_loaded() -> void:
 		_owned_by_type = _parse_owned(_read_json_dict(path))
 	if _is_empty_owned(_owned_by_type):
 		_seed_defaults()
-		save()
+		_write_owned_cache_only()
 	elif _apply_preview_grants():
-		save()
+		_write_owned_cache_only()
 
 
 static func reload() -> void:
@@ -55,10 +55,18 @@ static func save() -> bool:
 	var path := owned_path()
 	if path.is_empty():
 		return false
-	if not _write_json(path, snapshot_owned()):
-		return false
-	_push_meta_if_needed()
-	return true
+	return _write_json(path, snapshot_owned())
+
+
+## 캐시만 기록 (시드·remote apply). Meta PUT 없음.
+static func _write_owned_cache_only() -> void:
+	var path := owned_path()
+	if path.is_empty():
+		return
+	var out: Dictionary = {}
+	for t in AccessoryTypes.ALL_TYPES:
+		out[t] = _owned_ids_array(t)
+	_write_json(path, out)
 
 
 ## API/MetaSync PUT body용.
@@ -81,10 +89,7 @@ static func apply_remote_owned(owned: Dictionary) -> void:
 	elif _apply_preview_grants():
 		pass
 	_loaded_account = AccountService.current_id()
-	var path := owned_path()
-	if path.is_empty():
-		return
-	_write_json(path, snapshot_owned())
+	_write_owned_cache_only()
 
 
 ## 타입별 id 목록 union — remote pull이 로컬 구매를 지우지 않게 한다.
@@ -122,19 +127,6 @@ static func owns(accessory_type: String, accessory_id: String) -> bool:
 static func list_owned_ids(accessory_type: String) -> Array[String]:
 	ensure_loaded()
 	return _owned_ids_array(accessory_type)
-
-
-static func grant(accessory_type: String, accessory_id: String) -> bool:
-	ensure_loaded()
-	var id := accessory_id.strip_edges()
-	if id.is_empty() or not AccessoryTypes.ALL_TYPES.has(accessory_type):
-		return false
-	if owns(accessory_type, id):
-		return true
-	var ids: Array = _owned_by_type.get(accessory_type, [])
-	ids.append(id)
-	_owned_by_type[accessory_type] = ids
-	return save()
 
 
 static func _owned_ids_array(accessory_type: String) -> Array[String]:
@@ -238,17 +230,3 @@ static func _write_json(path: String, data: Dictionary) -> bool:
 	f.store_string(JSON.stringify(data, "\t"))
 	f.close()
 	return true
-
-
-static func _push_meta_if_needed() -> void:
-	var sync := _meta_sync_node()
-	if sync == null or bool(sync.get("applying_remote")):
-		return
-	sync.call("push_snapshot_async")
-
-
-static func _meta_sync_node() -> Node:
-	var tree := Engine.get_main_loop() as SceneTree
-	if tree == null or tree.root == null:
-		return null
-	return tree.root.get_node_or_null("/root/MetaSync")

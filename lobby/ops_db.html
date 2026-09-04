@@ -77,14 +77,19 @@
     <p style="font-size:.75rem;color:#888;margin:.4rem 0 0">DB에서 계정·골드·보유·덱을 영구 삭제합니다. 동일 account key는 재이관이 막힙니다.</p>
   </section>
   <section>
-    <h2>카드 부여</h2>
+    <h2>선물함 부여 (인벤 즉시 반영 없음)</h2>
     <div class="row">
       <div><label>card id</label><input id="cid" type="number" min="1"></div>
       <div><label>rarity 0-3 (빈칸=0)</label><input id="rar" type="number" min="0" max="3"></div>
       <div><label>매수</label><input id="cnt" type="number" min="1" value="1"></div>
     </div>
-    <button type="button" id="btn-one">특정 카드 +N</button>
-    <button type="button" id="btn-all">전종 0~3 등급 +N</button>
+    <button type="button" id="btn-one">카드 → 선물함</button>
+    <button type="button" id="btn-all">전종 0~3 등급 → 선물함</button>
+    <div class="row" style="margin-top:.5rem">
+      <div><label>골드 +N</label><input id="grant-gold" type="number" min="1" value="100"></div>
+    </div>
+    <button type="button" id="btn-gold">골드 → 선물함</button>
+    <p style="font-size:.75rem;color:#888;margin:.4rem 0 0">클라에서 수령해야 보유/골드에 반영됩니다. 위 골드 저장은 잔액 직접 설정입니다.</p>
   </section>
   <section>
     <h2>패치노트</h2>
@@ -273,10 +278,19 @@
     };
 
     document.getElementById("btn-all").onclick = async () => {
-      if (!confirm("전종 × 레어도 0~3 전부 +N 할까요?")) return;
+      if (!confirm("전종 × 레어도 0~3을 선물함에 넣을까요? (수령 전까지 인벤 미반영)")) return;
       try {
         show("snap", await api("POST", "/v1/ops/grant", {
           mode: "all", accountKey: activeKey(), count: Number(document.getElementById("cnt").value || 1)
+        }));
+      } catch (e) { show("snap", e); }
+    };
+
+    document.getElementById("btn-gold").onclick = async () => {
+      try {
+        show("snap", await api("POST", "/v1/ops/grant", {
+          mode: "gold", accountKey: activeKey(),
+          gold: Number(document.getElementById("grant-gold").value || 0)
         }));
       } catch (e) { show("snap", e); }
     };

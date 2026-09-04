@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/notification_badge.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+bg_color = Color(0.85, 0.18, 0.22, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="NotificationBadge" type="PanelContainer"]
+custom_minimum_size = Vector2(18, 18)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+script = ExtResource("1_script")
+
+[node name="MarkLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "!"
+horizontal_alignment = 1
+vertical_alignment = 1

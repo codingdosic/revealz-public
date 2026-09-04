@@ -173,17 +173,12 @@ func play_slot_land(world_pos: Vector2, kind: String = "place") -> void:
 	tween.chain().tween_callback(spr.queue_free)
 
 
-## card_flip이 끝날 때까지 기다린 뒤 play_slot_land. 플립 중이 아니면 즉시.
+## tilt 플립이 끝날 때까지 기다린 뒤 play_slot_land. 플립 중이 아니면 즉시.
 func play_slot_land_after_flip(card: Node2D, kind: String = "open") -> void:
 	if not _active or card == null or not is_instance_valid(card):
 		return
-	var anim := card.get_node_or_null("AnimationPlayer") as AnimationPlayer
-	if (
-		anim != null
-		and anim.is_playing()
-		and String(anim.current_animation) == "card_flip"
-	):
-		var remaining := maxf(0.0, anim.current_animation_length - anim.current_animation_position)
+	var remaining: float = CardHoverTilt.flip_remaining_sec(card)
+	if remaining > 0.001:
 		var tw := card.create_tween()
 		tw.tween_interval(remaining)
 		tw.tween_callback(func() -> void:
@@ -571,15 +566,33 @@ func _on_battle_hit_shake_finished(card: Node2D, origin: Vector2) -> void:
 
 
 func _start_field_camera_shake() -> Tween:
+	return _start_field_camera_shake_params(
+		MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_SEC,
+		float(MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_PX),
+		MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_STEPS
+	)
+
+
+## 공개 플립 착지용 약한 필드 쉐이크.
+func play_flip_land_camera_shake() -> void:
+	if not _active:
+		return
+	_start_field_camera_shake_params(
+		MatchVfx.DEFAULT_FLIP_LAND_CAMERA_SHAKE_SEC,
+		MatchVfx.DEFAULT_FLIP_LAND_CAMERA_SHAKE_PX,
+		MatchVfx.DEFAULT_FLIP_LAND_CAMERA_SHAKE_STEPS
+	)
+
+
+func _start_field_camera_shake_params(sec: float, px: float, steps: int) -> Tween:
 	var field := _resolve_field_shake_root()
 	if field == null:
 		return null
 	var origin := field.position
-	var steps := MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_STEPS
-	var step_sec := MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_SEC / float(maxi(steps, 1))
-	var px := MatchVfx.DEFAULT_BATTLE_CAMERA_SHAKE_PX
+	var step_count := maxi(steps, 1)
+	var step_sec := sec / float(step_count)
 	var tween := field.create_tween()
-	for _i in range(steps):
+	for _i in range(step_count):
 		var ox := randf_range(-px, px)
 		var oy := randf_range(-px, px)
 		tween.tween_property(field, "position", origin + Vector2(ox, oy), step_sec)

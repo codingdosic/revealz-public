@@ -1,7 +1,7 @@
 class_name DeckCardChip
 extends PanelContainer
 ## 카드 칩 UI (`scenes/ui/card_chip.tscn`). 일러스트·보유 배지·흑백·팩 개봉 플립.
-## 덱에디터: 드래그/우클릭 가감. 팩개봉: face-down → 클릭/스와이프 플립.
+## 덱에디터: 드래그/우클릭 가감. 팩개봉: face-down → Y축 tilt 플립(+lift).
 
 
 signal info_requested(card_name: String, rarity: int)
@@ -13,9 +13,6 @@ signal revealed(card_name: String)
 const SCENE_PATH := "res://scenes/ui/card_chip.tscn"
 const CARD_BACK_PATH := "res://assets_lite/ShopAsset/card_back.png"
 const CARD_ASPECT := 158.0 / 220.0
-## 인게임 card_flip과 비슷한 반쪽 시간(초).
-const FLIP_HALF_SEC := 0.1
-const FLIP_EDGE_SCALE_X := 0.1
 ## SR+ 공개 연출.
 const REVEAL_FX_FLASH_SEC := 0.28
 const REVEAL_FX_PULSE_SEC := 0.22
@@ -222,6 +219,7 @@ func reveal_instant() -> void:
 	_flipping = false
 	_face_up = true
 	_reset_layer_scale()
+	_snap_chip_tilt_flat()
 	_apply_face_visual()
 	revealed.emit(card_name)
 
@@ -459,14 +457,14 @@ func _start_back_glow_pulse() -> void:
 	).set_ease(Tween.EASE_IN_OUT)
 
 
-## scale.x 트윈으로 뒷면→앞면 플립.
+## 인게임과 동일: Y축 tilt 플립 (팩은 lift/slam 없이 제자리).
 func _play_flip_to_front() -> void:
 	_bind_nodes()
 	_snap_chip_tilt_flat()
 	_kill_back_glow_tween()
 	if _rarity_frame:
 		_rarity_frame.modulate = Color(1, 1, 1, 1)
-	if _layer == null:
+	if _art == null:
 		_face_up = true
 		_back_glow_hint = false
 		_apply_face_visual()
@@ -474,16 +472,46 @@ func _play_flip_to_front() -> void:
 		return
 	_kill_flip_tween()
 	_flipping = true
-	var pivot_size := _layer.size
-	if pivot_size.x < 1.0 or pivot_size.y < 1.0:
-		pivot_size = size
-	_layer.pivot_offset = pivot_size * 0.5
+	_tilt_hovering = false
+	set_process(false)
+	# 뒷면에도 tilt material 필요 (힌트 없는 N 포함).
+	CardRarityFoil.apply_or_tilt(_art, 0, false)
+	if _art:
+		_art.modulate = Color(1, 1, 1, 1)
+
+	var flip_sec := GameConstants.CARD_FLIP_TOTAL_SEC
+	var half := GameConstants.CARD_FLIP_SWAP_SEC
+	var second := maxf(0.01, flip_sec - half)
+	var edge := GameConstants.CARD_FLIP_EDGE_DEG
+	var pitch := GameConstants.CARD_FLIP_PITCH_DEG
+
 	_flip_tween = create_tween()
 	_flip_tween.set_parallel(false)
-	_flip_tween.tween_property(_layer, "scale:x", FLIP_EDGE_SCALE_X, FLIP_HALF_SEC)
-	_flip_tween.tween_callback(_commit_front_face)
-	_flip_tween.tween_property(_layer, "scale:x", 1.0, FLIP_HALF_SEC)
+	_flip_tween.tween_method(
+		func(y: float) -> void: _sample_pack_flip_tilt(y, edge, pitch),
+		0.0, edge, half
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_flip_tween.tween_callback(func() -> void: _on_pack_flip_edge_swap(edge, pitch))
+	_flip_tween.tween_method(
+		func(y: float) -> void: _sample_pack_flip_tilt(y, edge, pitch),
+		-edge, 0.0, second
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_flip_tween.tween_callback(_on_flip_finished)
+
+
+## 플립 각도 샘플 — CardHoverTilt._flip_tilt_sample 과 동일.
+func _sample_pack_flip_tilt(tilt_y: float, edge: float, pitch: float) -> void:
+	var t := clampf(absf(tilt_y) / maxf(edge, 0.001), 0.0, 1.0)
+	_tilt_x = pitch * t
+	_tilt_y = tilt_y
+	if _art:
+		CardRarityFoil.set_tilt(_art, _tilt_x, _tilt_y)
+
+
+## 옆면 시점: 앞면 커밋 후 -edge에서 펼침 시작.
+func _on_pack_flip_edge_swap(edge: float, pitch: float) -> void:
+	_commit_front_face()
+	_sample_pack_flip_tilt(-edge, edge, pitch)
 
 
 ## 플립 중간: 앞면 텍스처로 바꾸고 revealed.
@@ -498,6 +526,7 @@ func _commit_front_face() -> void:
 func _on_flip_finished() -> void:
 	_flipping = false
 	_reset_layer_scale()
+	_snap_chip_tilt_flat()
 	if CardRarity.plays_reveal_fx(instance_rarity):
 		_play_rare_reveal_fx()
 
@@ -574,6 +603,7 @@ func _kill_flip_tween() -> void:
 	if _flip_tween != null and _flip_tween.is_valid():
 		_flip_tween.kill()
 	_flip_tween = null
+	_snap_chip_tilt_flat()
 
 
 ## SR+ 공개 연출 트윈을 중단한다.

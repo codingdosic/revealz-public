@@ -14,7 +14,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
 [node name="Dimmer" type="ColorRect" parent="Root"]
 layout_mode = 1
@@ -23,8 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
-color = Color(0.09815734, 0.09813384, 0.14779761, 0.94)
+color = Color(0.08702894, 0.087026276, 0.13439026, 0.9607843)
 
 [node name="CenterAnchor" type="CenterContainer" parent="Root"]
 layout_mode = 1
@@ -43,7 +41,7 @@ alignment = 1
 [node name="HeadlineLabel" type="Label" parent="Root/CenterAnchor/MainVBox"]
 custom_minimum_size = Vector2(480, 88)
 layout_mode = 2
-theme_override_font_sizes/font_size = 72
+theme_override_font_sizes/font_size = 100
 text = "VS"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -112,7 +112,11 @@ func _on_icon_pressed(icon_id: String) -> void:
 	var id := icon_id.strip_edges()
 	if id.is_empty():
 		return
-	var err := AccountService.set_profile_icon_id(id)
+	if id == AccountService.profile_icon_id():
+		return
+	if _status_label:
+		_status_label.text = "저장 중…"
+	var err: String = await AccountService.set_profile_icon_id_async(id)
 	if not err.is_empty():
 		if _status_label:
 			_status_label.text = err
@@ -125,7 +129,12 @@ func _on_icon_pressed(icon_id: String) -> void:
 func _commit_display_name() -> void:
 	if _suppress_name_commit or _name_edit == null or not _name_edit.editable:
 		return
-	var err := AccountService.set_display_name(_name_edit.text)
+	var next := _name_edit.text.strip_edges()
+	if next == AccountService.display_name():
+		return
+	if _status_label:
+		_status_label.text = "저장 중…"
+	var err: String = await AccountService.set_display_name_async(_name_edit.text)
 	if not err.is_empty():
 		if _status_label:
 			_status_label.text = err
@@ -144,7 +153,8 @@ func _on_name_focus_exited() -> void:
 
 
 func _on_back_button_pressed() -> void:
-	_commit_display_name()
+	# 저장 HTTP가 메인 on_menu_shown refresh와 같은 HTTPRequest를 쓰지 않도록 먼저 끝낸다.
+	await _commit_display_name()
 	if _embedded:
 		close_requested.emit()
 		return

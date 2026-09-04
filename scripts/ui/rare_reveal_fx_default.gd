@@ -4,7 +4,7 @@ extends RefCounted
 ## 인게임 Node2D 카드용. 팩 칩은 DeckCardChip 쪽 로직 유지.
 
 
-## card_flip 앞면 교체(CARD_FLIP_SWAP_SEC)에 맞춰 시작 — 애니 종료까지 기다리면 한 박자 늦음.
+## card_flip 앞면 교체(CARD_FLIP_SWAP_SEC)에 맞춰 시작 — 종료까지 기다리면 한 박자 늦음.
 const FLASH_SEC := 0.16
 const PULSE_SEC := 0.12
 const META_TWEEN := &"_rare_reveal_fx_tween"
@@ -19,15 +19,8 @@ func play_on_card(card: Node2D, tier: int) -> void:
 	if card == null or not is_instance_valid(card):
 		return
 	_kill_start(card)
-	var anim := card.get_node_or_null("AnimationPlayer") as AnimationPlayer
-	if (
-		anim != null
-		and anim.has_animation("card_flip")
-		and anim.is_playing()
-		and String(anim.current_animation) == "card_flip"
-	):
-		var start_at := GameConstants.CARD_FLIP_SWAP_SEC
-		var delay := maxf(0.0, start_at - anim.current_animation_position)
+	if CardHoverTilt.is_flipping(card):
+		var delay: float = CardHoverTilt.flip_sec_until_swap(card)
 		if delay > 0.001:
 			var starter := card.create_tween()
 			card.set_meta(META_START, starter)

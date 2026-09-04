@@ -50,6 +50,12 @@ async function ensureSchema() {
   const sqlPath = path.join(__dirname, "schema.sql");
   const sql = fs.readFileSync(sqlPath, "utf8");
   await p.query(sql);
+  const seedPath = path.join(__dirname, "seed_shop.sql");
+  if (fs.existsSync(seedPath)) {
+    const seedSql = fs.readFileSync(seedPath, "utf8");
+    await p.query(seedSql);
+    log("shop seed applied (ON CONFLICT DO NOTHING)");
+  }
   schemaReady = true;
   log("schema ready");
   return true;

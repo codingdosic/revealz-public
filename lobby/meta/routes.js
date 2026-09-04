@@ -1,13 +1,20 @@
 /**
- * MetaSrv HTTP handlers — GET/PUT/POST /v1/meta/accounts/:accountKey
+ * GET/PUT /v1/meta/accounts/:accountKey
  * POST /v1/meta/accounts/:accountKey/purchase
+ * GET  /v1/meta/accounts/:accountKey/mailbox
+ * POST /v1/meta/accounts/:accountKey/mailbox/claim
+ * POST /v1/meta/accounts/:accountKey/mailbox/claim-all
+ * GET /v1/shop/catalog
  */
 
 "use strict";
 
 const db = require("./db");
-const { purchasePack } = require("./purchase");
+const { purchase } = require("./purchase");
 const { validateDeckOwned } = require("./validate_deck");
+const shopCatalog = require("./shop_catalog");
+const { updateProfile, sanitizeDisplayName, resolveProfileIconId } = require("./profile");
+const mailbox = require("./mailbox");
 
 /**
  * @param {import("http").ServerResponse} res
@@ -165,6 +172,7 @@ async function loadSnapshot(accountKey) {
     ownedAccessories,
     decks,
     metaRevision: Number(row.meta_revision) || 0,
+    mailboxPendingCount: await mailbox.countPending(accountKey),
   };
 }
 
@@ -176,20 +184,15 @@ async function loadSnapshot(accountKey) {
 async function upsertSnapshot(client, accountKey, body) {
   const account = body.account && typeof body.account === "object" ? body.account : {};
   const authKind = String(account.authKind || body.authKind || "guest").slice(0, 64);
-  const displayName = String(
-    account.displayName || body.displayName || accountKey
-  ).slice(0, 80);
-  const profileIconId = String(
+  const nameSan = sanitizeDisplayName(
+    account.displayName || body.displayName || accountKey,
+    accountKey
+  );
+  const displayName = nameSan.ok ? nameSan.name : String(accountKey).slice(0, 50);
+  const rawProfileIcon = String(
     account.profileIconId || body.profileIconId || ""
-  ).slice(0, 128);
-  const gold = Math.max(0, Number(body.gold) || 0);
-  const owned = body.owned && typeof body.owned === "object" ? body.owned : {};
-  const ownedAccessories =
-    body.ownedAccessories && typeof body.ownedAccessories === "object"
-      ? body.ownedAccessories
-      : {};
+  ).trim().slice(0, 128);
   const decks = Array.isArray(body.decks) ? body.decks : [];
-  const markMigrated = Boolean(body.markMigrated);
 
   const tomb = await client.query(
     `SELECT 1 FROM deleted_accounts WHERE account_key = $1`,
@@ -205,7 +208,8 @@ async function upsertSnapshot(client, accountKey, body) {
     `SELECT meta_revision FROM accounts WHERE account_key = $1 FOR UPDATE`,
     [accountKey]
   );
-  if (existing.rowCount > 0) {
+  const isCreate = existing.rowCount === 0;
+  if (!isCreate) {
     const current = Number(existing.rows[0].meta_revision) || 0;
     const hasBase = body.baseRevision !== undefined && body.baseRevision !== null;
     const base = hasBase ? Number(body.baseRevision) : NaN;
@@ -217,58 +221,50 @@ async function upsertSnapshot(client, accountKey, body) {
   }
 
   await client.query(
-    `INSERT INTO accounts (account_key, auth_kind, display_name, profile_icon_id, client_migrated_at)
-     VALUES ($1, $2, $3, $4, CASE WHEN $5 THEN NOW() ELSE NULL END)
+    `INSERT INTO accounts (account_key, auth_kind, display_name, profile_icon_id)
+     VALUES ($1, $2, $3, $4)
      ON CONFLICT (account_key) DO UPDATE SET
        auth_kind = EXCLUDED.auth_kind,
-       display_name = EXCLUDED.display_name,
-       profile_icon_id = EXCLUDED.profile_icon_id,
-       client_migrated_at = CASE
-         WHEN $5 THEN COALESCE(accounts.client_migrated_at, NOW())
-         ELSE accounts.client_migrated_at
-       END`,
-    [accountKey, authKind, displayName, profileIconId, markMigrated]
+       display_name = EXCLUDED.display_name`,
+    [accountKey, authKind, displayName, ""]
   );
 
+  if (isCreate) {
+    // Economy/owned are server-only after create. Initial gold is always 0.
+    await client.query(
+      `INSERT INTO wallets (account_key, gold) VALUES ($1, 0)
+       ON CONFLICT (account_key) DO NOTHING`,
+      [accountKey]
+    );
+
+    const ownedAccessories =
+      body.ownedAccessories && typeof body.ownedAccessories === "object"
+        ? body.ownedAccessories
+        : { icon: ["icon_default"], card_back: ["card_back_default"], field: ["default_field"] };
+    const accessoryTypes = ["icon", "card_back", "field"];
+    for (const accessoryType of accessoryTypes) {
+      const idsRaw = ownedAccessories[accessoryType];
+      if (!Array.isArray(idsRaw)) continue;
+      for (const idRaw of idsRaw) {
+        const accessoryId = String(idRaw || "").trim().slice(0, 128);
+        if (!accessoryId) continue;
+        await client.query(
+          `INSERT INTO owned_accessories (account_key, accessory_type, accessory_id)
+           VALUES ($1, $2, $3)
+           ON CONFLICT DO NOTHING`,
+          [accountKey, accessoryType, accessoryId]
+        );
+      }
+    }
+    await mailbox.enqueueWelcomeGold(client, accountKey);
+  }
+
+  // Icon ownership is known after owned_accessories (create) or existing rows (update).
+  const profileIconId = await resolveProfileIconId(client, accountKey, rawProfileIcon);
   await client.query(
-    `INSERT INTO wallets (account_key, gold) VALUES ($1, $2)
-     ON CONFLICT (account_key) DO UPDATE SET gold = EXCLUDED.gold`,
-    [accountKey, gold]
+    `UPDATE accounts SET profile_icon_id = $2 WHERE account_key = $1`,
+    [accountKey, profileIconId]
   );
-
-  await client.query(`DELETE FROM owned_cards WHERE account_key = $1`, [accountKey]);
-  for (const [cardIdStr, rarityMap] of Object.entries(owned)) {
-    const cardId = Number(cardIdStr);
-    if (!Number.isFinite(cardId) || cardId <= 0) continue;
-    if (!rarityMap || typeof rarityMap !== "object") continue;
-    for (const [rarityStr, countRaw] of Object.entries(rarityMap)) {
-      const rarity = Number(rarityStr);
-      const count = Number(countRaw);
-      if (!Number.isFinite(rarity) || rarity < 0 || rarity > 3) continue;
-      if (!Number.isFinite(count) || count <= 0) continue;
-      await client.query(
-        `INSERT INTO owned_cards (account_key, card_id, rarity, count)
-         VALUES ($1, $2, $3, $4)`,
-        [accountKey, cardId, rarity, Math.floor(count)]
-      );
-    }
-  }
-
-  await client.query(`DELETE FROM owned_accessories WHERE account_key = $1`, [accountKey]);
-  const accessoryTypes = ["icon", "card_back", "field"];
-  for (const accessoryType of accessoryTypes) {
-    const idsRaw = ownedAccessories[accessoryType];
-    if (!Array.isArray(idsRaw)) continue;
-    for (const idRaw of idsRaw) {
-      const accessoryId = String(idRaw || "").trim().slice(0, 128);
-      if (!accessoryId) continue;
-      await client.query(
-        `INSERT INTO owned_accessories (account_key, accessory_type, accessory_id)
-         VALUES ($1, $2, $3)`,
-        [accountKey, accessoryType, accessoryId]
-      );
-    }
-  }
 
   await client.query(`DELETE FROM decks WHERE account_key = $1`, [accountKey]);
   for (const deck of decks) {
@@ -305,6 +301,139 @@ async function upsertSnapshot(client, accountKey, body) {
  * @param {string} method
  */
 async function tryHandle(req, res, url, method) {
+  if (url.pathname === "/v1/shop/catalog") {
+    if (!db.isConfigured()) {
+      json(res, 503, { error: "meta_db_not_configured" });
+      return true;
+    }
+    if (method !== "GET") {
+      json(res, 405, { error: "method_not_allowed" });
+      return true;
+    }
+    try {
+      const catalog = await shopCatalog.loadPublicCatalog();
+      json(res, 200, catalog);
+      return true;
+    } catch (e) {
+      db.log("shop catalog error", e.message || e);
+      json(res, 500, { error: "internal", message: String(e.message || e) });
+      return true;
+    }
+  }
+
+  const mailboxListMatch = url.pathname.match(/^\/v1\/meta\/accounts\/([^/]+)\/mailbox$/);
+  if (mailboxListMatch) {
+    if (!db.isConfigured()) {
+      json(res, 503, { error: "meta_db_not_configured" });
+      return true;
+    }
+    const accountKey = decodeURIComponent(mailboxListMatch[1]).trim();
+    if (!accountKey) {
+      json(res, 400, { error: "account_key_required" });
+      return true;
+    }
+    if (method !== "GET") {
+      json(res, 405, { error: "method_not_allowed" });
+      return true;
+    }
+    try {
+      db.log("GET", "mailbox", accountKey);
+      json(res, 200, await mailbox.listPending(accountKey));
+      return true;
+    } catch (e) {
+      const code = e && e.code ? String(e.code) : "";
+      db.log("mailbox list error", e.message || e);
+      if (code === "not_found") {
+        json(res, 404, { error: String(e.message || "account_not_found") });
+        return true;
+      }
+      json(res, Number(e.status) || 500, { error: String(e.message || e) });
+      return true;
+    }
+  }
+
+  const mailboxClaimAllMatch = url.pathname.match(
+    /^\/v1\/meta\/accounts\/([^/]+)\/mailbox\/claim-all$/
+  );
+  if (mailboxClaimAllMatch) {
+    if (!db.isConfigured()) {
+      json(res, 503, { error: "meta_db_not_configured" });
+      return true;
+    }
+    const accountKey = decodeURIComponent(mailboxClaimAllMatch[1]).trim();
+    if (!accountKey) {
+      json(res, 400, { error: "account_key_required" });
+      return true;
+    }
+    if (method !== "POST") {
+      json(res, 405, { error: "method_not_allowed" });
+      return true;
+    }
+    try {
+      db.log("POST", "mailbox/claim-all", accountKey);
+      json(res, 200, await mailbox.claimAll(accountKey));
+      return true;
+    } catch (e) {
+      const code = e && e.code ? String(e.code) : "";
+      db.log("mailbox claim-all error", e.message || e);
+      if (code === "not_found") {
+        json(res, 404, { error: String(e.message || "account_not_found") });
+        return true;
+      }
+      json(res, Number(e.status) || 500, { error: String(e.message || e) });
+      return true;
+    }
+  }
+
+  const mailboxClaimMatch = url.pathname.match(
+    /^\/v1\/meta\/accounts\/([^/]+)\/mailbox\/claim$/
+  );
+  if (mailboxClaimMatch) {
+    if (!db.isConfigured()) {
+      json(res, 503, { error: "meta_db_not_configured" });
+      return true;
+    }
+    const accountKey = decodeURIComponent(mailboxClaimMatch[1]).trim();
+    if (!accountKey) {
+      json(res, 400, { error: "account_key_required" });
+      return true;
+    }
+    if (method !== "POST") {
+      json(res, 405, { error: "method_not_allowed" });
+      return true;
+    }
+    try {
+      let body = {};
+      try {
+        body = await readBody(req);
+      } catch (_) {
+        json(res, 400, { error: "bad_json" });
+        return true;
+      }
+      const itemId = body.id || body.itemId || body.item_id;
+      db.log("POST", "mailbox/claim", accountKey, itemId);
+      json(res, 200, await mailbox.claimOne(accountKey, itemId));
+      return true;
+    } catch (e) {
+      const code = e && e.code ? String(e.code) : "";
+      db.log("mailbox claim error", e.message || e);
+      if (code === "not_found") {
+        json(res, 404, { error: String(e.message || "mailbox_item_not_found") });
+        return true;
+      }
+      if (code === "conflict") {
+        json(res, 409, { error: String(e.message || "already_claimed") });
+        return true;
+      }
+      if (code === "bad_request") {
+        json(res, 400, { error: String(e.message || "bad_request") });
+        return true;
+      }
+      json(res, Number(e.status) || 500, { error: String(e.message || e) });
+      return true;
+    }
+  }
+
   const validateMatch = url.pathname.match(/^\/v1\/meta\/accounts\/([^/]+)\/validate-deck$/);
   if (validateMatch) {
     if (!db.isConfigured()) {
@@ -346,6 +475,65 @@ async function tryHandle(req, res, url, method) {
     }
   }
 
+  const profileMatch = url.pathname.match(/^\/v1\/meta\/accounts\/([^/]+)\/profile$/);
+  if (profileMatch) {
+    if (!db.isConfigured()) {
+      json(res, 503, { error: "meta_db_not_configured" });
+      return true;
+    }
+    const accountKey = decodeURIComponent(profileMatch[1]).trim();
+    if (!accountKey) {
+      json(res, 400, { error: "account_key_required" });
+      return true;
+    }
+    if (method !== "POST") {
+      json(res, 405, { error: "method_not_allowed" });
+      return true;
+    }
+    try {
+      let body = {};
+      try {
+        body = await readBody(req);
+      } catch (_) {
+        json(res, 400, { error: "bad_json" });
+        return true;
+      }
+      db.log("POST", "profile", accountKey);
+      await db.withTransaction(async (client) => {
+        await updateProfile(client, accountKey, body);
+      });
+      const snap = await loadSnapshot(accountKey);
+      json(res, 200, snap);
+      return true;
+    } catch (e) {
+      const code = e && e.code ? String(e.code) : "";
+      db.log("profile error", e.message || e);
+      if (code === "not_found") {
+        json(res, 404, { error: String(e.message || "account_not_found") });
+        return true;
+      }
+      if (code === "revision_conflict") {
+        const snap = await loadSnapshot(accountKey);
+        json(res, 409, { error: "revision_conflict", snapshot: snap });
+        return true;
+      }
+      if (code === "account_deleted") {
+        json(res, 410, { error: "account_deleted" });
+        return true;
+      }
+      if (code === "conflict") {
+        json(res, 409, { error: String(e.message || "conflict") });
+        return true;
+      }
+      if (code === "bad_request") {
+        json(res, 400, { error: String(e.message || "bad_request") });
+        return true;
+      }
+      json(res, 500, { error: "internal", message: String(e.message || e) });
+      return true;
+    }
+  }
+
   const purchaseMatch = url.pathname.match(/^\/v1\/meta\/accounts\/([^/]+)\/purchase$/);
   if (purchaseMatch) {
     if (!db.isConfigured()) {
@@ -371,7 +559,7 @@ async function tryHandle(req, res, url, method) {
       }
       db.log("POST", "purchase", accountKey);
       const result = await db.withTransaction(async (client) => {
-        return purchasePack(client, accountKey, body);
+        return purchase(client, accountKey, body);
       });
       json(res, 200, result);
       return true;

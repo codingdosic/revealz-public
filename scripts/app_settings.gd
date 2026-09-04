@@ -160,6 +160,23 @@ static func save_last_deck_id(key: String, deck_id: String) -> bool:
 	return _write_json(path, data)
 
 
+## 프로필 settings.json에 키를 병합 저장한다.
+static func save_merge(patch: Dictionary) -> bool:
+	var path := settings_path()
+	if path.is_empty():
+		return false
+	var data := load_dict()
+	for key in patch.keys():
+		data[key] = patch[key]
+	return _write_json(path, data)
+
+
+static func get_int(key: String, default_value: int = 0) -> int:
+	if key.is_empty():
+		return default_value
+	return int(load_dict().get(key, default_value))
+
+
 ## 프리셋 배열에서 size와 같은 인덱스. 없으면 -1.
 static func preset_index_of(size: Vector2i) -> int:
 	for i in RESOLUTION_PRESETS.size():

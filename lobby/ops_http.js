@@ -381,6 +381,10 @@ async function handleApi(req, res, url, method, deps) {
         json(res, 200, await metaOps.grantAll(key, count));
         return;
       }
+      if (mode === "gold") {
+        json(res, 200, await metaOps.grantGold(key, body.gold != null ? body.gold : count));
+        return;
+      }
       json(res, 200, await metaOps.grantOne(key, body.cardId || body.card_id, body.rarity, count));
       return;
     }
