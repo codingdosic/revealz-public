@@ -18,7 +18,7 @@ Godot 4 턴제 카드 게임과, 실제로 게임을 운영하기 위한 프로�
 - 카드 수집, 팩 오픈, 덱 편성, 싱글 플레이, 온라인 대전
 - 서버 권위 매치 세션, 매칭 로딩·대전 연출 UI
 
-**서버 · 운영 **
+**서버 운영 **
 - Node.js 로비: 매칭 큐, 전용 서버(Dedicated) 프로세스 spawn, warm 풀, 덱 검증
 - PostgreSQL 메타 DB: 계정, 골드, 보유 카드, 상점 카탈로그, 선물함
 - Docker Compose 기반 스택 구성, GitHub Actions CI, health poller
